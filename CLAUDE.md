@@ -69,4 +69,6 @@
      boutons « Enregistrer » (orange), « Copier le lien de configuration »,
      « Valeurs par défaut », « Fermer ».
   Le bandeau d'accueil de l'église (étape 6) s'ajoutera dans cette même fenêtre.
+- Textes : police du système et tailles de la v1 (onglets 17 px, noms de langues 17 px demi-gras #333,
+  nom du pays 28 px) — section « alignées sur la v1 » à la fin de styles.css.
 - Couleurs de la v1 : mer bleu nuit #0c1a2b, pays orange brûlé #c4561a, onglet actif orange #ff6a13.

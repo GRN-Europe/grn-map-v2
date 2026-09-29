@@ -23,7 +23,8 @@ html, body {
   margin: 0;
   height: 100%;
   overflow: hidden;              /* la page ne défile jamais : tout tient à l'écran */
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Police du système, comme en v1 : San Francisco (Mac, iPad), Segoe UI (Windows), Roboto (Android) */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: var(--texte);
   background: var(--mer);
   -webkit-user-select: none;     /* pas de sélection de texte au doigt */
@@ -908,3 +909,67 @@ body.pays-ouvert .coin-bas-droite {
   color: #5d6873;
   font-size: 15px;
 }
+
+/* --- Tailles et couleurs des textes, alignées sur la v1 ----------------------------
+   (la v1 a des textes un peu plus petits et des gris plus doux, jugés plus nets)
+   Ces règles complètent celles des sections précédentes. */
+
+/* Onglets : gris clair pour les onglets inactifs, orange pour l'actif */
+.onglet {
+  padding: 0 22px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #333;
+  background: #f4f4f5;
+}
+
+.onglet.actif { background: var(--orange); color: white; }
+
+/* Titre en haut à gauche */
+.titre-carte {
+  font-size: 18px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  padding: 10px 16px;
+}
+
+/* Panneau d'un pays */
+.panneau-pays h2 { font-size: 28px; color: #111; }
+.pays-sous-titre { font-size: 15px; color: #666; }
+.pays-consigne { font-size: 16px; font-weight: 600; color: #333; }
+
+.carte-langue {
+  padding: 12px 14px;
+  border: 2px solid #ffe0c2;
+  border-radius: 12px;
+  background: #fff7ef;
+  color: #333;
+  font-size: 17px;
+  font-weight: 600;
+  min-height: 64px;
+}
+
+.case-diaspora { font-size: 14px; color: #555; }
+.panneau-pays .bouton-fermer { width: 44px; height: 44px; background: #f4f4f5; font-size: 20px; }
+
+/* Fenêtre du QR code */
+.fenetre-qr h2 { font-size: 24px; color: #111; }
+.qr-pays { font-size: 14px; color: #888; }
+.fenetre-qr p { font-size: 15px; color: #666; }
+.fenetre-qr .bouton-principal,
+.fenetre-qr .bouton-secondaire {
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Barre de l'écran 5fish */
+.barre-5fish .bouton-principal { font-size: 17px; padding: 0 22px; }
+.titre-5fish { font-size: 15px; font-weight: 400; color: #cfd8e3; }
+.compte-a-rebours { font-size: 14px; color: #8fa0b5; }
+
+/* Résultats de recherche */
+.resultat-texte strong { font-size: 16px; font-weight: 600; color: #333; }
+.resultat-texte small { font-size: 13px; color: #999; }
