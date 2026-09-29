@@ -49,6 +49,9 @@ Site publié : https://grn-map-v2.vercel.app (déploiement automatique à chaque
 | `src/styles.css` | Apparence (couleurs en haut du fichier) |
 | `src/donnees/exemple-5fish.json` | Données d'exemple (remplacées par les vraies données 5fish à l'étape 7) |
 | `public/diaporama/` | Images du diaporama d'origine (JPEG 1920 × 1080) |
+| `public/logos/grn-europe.png` | Logo GRN Europe (bleu et or, fond transparent), affiché en blanc par un filtre CSS |
+| `public/icones/` | Icônes de l'application installable (dessin source : `public/icones/icone.svg`) |
+| `vite.config.js` | Publication et application installable / hors ligne (PWA) |
 | `sources/diaporama-original/` | Export PNG de la présentation PowerPoint (non publié) |
 
 ## Changer le diaporama d'origine

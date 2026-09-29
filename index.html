@@ -5,6 +5,11 @@
   <!-- user-scalable=no : empêche le zoom de toute la page (le zoom se fait uniquement sur la carte) -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>GRN map</title>
+  <!-- Application installable : couleur de la barre et icône pour iPad / iPhone -->
+  <meta name="theme-color" content="#0c1a2b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="GRN map">
+  <link rel="apple-touch-icon" href="/icones/apple-touch-icon.png">
 </head>
 <body>
   <!-- La carte occupe tout l'écran ; les commandes flottent par-dessus (comme en v1) -->
@@ -37,10 +42,9 @@
       </nav>
     </div>
 
-    <!-- En bas à gauche : logo GRN (lien vers grneu.org) — logo provisoire en texte -->
+    <!-- En bas à gauche : logo GRN Europe (lien vers grneu.org), affiché en blanc -->
     <a class="logo-grn" href="https://grneu.org" target="_blank" rel="noopener" data-texte-aria="logoAria">
-      <strong>GRN</strong>
-      <span>Global<br>Recordings<br>Network</span>
+      <img class="logo-blanc" src="/logos/grn-europe.png" alt="">
     </a>
 
     <!-- En bas à droite : plein écran et réglages -->
@@ -52,10 +56,11 @@
         </svg>
       </button>
       <button class="bouton-discret" id="bouton-reglages" type="button" data-texte-aria="reglages">
-        <!-- Icône roue dentée -->
-        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="3.2"/>
-          <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>
+        <!-- Icône roue crantée (dessin de la bibliothèque libre Lucide, licence ISC) -->
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+          <circle cx="12" cy="12" r="3"/>
         </svg>
       </button>
     </div>
@@ -113,8 +118,7 @@
       </div>
     </div>
     <div class="veille-logo">
-      <strong>GRN</strong>
-      <span>Global<br>Recordings<br>Network</span>
+      <img class="logo-blanc" src="/logos/grn-europe.png" alt="Global Recordings Network Europe">
     </div>
     <button class="bouton-discret veille-plein-ecran" id="veille-plein-ecran" type="button" data-texte-aria="pleinEcran">
       <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2">

@@ -223,8 +223,14 @@ button {
   box-shadow: var(--ombre);
 }
 
-.logo-grn strong { font-size: 22px; letter-spacing: 1px; }
-.logo-grn span { font-size: 10px; line-height: 1.15; font-weight: 600; }
+/* Logo GRN Europe : le fichier est bleu et or ; ce filtre l'affiche entièrement en blanc
+   sur les fonds bleu nuit (comme en v1) */
+.logo-blanc {
+  display: block;
+  filter: brightness(0) invert(1);
+}
+
+.logo-grn .logo-blanc { width: 150px; height: auto; }
 
 .coin-bas-droite {
   position: absolute;
@@ -380,10 +386,10 @@ button {
   border: 1px solid #f3dcc6;
   border-radius: 14px;
   background: #fdf6ef;
-  color: var(--texte);
+  color: #333a42;          /* gris très foncé, comme en v1 */
   text-align: left;
   font-size: 19px;
-  font-weight: 700;
+  font-weight: 600;        /* demi-gras, comme en v1 */
 }
 
 .carte-langue:active { background: #fbe7d3; }
@@ -697,8 +703,7 @@ body.pays-ouvert .coin-bas-droite {
   color: white;
 }
 
-.veille-logo strong { font-size: 34px; letter-spacing: 1px; }
-.veille-logo span { font-size: 13px; line-height: 1.15; font-weight: 600; }
+.veille-logo .logo-blanc { width: 220px; height: auto; }
 
 .veille-plein-ecran {
   position: absolute;
