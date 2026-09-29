@@ -48,7 +48,7 @@ const PAYS = feature(monde, monde.objects.countries).features
 // Codes à 2 lettres de tous les pays de la carte (utilisés par la recherche)
 export const CODES_PAYS = PAYS.map((p) => p.code).filter(Boolean);
 
-export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouche }) {
+export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouche, quandMerTouchee }) {
   const svg = select(svgElement);
   const projection = geoMercator();
   const chemin = geoPath(projection);
@@ -90,6 +90,13 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
       placerDrapeaux(evenement.transform);
     });
   svg.call(comportementZoom);
+
+  // Toucher la mer (le fond de la carte, hors des pays) : par exemple pour fermer le panneau
+  // d'un pays. Après un glissement de la carte, d3-zoom annule ce « clic » : seul un toucher
+  // bref compte.
+  svg.on('click', (evenement) => {
+    if (evenement.target === svgElement) quandMerTouchee();
+  });
 
   let largeur = 0;
   let hauteur = 0;

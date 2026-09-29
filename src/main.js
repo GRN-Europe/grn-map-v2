@@ -30,6 +30,7 @@ const carte = creerCarte({
   coucheDrapeaux: document.getElementById('couche-drapeaux'),
   donnees,
   quandPaysTouche: (code) => ouvrirPays(code),
+  quandMerTouchee: () => fermerPays(), // toucher la mer ferme le panneau du pays
 });
 
 quandLaLangueChange(() => carte.traduire());

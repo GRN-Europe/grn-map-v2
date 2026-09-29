@@ -22,6 +22,7 @@
 - Publication : GitHub GRN-Europe/grn-map-v2 (public), Vercel équipe GRN-Europe (Hobby),
   https://grn-map-v2.vercel.app. Git en ligne de commande n'est pas installé : les envois se font
   avec GitHub Desktop.
+- Toucher la mer (hors des pays) ferme le panneau du pays sélectionné (demande de GRN Europe).
 - Recherche (loupe, comme en v1) : pays (nom dans la langue de la borne ou en anglais) et langues ;
   un pays ouvre son panneau, une langue ouvre directement son QR code.
 - Bandeau d'accueil : bande blanche de 76 px en haut (bordure orange), logo à gauche de la phrase ;
