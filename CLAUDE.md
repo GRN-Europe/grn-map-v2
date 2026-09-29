@@ -8,6 +8,9 @@
 - Tout texte visible passe par `texte("cle")` (src/traductions.js) ; les textes sont dans
   src/langues/ (un fichier par langue, l'anglais sert de secours).
 - Les liens 5fish pointent vers https://fivefish.org (5fish.mobi y redirige).
+- Données : src/donnees/5fish.json (228 pays, 7 113 langues), lien par langue avec « {pays} » à remplacer
+  par le code du pays (lienFivefish dans src/pays.js). Pas d'API : pages publiques de fivefish.org,
+  collecte autorisée par GRN (directeur Europe).
 - Lancer : `npm run dev` (Node.js est dans /usr/local/bin).
 
 ## Décisions déjà prises

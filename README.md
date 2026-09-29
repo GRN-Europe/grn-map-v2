@@ -48,7 +48,8 @@ Site publié : https://grn-map-v2.vercel.app (déploiement automatique à chaque
 | `src/traductions.js` | Gestion des langues de l'interface |
 | `src/langues/` | Un fichier par langue (fr, en, de, es, it, pt, nl). Traductions de, es, it, pt, nl à faire relire par des locuteurs natifs. Pour ajouter une langue : copier en.js, changer code, nom et l'import des pays, traduire |
 | `src/styles.css` | Apparence (couleurs en haut du fichier) |
-| `src/donnees/exemple-5fish.json` | Données d'exemple (remplacées par les vraies données 5fish à l'étape 7) |
+| `src/donnees/5fish.json` | Copie des données 5fish (228 pays, 7 113 langues) — voir ci-dessous |
+| `scripts/importer-donnees-v1.mjs` | Recrée `5fish.json` à partir des données de la v1 |
 | `public/diaporama/` | Images du diaporama d'origine (JPEG 1920 × 1080) |
 | `public/logos/grn-europe.png` | Logo GRN Europe (bleu et or, fond transparent), affiché en blanc par un filtre CSS |
 | `public/icones/` | Icônes de l'application installable (dessin source : `public/icones/icone.svg`) |
@@ -61,24 +62,42 @@ Site publié : https://grn-map-v2.vercel.app (déploiement automatique à chaque
 2. Convertir en JPEG dans `public/diaporama/` sous les noms `diapo-1.jpg`, `diapo-2.jpg`…
 3. Si le nombre d'images change, adapter la liste `IMAGES_D_ORIGINE` dans `src/diaporama.js`.
 
-## Format des données 5fish
+## Données 5fish
+
+La carte lit une copie des données de 5fish (`src/donnees/5fish.json`), pour fonctionner même
+sans internet. Aucune API ni code d'accès n'est nécessaire : les données viennent des pages
+publiques de fivefish.org (accord de GRN).
+
+Mettre à jour les données (actuellement : copie des données de la v1) :
+
+```
+node scripts/importer-donnees-v1.mjs
+```
+
+puis envoyer la modification avec GitHub Desktop. La date de mise à jour s'affiche dans les réglages.
+
+Format du fichier :
 
 ```json
 {
-  "source": "exemple",
+  "source": "v1 (copie de fivefish.org)",
   "miseAJour": "2026-09-29",
-  "langues": { "cat": { "nom": { "fr": "Catalan", "en": "Catalan" }, "lien": "https://fivefish.org/..." } },
-  "pays":    { "AD": { "langues": ["cat", "spa"], "diaspora": ["por"] } }
+  "langues": { "23": { "nom": { "en": "French" }, "lien": "https://fivefish.org/{pays}/23?language=French" } },
+  "pays":    { "FR": { "langues": ["23", "…"], "diaspora": ["…"] } }
 }
 ```
 
-Les pays sont repérés par leur code ISO à 2 lettres (FR, AD…).
+- Les pays sont repérés par leur code ISO à 2 lettres (FR, AD…).
+- `langues` d'un pays = langues natives ; `diaspora` = autres langues parlées dans le pays.
+- Le lien d'une langue dépend du pays : `{pays}` est remplacé par le code du pays en minuscules
+  (`/fr/23` = le français en France, `/dz/23` = le français en Algérie).
+- 5fish ne donne les noms de langues qu'en anglais : ils s'affichent en anglais (comme en v1).
 
 ## Avancement (étapes du cahier des charges)
 
-- [x] 3. Carte avec données d'exemple
+- [x] 3. Carte
 - [x] 4. Langue du cœur, diaspora, QR code, « Ouvrir ici »
 - [x] 5. Mode borne : diaporama, inactivité, réglages protégés
 - [x] 6. Bandeau d'accueil de l'église
-- [ ] 7. Vraies données 5fish
-- [ ] 8. Publication sur Vercel
+- [x] 7. Vraies données 5fish (copie des données de la v1) — reste : script de mise à jour depuis fivefish.org
+- [x] 8. Publication sur Vercel

@@ -4,7 +4,7 @@
 // ajoute les langues parlées par les communautés venues d'ailleurs.
 
 import { texte, langue, quandLaLangueChange } from './traductions.js';
-import { nomDuPays } from './pays.js';
+import { nomDuPays, lienFivefish } from './pays.js';
 import { qrCodeSvg } from './qr.js';
 
 export function creerPanneauPays({ donnees, quandLangueChoisie, quandFerme }) {
@@ -65,7 +65,9 @@ export function creerPanneauPays({ donnees, quandLangueChoisie, quandFerme }) {
 
     // Les QR codes se calculent en parallèle ; si le panneau a changé entre-temps
     // (autre pays, case cochée…), on abandonne ce remplissage devenu inutile.
-    const qrCodes = await Promise.all(lignes.map(({ code }) => qrCodeSvg(donnees.langues[code].lien)));
+    // Lien de la langue dans CE pays (par ex. le français en France)
+    const lien = (code) => lienFivefish(donnees.langues[code].lien, paysOuvert);
+    const qrCodes = await Promise.all(lignes.map(({ code }) => qrCodeSvg(lien(code))));
     if (numero !== numeroRemplissage) return;
 
     const elements = lignes.map(({ code, diaspora }, i) => {
@@ -80,7 +82,7 @@ export function creerPanneauPays({ donnees, quandLangueChoisie, quandFerme }) {
         </span>
         <span class="qr-petit">${qrCodes[i]}</span>`;
       bouton.addEventListener('click', () => {
-        quandLangueChoisie({ nomLangue: nomDeLangue(code), nomPays, lien: donnees.langues[code].lien });
+        quandLangueChoisie({ nomLangue: nomDeLangue(code), nomPays, lien: lien(code) });
       });
       element.appendChild(bouton);
       return element;

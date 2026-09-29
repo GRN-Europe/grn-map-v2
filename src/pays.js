@@ -28,6 +28,13 @@ export function codeDuPays(entiteCarte) {
   return CODES_MANQUANTS[entiteCarte.properties.name] ?? null;
 }
 
+// Lien de la page 5fish d'une langue DANS un pays donné.
+// Les données gardent un modèle « https://fivefish.org/{pays}/23?language=French » :
+// on y met le code du pays en minuscules (fr → le français en France).
+export function lienFivefish(modele, codePays) {
+  return modele.replace('{pays}', codePays.toLowerCase());
+}
+
 // Renvoie le nom du pays dans la langue demandée (en anglais s'il manque)
 export function nomDuPays(code, langue) {
   return NOMS_MANQUANTS[code] ?? pays.getName(code, langue) ?? pays.getName(code, 'en') ?? code;

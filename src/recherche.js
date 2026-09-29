@@ -6,7 +6,7 @@
 // et cherche les noms de pays dans la langue de la borne ET en anglais.
 
 import { texte, langue } from './traductions.js';
-import { nomDuPays } from './pays.js';
+import { nomDuPays, lienFivefish } from './pays.js';
 import { CODES_PAYS } from './carte.js';
 
 // Nombre maximum de résultats affichés
@@ -22,12 +22,18 @@ export function creerRecherche({ donnees, quandPaysChoisi, quandLangueChoisie })
   const champ = document.getElementById('champ-recherche');
   const liste = document.getElementById('resultats-recherche');
 
-  // Pour chaque langue, les pays où elle est parlée (d'abord langue native, puis diaspora)
-  const paysDeLaLangue = {};
+  // Pour chaque langue, les pays où elle est parlée : d'abord ceux où elle est native,
+  // puis ceux de la diaspora (le premier pays sert pour le QR code)
+  const paysNatifs = {};
+  const paysDiaspora = {};
   Object.entries(donnees.pays).forEach(([codePays, infos]) => {
-    [...infos.langues, ...infos.diaspora].forEach((codeLangue) => {
-      (paysDeLaLangue[codeLangue] ??= []).push(codePays);
-    });
+    infos.langues.forEach((codeLangue) => (paysNatifs[codeLangue] ??= []).push(codePays));
+    infos.diaspora.forEach((codeLangue) => (paysDiaspora[codeLangue] ??= []).push(codePays));
+  });
+  const paysDeLaLangue = {};
+  Object.keys(donnees.langues).forEach((codeLangue) => {
+    const liste = [...(paysNatifs[codeLangue] ?? []), ...(paysDiaspora[codeLangue] ?? [])];
+    if (liste.length > 0) paysDeLaLangue[codeLangue] = liste;
   });
 
   function nomDeLangue(codeLangue) {
@@ -56,7 +62,10 @@ export function creerRecherche({ donnees, quandPaysChoisi, quandLangueChoisie })
     const score = (nom) => (simplifier(nom).startsWith(cherche) ? 0 : 1);
     const correspond = (nom) => simplifier(nom).includes(cherche);
 
-    const pays = CODES_PAYS
+    // Pays de la carte + territoires présents dans les données mais sans forme sur la carte
+    // (Réunion, Guadeloupe, Martinique, Guyane, Mayotte… dessinés avec la France)
+    const tousLesPays = [...new Set([...CODES_PAYS, ...Object.keys(donnees.pays)])];
+    const pays = tousLesPays
       .map((code) => ({ code, nom: nomDuPays(code, langue()), nomAnglais: nomDuPays(code, 'en') }))
       .filter(({ nom, nomAnglais }) => correspond(nom) || correspond(nomAnglais))
       .map((p) => ({ type: 'pays', ...p, score: Math.min(score(p.nom), score(p.nomAnglais)) }));
@@ -119,7 +128,7 @@ export function creerRecherche({ donnees, quandPaysChoisi, quandLangueChoisie })
           quandLangueChoisie({
             nomLangue: resultat.nom,
             nomPays: nomDuPays(pays[0], langue()),
-            lien: donnees.langues[resultat.code].lien,
+            lien: lienFivefish(donnees.langues[resultat.code].lien, pays[0]),
           });
         });
       }
