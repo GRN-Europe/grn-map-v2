@@ -12,6 +12,7 @@ import { creerVeille } from './veille.js';
 import { creerEcranReglages } from './reglages.js';
 import { creerBandeau } from './bandeau.js';
 import { creerRecherche } from './recherche.js';
+import { creerPleinEcran } from './plein-ecran.js';
 import { lireReglages, appliquerConfigurationDeLAdresse } from './stockage.js';
 
 // Empêche le zoom de la page entière (pincement Safari/iPad, double toucher)
@@ -136,16 +137,11 @@ document.getElementById('zoom-moins').addEventListener('click', () => carte.zoom
 
 // --- Plein écran (sur la carte et sur l'écran de veille) -----------------
 
-function basculerPleinEcran() {
-  if (document.fullscreenElement) {
-    document.exitFullscreen();
-  } else {
-    document.documentElement.requestFullscreen();
-  }
-}
+// En mode borne : code demandé pour sortir, retour automatique au plein écran (plein-ecran.js)
+const pleinEcran = creerPleinEcran();
 
-document.getElementById('bouton-plein-ecran').addEventListener('click', basculerPleinEcran);
-document.getElementById('veille-plein-ecran').addEventListener('click', basculerPleinEcran);
+document.getElementById('bouton-plein-ecran').addEventListener('click', () => pleinEcran.basculer());
+document.getElementById('veille-plein-ecran').addEventListener('click', () => pleinEcran.basculer());
 
 // --- Recherche (loupe) ---------------------------------------------------
 

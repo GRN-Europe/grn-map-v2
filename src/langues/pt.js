@@ -78,6 +78,7 @@ export default {
     donnees5fish: 'Dados 5fish: atualizados em {date}',
     donneesExemple: '(dados de exemplo)',
     pleinEcran: 'Ecrã inteiro',
+    sortiePleinEcran: 'Sair do ecrã inteiro',
     zoomPlus: 'Aumentar',
     zoomMoins: 'Diminuir',
     fermer: 'Fechar',

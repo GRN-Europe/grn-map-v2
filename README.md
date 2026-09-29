@@ -38,6 +38,7 @@ Site publié : https://grn-map-v2.vercel.app (déploiement automatique à chaque
 | `src/qr.js` | Fabrique les QR codes (hors ligne) |
 | `src/recherche.js` | Recherche (loupe) : langues et pays, sans tenir compte des accents |
 | `src/borne.js` | Mode borne (actif par défaut, `?presentation=0` pour le désactiver) : inactivité, « Je suis toujours là », retours automatiques |
+| `src/plein-ecran.js` | Plein écran : code demandé pour en sortir, retour automatique (mode borne) |
 | `src/veille.js` | Écran de veille : mini-carte, diaporama en fondu, logo |
 | `src/diaporama.js` | Images du diaporama : d'origine ou issues d'un PDF chargé |
 | `src/reglages.js` | Écran « Réglages de la borne » |

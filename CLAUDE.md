@@ -22,6 +22,9 @@
 - Publication : GitHub GRN-Europe/grn-map-v2 (public), Vercel équipe GRN-Europe (Hobby),
   https://grn-map-v2.vercel.app. Git en ligne de commande n'est pas installé : les envois se font
   avec GitHub Desktop.
+- Plein écran (mode borne) : le bouton ⛶ demande le code pour en sortir ; après une sortie par Échap
+  ou geste, le plein écran revient au toucher suivant. Un site ne peut pas bloquer totalement la sortie :
+  pour un vrai verrouillage, mode kiosque de l'appareil (Accès guidé iPad, Accès attribué Windows).
 - Toucher la mer (hors des pays) ferme le panneau du pays sélectionné (demande de GRN Europe).
 - Recherche (loupe, comme en v1) : pays (nom dans la langue de la borne ou en anglais) et langues ;
   un pays ouvre son panneau, une langue ouvre directement son QR code.

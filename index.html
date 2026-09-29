@@ -239,6 +239,24 @@
     </div>
   </div>
 
+  <!-- Code demandé pour quitter le plein écran avec le bouton ⛶ (mode borne) -->
+  <div class="panneau" id="fenetre-code-sortie" hidden>
+    <div class="panneau-contenu fenetre-reglages">
+      <h2 data-texte="sortiePleinEcran"></h2>
+      <form id="formulaire-code-sortie" autocomplete="off">
+        <label class="champ">
+          <span data-texte="codeAcces"></span>
+          <input id="champ-code-sortie" type="password" autocapitalize="characters">
+        </label>
+        <p class="erreur" id="erreur-code-sortie" hidden data-texte="codeIncorrect"></p>
+        <div class="boutons boutons-gauche">
+          <button class="bouton-principal" type="submit" data-texte="valider"></button>
+          <button class="bouton-secondaire" id="code-sortie-annuler" type="button" data-texte="fermer"></button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- « Je suis toujours là » : les 10 dernières secondes avant un retour automatique
        (en dernier dans la page pour passer devant tout le reste) -->
   <div class="panneau" id="toujours-la" hidden>
