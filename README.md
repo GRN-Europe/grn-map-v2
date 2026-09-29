@@ -49,7 +49,8 @@ Site publié : https://grn-map-v2.vercel.app (déploiement automatique à chaque
 | `src/langues/` | Un fichier par langue (fr, en, de, es, it, pt, nl). Traductions de, es, it, pt, nl à faire relire par des locuteurs natifs. Pour ajouter une langue : copier en.js, changer code, nom et l'import des pays, traduire |
 | `src/styles.css` | Apparence (couleurs en haut du fichier) |
 | `src/donnees/5fish.json` | Copie des données 5fish (228 pays, 7 113 langues) — voir ci-dessous |
-| `scripts/importer-donnees-v1.mjs` | Recrée `5fish.json` à partir des données de la v1 |
+| `scripts/mettre-a-jour-5fish.mjs` | Met à jour `5fish.json` en lisant le site fivefish.org |
+| `scripts/importer-donnees-v1.mjs` | Solution de secours : recrée `5fish.json` à partir des données de la v1 |
 | `public/diaporama/` | Images du diaporama d'origine (JPEG 1920 × 1080) |
 | `public/logos/grn-europe.png` | Logo GRN Europe (bleu et or, fond transparent), affiché en blanc par un filtre CSS |
 | `public/icones/` | Icônes de l'application installable (dessin source : `public/icones/icone.svg`) |
@@ -68,19 +69,24 @@ La carte lit une copie des données de 5fish (`src/donnees/5fish.json`), pour fo
 sans internet. Aucune API ni code d'accès n'est nécessaire : les données viennent des pages
 publiques de fivefish.org (accord de GRN).
 
-Mettre à jour les données (actuellement : copie des données de la v1) :
+**Mettre à jour les données** (environ 4 minutes, à faire de temps en temps) :
 
 ```
-node scripts/importer-donnees-v1.mjs
+node scripts/mettre-a-jour-5fish.mjs
 ```
 
-puis envoyer la modification avec GitHub Desktop. La date de mise à jour s'affiche dans les réglages.
+Le script lit les 5 pages de régions puis la page de chaque pays sur fivefish.org, avec une
+pause d'une seconde entre chaque page. Si le site 5fish a changé et que le script lit trop peu de
+pays ou de langues, il s'arrête sans rien modifier. Ensuite, envoyer la modification avec GitHub
+Desktop. La date de mise à jour s'affiche dans les réglages de la borne.
+
+(Solution de secours : `node scripts/importer-donnees-v1.mjs` reprend la copie des données de la v1.)
 
 Format du fichier :
 
 ```json
 {
-  "source": "v1 (copie de fivefish.org)",
+  "source": "fivefish.org",
   "miseAJour": "2026-09-29",
   "langues": { "23": { "nom": { "en": "French" }, "lien": "https://fivefish.org/{pays}/23?language=French" } },
   "pays":    { "FR": { "langues": ["23", "…"], "diaspora": ["…"] } }
@@ -99,5 +105,5 @@ Format du fichier :
 - [x] 4. Langue du cœur, diaspora, QR code, « Ouvrir ici »
 - [x] 5. Mode borne : diaporama, inactivité, réglages protégés
 - [x] 6. Bandeau d'accueil de l'église
-- [x] 7. Vraies données 5fish (copie des données de la v1) — reste : script de mise à jour depuis fivefish.org
+- [x] 7. Vraies données 5fish, avec script de mise à jour depuis fivefish.org
 - [x] 8. Publication sur Vercel
