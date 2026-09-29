@@ -28,6 +28,8 @@
 - Plein écran (mode borne) : le bouton ⛶ demande le code pour en sortir ; après une sortie par Échap
   ou geste, le plein écran revient au toucher suivant. Un site ne peut pas bloquer totalement la sortie :
   pour un vrai verrouillage, mode kiosque de l'appareil (Accès guidé iPad, Accès attribué Windows).
+- Mises à jour : la borne vérifie toutes les heures s'il existe une nouvelle version et recharge
+  la page au passage en veille (jamais pendant qu'un visiteur l'utilise).
 - Toucher la mer (hors des pays) ferme le panneau du pays sélectionné (demande de GRN Europe).
 - Recherche (loupe, comme en v1) : pays (nom dans la langue de la borne ou en anglais) et langues ;
   un pays ouvre son panneau, une langue ouvre directement son QR code.

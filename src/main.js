@@ -77,8 +77,37 @@ const veille = creerVeille({
   quandReveil: () => borne.changerEtat('carte'),
 });
 
+// --- Mises à jour de l'application sur une borne allumée en permanence ------
+// L'application enregistrée sur l'appareil (hors ligne) ne prend une nouvelle version
+// qu'au rechargement. Sur une borne, personne ne recharge : on vérifie donc s'il existe
+// une nouvelle version toutes les heures et, quand elle est prête, on recharge la page
+// au moment du passage en veille (jamais pendant qu'un visiteur utilise la borne).
+let nouvelleVersionPrete = false;
+
+if ('serviceWorker' in navigator) {
+  // Lors de la toute première visite, il n'y a pas encore de version enregistrée :
+  // son installation n'est pas une « nouvelle version », inutile de recharger
+  let versionDejaEnregistree = Boolean(navigator.serviceWorker.controller);
+
+  navigator.serviceWorker.ready.then((enregistrement) => {
+    setInterval(() => enregistrement.update().catch(() => {}), 60 * 60 * 1000);
+  });
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!versionDejaEnregistree) {
+      versionDejaEnregistree = true;
+      return;
+    }
+    nouvelleVersionPrete = true;
+    if (veille.estVisible()) window.location.reload(); // déjà en veille : on recharge tout de suite
+  });
+}
+
 // Ferme tout, recentre la carte sur le monde et lance le diaporama
 function passerEnVeille() {
+  if (nouvelleVersionPrete) {
+    window.location.reload(); // l'application redémarre sur l'écran d'accueil, à jour
+    return;
+  }
   ecranReglages.fermer();
   recherche.fermer();
   ecoute.toutFermer();
