@@ -49,7 +49,7 @@ export default {
     dureeImage: 'Duración de cada imagen de la presentación (segundos)',
     inactivite: 'Volver a la presentación tras inactividad (segundos)',
     retour5fish: 'Volver al mapa desde el sitio de GRN (segundos)',
-    retour5fishAide: '0 = sin regreso automático. Solo en modo terminal.',
+    retour5fishAide: '0 = sin regreso automático.',
     imagesDiaporama: 'Imágenes de la presentación',
     diaporamaOrigine: 'Presentación original, {n} imágenes.',
     diaporamaPdf: 'PDF «{nom}», {n} imágenes, cargado el {date}.',

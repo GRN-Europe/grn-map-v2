@@ -49,7 +49,7 @@ export default {
     dureeImage: 'Anzeigedauer jedes Bildes der Diashow (Sekunden)',
     inactivite: 'Zurück zur Diashow nach Inaktivität (Sekunden)',
     retour5fish: 'Zurück zur Karte von der GRN-Website (Sekunden)',
-    retour5fishAide: '0 = keine automatische Rückkehr. Nur im Terminal-Modus aktiv.',
+    retour5fishAide: '0 = keine automatische Rückkehr.',
     imagesDiaporama: 'Bilder der Diashow',
     diaporamaOrigine: 'Original-Diashow, {n} Bilder.',
     diaporamaPdf: 'PDF „{nom}“, {n} Bilder, geladen am {date}.',

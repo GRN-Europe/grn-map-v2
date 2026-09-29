@@ -17,7 +17,11 @@
 - Le lien de configuration contient les réglages simples, pas les images du PDF.
 - Diaporama d'origine : public/diaporama/diapo-1…6.jpg (export de la présentation GRN) ;
   la diapositive 5 dit « 6593 languages » (à corriger dans la présentation si besoin).
-- Sans ?presentation=1 : pas de veille ni de retour automatique (site normal).
+- Mode borne actif sur l'adresse simple (choix de GRN Europe) : l'application démarre sur
+  l'écran d'accueil (diaporama). ?presentation=0 désactive le mode borne (site normal).
+- Publication : GitHub GRN-Europe/grn-map-v2 (public), Vercel équipe GRN-Europe (Hobby),
+  https://grn-map-v2.vercel.app. Git en ligne de commande n'est pas installé : les envois se font
+  avec GitHub Desktop.
 - Recherche (loupe, comme en v1) : pays (nom dans la langue de la borne ou en anglais) et langues ;
   un pays ouvre son panneau, une langue ouvre directement son QR code.
 - Bandeau d'accueil : bande blanche de 76 px en haut (bordure orange), logo à gauche de la phrase ;

@@ -7,7 +7,7 @@ import { creerCarte, REGIONS } from './carte.js';
 import { changerLangue, quandLaLangueChange, traduireLaPage } from './traductions.js';
 import { creerPanneauPays } from './panneau-pays.js';
 import { creerEcoute } from './ecoute.js';
-import { creerBorne } from './borne.js';
+import { creerBorne, MODE_BORNE } from './borne.js';
 import { creerVeille } from './veille.js';
 import { creerEcranReglages } from './reglages.js';
 import { creerBandeau } from './bandeau.js';
@@ -161,6 +161,11 @@ document.getElementById('bouton-recherche').addEventListener('click', () => rech
 traduireLaPage();
 changerLangue(reglages.langue);
 bandeau.afficher(reglages);
-veille.chargerImages();
 choisirRegion('monde');
 borne.changerEtat('carte');
+
+// En mode borne, l'application démarre sur l'écran d'accueil (diaporama),
+// une fois la liste des images chargée
+veille.chargerImages().then(() => {
+  if (MODE_BORNE) passerEnVeille();
+});

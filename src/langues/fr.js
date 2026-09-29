@@ -49,7 +49,7 @@ export default {
     dureeImage: 'Durée de chaque image du diaporama (secondes)',
     inactivite: 'Retour au diaporama après inactivité (secondes)',
     retour5fish: 'Retour à la carte depuis le site GRN (secondes)',
-    retour5fishAide: '0 = pas de retour automatique. Actif en mode borne uniquement.',
+    retour5fishAide: '0 = pas de retour automatique.',
     imagesDiaporama: 'Images du diaporama',
     diaporamaOrigine: 'Diaporama d’origine, {n} images.',
     diaporamaPdf: 'PDF « {nom} », {n} images, chargé le {date}.',

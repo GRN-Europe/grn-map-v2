@@ -9,7 +9,10 @@ sur son téléphone (5fish).
 1. Installer Node.js (version LTS) depuis https://nodejs.org
 2. Dans ce dossier, installer les outils (une seule fois) : `npm install`
 3. Démarrer : `npm run dev`, puis ouvrir http://localhost:5173
-   - mode borne (diaporama de veille, retours automatiques) : http://localhost:5173/?presentation=1
+   - le mode borne (écran d'accueil, retours automatiques) est actif sur l'adresse simple ;
+     pour un site normal sans diaporama : http://localhost:5173/?presentation=0
+
+Site publié : https://grn-map-v2.vercel.app (déploiement automatique à chaque envoi sur GitHub).
 
 ## Réglages de la borne
 
@@ -34,7 +37,7 @@ sur son téléphone (5fish).
 | `src/ecoute.js` | Fenêtre du QR code et écran « Ouvrir ici » (page 5fish dans un cadre) |
 | `src/qr.js` | Fabrique les QR codes (hors ligne) |
 | `src/recherche.js` | Recherche (loupe) : langues et pays, sans tenir compte des accents |
-| `src/borne.js` | Mode borne (`?presentation=1`) : inactivité, « Je suis toujours là », retours automatiques |
+| `src/borne.js` | Mode borne (actif par défaut, `?presentation=0` pour le désactiver) : inactivité, « Je suis toujours là », retours automatiques |
 | `src/veille.js` | Écran de veille : mini-carte, diaporama en fondu, logo |
 | `src/diaporama.js` | Images du diaporama : d'origine ou issues d'un PDF chargé |
 | `src/reglages.js` | Écran « Réglages de la borne » |

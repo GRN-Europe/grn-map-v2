@@ -1,7 +1,8 @@
-// Mode borne : retours automatiques après inactivité.
+// Mode borne : écran d'accueil (diaporama) et retours automatiques après inactivité.
 //
-// Le mode borne s'active avec l'adresse …?presentation=1 (comme en v1).
-// Sans ce paramètre, l'application est un site normal : pas de diaporama ni de retour automatique.
+// Le mode borne est actif sur l'adresse simple (choix de GRN Europe).
+// Pour l'utiliser comme un site normal, sans diaporama ni retour automatique,
+// ajouter ?presentation=0 à l'adresse.
 //
 // La borne est toujours dans l'un de ces trois états :
 //   "carte"  → sans toucher pendant « inactivité » secondes, on passe au diaporama de veille ;
@@ -11,8 +12,8 @@
 
 import { texte, quandLaLangueChange } from './traductions.js';
 
-// true si l'adresse contient ?presentation=1
-export const MODE_BORNE = new URLSearchParams(window.location.search).get('presentation') === '1';
+// true sauf si l'adresse contient ?presentation=0
+export const MODE_BORNE = new URLSearchParams(window.location.search).get('presentation') !== '0';
 
 // Nombre de secondes pendant lesquelles « Je suis toujours là » est affiché
 const DUREE_AVERTISSEMENT = 10;

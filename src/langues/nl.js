@@ -49,7 +49,7 @@ export default {
     dureeImage: 'Duur van elke afbeelding van de diavoorstelling (seconden)',
     inactivite: 'Terug naar de diavoorstelling na inactiviteit (seconden)',
     retour5fish: 'Terug naar de kaart vanaf de GRN-website (seconden)',
-    retour5fishAide: '0 = niet automatisch terug. Alleen actief in zuilmodus.',
+    retour5fishAide: '0 = niet automatisch terug.',
     imagesDiaporama: 'Afbeeldingen van de diavoorstelling',
     diaporamaOrigine: 'Oorspronkelijke diavoorstelling, {n} afbeeldingen.',
     diaporamaPdf: 'PDF ‘{nom}’, {n} afbeeldingen, geladen op {date}.',

@@ -66,14 +66,13 @@ export function codeValide(code, reglages) {
 
 // --- Lien de configuration -------------------------------------------------
 
-// Fabrique le lien : adresse de la borne en mode présentation + réglages encodés
+// Fabrique le lien : adresse de la borne + réglages encodés
 export function lienDeConfiguration(reglages) {
   const json = JSON.stringify(reglages);
   const encode = btoa(String.fromCharCode(...new TextEncoder().encode(json)));
   const adresse = new URL(window.location.href);
   adresse.search = '';
   adresse.hash = '';
-  adresse.searchParams.set('presentation', '1');
   adresse.searchParams.set('config', encode);
   return adresse.toString();
 }

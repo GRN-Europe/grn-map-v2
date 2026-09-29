@@ -49,7 +49,7 @@ export default {
     dureeImage: 'Duration of each slideshow image (seconds)',
     inactivite: 'Back to the slideshow after inactivity (seconds)',
     retour5fish: 'Back to the map from the GRN website (seconds)',
-    retour5fishAide: '0 = no automatic return. Kiosk mode only.',
+    retour5fishAide: '0 = no automatic return.',
     imagesDiaporama: 'Slideshow images',
     diaporamaOrigine: 'Original slideshow, {n} images.',
     diaporamaPdf: 'PDF “{nom}”, {n} images, loaded on {date}.',
