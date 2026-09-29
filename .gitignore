@@ -1,0 +1,13 @@
+# Fichiers que Git n'envoie pas sur GitHub
+
+# Outils installés par « npm install » (recréés automatiquement)
+node_modules/
+
+# Version publiable fabriquée par « npm run build » (Vercel la refait lui-même)
+dist/
+
+# Fichiers de travail non publiés : exports PowerPoint, logos d'églises pour les tests
+sources/
+
+# Fichiers système du Mac
+.DS_Store

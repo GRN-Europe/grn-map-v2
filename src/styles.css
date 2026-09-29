@@ -1,0 +1,904 @@
+/* Styles de GRN map v2 — pensés pour une borne tactile en paysage. */
+
+/* Couleurs principales (relevées sur les captures d'écran de la v1) */
+:root {
+  --bleu-nuit: #0c1a2b;     /* mer et fonds sombres */
+  --orange: #ff6a13;        /* onglet actif et boutons d'action (« Retour à la carte ») */
+  --mer: var(--bleu-nuit);
+  --terre: #c4561a;         /* tous les pays : orange brûlé, comme en v1 */
+  --terre-touchee: #e0692a; /* pays au moment où on le touche */
+  --frontiere: #0c1a2b;
+  --texte: #1c2733;
+  --ombre: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --marge: 16px;            /* espace entre les commandes et le bord de l'écran */
+  --hauteur-bandeau: 0px;   /* 0 sans bandeau d'accueil ; voir body.avec-bandeau */
+}
+
+/* Hauteur modérée du bandeau, pour ne pas réduire la carte sur les écrans tactiles */
+body.avec-bandeau { --hauteur-bandeau: 76px; }
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;              /* la page ne défile jamais : tout tient à l'écran */
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--texte);
+  background: var(--mer);
+  -webkit-user-select: none;     /* pas de sélection de texte au doigt */
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;    /* supprime le zoom par double toucher sur la page */
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+}
+
+/* --- Carte (plein écran) ------------------------------------------------ */
+
+/* La carte occupe tout l'écran, sous le bandeau d'accueil s'il est affiché */
+.zone-carte {
+  position: fixed;
+  top: var(--hauteur-bandeau);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+#carte {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pays path {
+  fill: var(--terre);
+  stroke: var(--frontiere);
+  stroke-width: 0.6;
+  vector-effect: non-scaling-stroke; /* frontières fines même en zoomant */
+  cursor: pointer;
+}
+
+/* Retour visuel au toucher (pas de survol sur une borne) */
+.pays path:active { fill: var(--terre-touchee); }
+.pays path.sans-code { pointer-events: none; }
+
+/* Couche des drapeaux : posée sur la carte, invisible tant qu'on n'a pas zoomé */
+.couche-drapeaux {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;          /* les gestes passent à la carte… */
+  display: none;
+}
+
+.couche-drapeaux.visible { display: block; }
+
+.drapeau {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 6px;                  /* agrandit la zone à toucher autour du drapeau */
+  background: transparent;
+  pointer-events: auto;          /* …sauf sur les drapeaux eux-mêmes */
+}
+
+/* Même taille et même format allongé qu'en v1 (26 × 18 px) pour ne pas encombrer la carte ;
+   la marge (padding) du bouton garde une zone à toucher un peu plus grande */
+.drapeau .fi {
+  display: block;
+  width: 26px;
+  height: 18px;
+  background-size: cover;  /* remplit le format allongé sans bandes vides */
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Rangée du haut ------------------------------------------------------ */
+
+/* Trois colonnes : [zoom + titre] [onglets] [vide].
+   Les colonnes de côté ont la même largeur, donc les onglets restent centrés ;
+   si le titre manque de place, sa colonne s'élargit et les onglets se décalent
+   vers la droite au lieu de le recouvrir. */
+.haut {
+  position: absolute;
+  top: var(--marge);
+  left: var(--marge);
+  right: var(--marge);
+  display: grid;
+  grid-template-columns: minmax(max-content, 1fr) auto 1fr;
+  align-items: start;
+  gap: 12px;
+  pointer-events: none;          /* les zones vides laissent passer les gestes vers la carte */
+}
+
+.haut > * { pointer-events: auto; }
+
+/* --- En haut à gauche : zoom et titre ----------------------------------- */
+
+.coin-haut-gauche {
+  justify-self: start;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.boutons-zoom {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--ombre);
+}
+
+.boutons-zoom button {
+  width: 52px;
+  height: 52px;
+  background: white;
+  color: var(--texte);
+  font-size: 28px;
+  line-height: 1;
+}
+
+.boutons-zoom button + button { border-top: 1px solid #d5d9de; }
+
+.titre-carte {
+  margin: 0;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: rgba(12, 26, 43, 0.85);
+  color: white;
+  font-size: 19px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* --- En haut au centre : pastille blanche des onglets -------------------- */
+
+.barre-onglets {
+  min-width: 0;                  /* permet aux onglets de défiler si l'écran est étroit */
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  border-radius: 16px;
+  background: white;
+  box-shadow: var(--ombre);
+}
+
+.onglets {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;              /* sur petite tablette, les onglets défilent */
+}
+
+/* Grandes zones à toucher : au moins 52 px de haut */
+.onglet {
+  min-height: 52px;
+  padding: 0 20px;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--texte);
+  font-size: 19px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.onglet.actif {
+  background: var(--orange);
+  color: white;
+  font-weight: 700;
+}
+
+.bouton-rond {
+  flex-shrink: 0;
+  min-width: 52px;
+  min-height: 52px;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--texte);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- En bas : logo GRN (gauche), plein écran et réglages (droite) --------- */
+
+.logo-grn {
+  position: absolute;
+  left: var(--marge);
+  bottom: var(--marge);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: rgba(12, 26, 43, 0.85);
+  color: white;
+  text-decoration: none;
+  box-shadow: var(--ombre);
+}
+
+.logo-grn strong { font-size: 22px; letter-spacing: 1px; }
+.logo-grn span { font-size: 10px; line-height: 1.15; font-weight: 600; }
+
+.coin-bas-droite {
+  position: absolute;
+  right: var(--marge);
+  bottom: var(--marge);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Boutons discrets, comme en v1, mais assez grands pour le doigt */
+.bouton-discret {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Panneaux (pays, recherche, réglages) -------------------------------- */
+
+.panneau {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(12, 26, 43, 0.6);
+}
+
+.panneau[hidden] { display: none; }
+
+.panneau-contenu {
+  width: min(560px, 90vw);
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 28px 32px;
+  border-radius: 20px;
+  background: white;
+  font-size: 20px;
+}
+
+.panneau-contenu h2 {
+  margin: 0 0 16px;
+  font-size: 30px;
+}
+
+.panneau-contenu ul {
+  margin: 0 0 24px;
+  padding-left: 24px;
+  line-height: 1.7;
+}
+
+.panneau-contenu .vide { list-style: none; margin-left: -24px; }
+
+.bouton-principal {
+  min-height: 56px;
+  padding: 0 28px;
+  border-radius: 28px;
+  background: var(--orange);
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* --- Écrans étroits (tablette en portrait) ------------------------------ */
+
+@media (max-width: 1100px) {
+  /* Plus assez de place sur une ligne : les onglets passent sous le zoom et le titre */
+  .haut { grid-template-columns: minmax(0, 1fr); }
+  .barre-onglets { justify-self: start; max-width: 100%; }
+}
+
+/* --- Pays sélectionné sur la carte (orange clair, contour blanc, comme en v1) --- */
+
+.pays path.selectionne {
+  fill: #f4a24c;
+  stroke: white;
+  stroke-width: 2;
+}
+
+/* --- Panneau d'un pays (à droite) ---------------------------------------- */
+
+:root { --largeur-panneau-pays: min(400px, 85vw); }
+
+.panneau-pays {
+  position: fixed;
+  top: var(--hauteur-bandeau); /* reste sous le bandeau d'accueil */
+  right: 0;
+  bottom: 0;
+  width: var(--largeur-panneau-pays);
+  overflow-y: auto;
+  padding: 24px 20px 32px;
+  background: white;
+  box-shadow: -6px 0 24px rgba(0, 0, 0, 0.35);
+}
+
+.panneau-pays[hidden] { display: none; }
+
+.panneau-pays h2 {
+  margin: 8px 56px 4px 0;          /* laisse la place au bouton ✕ */
+  font-size: 32px;
+}
+
+.pays-sous-titre {
+  margin: 0 0 16px;
+  color: #5d6873;
+  font-size: 17px;
+}
+
+.pays-consigne {
+  margin: 0 0 12px;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+/* Bouton ✕ en haut à droite du panneau */
+.bouton-fermer {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #f1f2f4;
+  color: var(--texte);
+  font-size: 22px;
+}
+
+.liste-langues {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.liste-langues .vide { color: #5d6873; }
+
+/* Une langue = une grande carte à toucher, avec son petit QR code à droite */
+.carte-langue {
+  width: 100%;
+  min-height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 12px 12px 18px;
+  border: 1px solid #f3dcc6;
+  border-radius: 14px;
+  background: #fdf6ef;
+  color: var(--texte);
+  text-align: left;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.carte-langue:active { background: #fbe7d3; }
+
+.nom-langue small {
+  display: block;
+  margin-top: 2px;
+  color: var(--orange);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.qr-petit {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+}
+
+.qr-petit svg,
+.qr-grand svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Case « Afficher aussi les langues diaspora » en bas de la liste */
+.case-diaspora {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 56px;
+  padding-top: 12px;
+  border-top: 1px solid #e3e6ea;
+  color: #3c4652;
+  font-size: 18px;
+}
+
+.case-diaspora[hidden] { display: none; }
+
+.case-diaspora input {
+  width: 28px;
+  height: 28px;
+  accent-color: var(--orange);
+}
+
+/* Quand le panneau est ouvert, les commandes se placent dans la partie visible de la carte */
+body.pays-ouvert .haut,
+body.pays-ouvert .coin-bas-droite {
+  right: calc(var(--largeur-panneau-pays) + var(--marge));
+}
+
+/* --- Fenêtre du QR code ---------------------------------------------------- */
+
+.fenetre-qr {
+  width: min(480px, 90vw);
+  text-align: center;
+}
+
+.fenetre-qr h2 { margin-bottom: 4px; }
+
+.qr-pays {
+  margin: 0 0 20px;
+  color: #5d6873;
+  font-size: 17px;
+}
+
+.qr-grand {
+  width: min(320px, 70vw);
+  height: min(320px, 70vw);
+  margin: 0 auto 20px;
+}
+
+.boutons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.bouton-secondaire {
+  min-height: 56px;
+  padding: 0 28px;
+  border-radius: 28px;
+  background: #f1f2f4;
+  color: var(--texte);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* --- Écran « Ouvrir ici » : page 5fish sous une barre sombre --------------- */
+
+.ecran-5fish {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: white;
+}
+
+.ecran-5fish[hidden] { display: none; }
+
+.barre-5fish {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 8px 16px;
+  background: var(--bleu-nuit);
+  border-bottom: 3px solid var(--orange);
+  color: white;
+}
+
+.titre-5fish {
+  flex: 1;
+  font-size: 19px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compte-a-rebours {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 17px;
+  font-variant-numeric: tabular-nums; /* les chiffres ne bougent pas en changeant */
+  white-space: nowrap;
+}
+
+#cadre-5fish {
+  flex: 1;
+  width: 100%;
+  border: none;
+}
+
+/* Fenêtre « Je suis toujours là » */
+.fenetre-toujours-la { text-align: center; }
+
+.fenetre-toujours-la p {
+  margin: 0 0 24px;
+  color: #5d6873;
+  font-variant-numeric: tabular-nums;
+}
+
+.bouton-geant {
+  min-height: 80px;
+  padding: 0 40px;
+  border-radius: 40px;
+  font-size: 26px;
+}
+
+/* --- Fenêtre des réglages ---------------------------------------------------- */
+
+.fenetre-reglages {
+  width: min(620px, 94vw);
+  max-height: 92vh;
+}
+
+.fenetre-reglages h2 { margin-bottom: 4px; }
+
+.fenetre-reglages .sous-titre {
+  margin: 0 0 24px;
+  color: #5d6873;
+  font-size: 16px;
+}
+
+/* Un champ = une étiquette, éventuellement une aide, puis la zone de saisie */
+.champ {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.champ small,
+.bloc-diaporama small {
+  color: #5d6873;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.champ input,
+.champ select {
+  min-height: 56px;
+  padding: 0 16px;
+  border: 1px solid #c9d0d6;
+  border-radius: 12px;
+  background: white;
+  color: var(--texte);
+  font: inherit;
+  font-weight: 400;
+}
+
+.champ input:focus,
+.champ select:focus {
+  outline: 3px solid rgba(255, 106, 19, 0.35);
+  border-color: var(--orange);
+}
+
+.erreur {
+  margin: -6px 0 16px;
+  color: #c0392b;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.erreur[hidden] { display: none; }
+
+.bloc-diaporama {
+  margin: 0 0 18px;
+  padding: 14px 16px 16px;
+  border: 1px dashed #c9d0d6;
+  border-radius: 12px;
+  font-size: 16px;
+}
+
+.bloc-diaporama legend {
+  padding: 0 6px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.bloc-diaporama p { margin: 4px 0; }
+.bloc-diaporama .boutons { margin-top: 12px; }
+
+.boutons-gauche {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.message {
+  min-height: 1.4em;
+  margin: 0 0 12px;
+  color: #2e7d32;
+  font-size: 16px;
+  overflow-wrap: anywhere; /* un long lien de configuration passe à la ligne */
+  user-select: text;       /* permet de sélectionner le lien s'il faut le copier à la main */
+  -webkit-user-select: text;
+}
+
+.date-donnees {
+  margin: 20px 0 0;
+  color: #5d6873;
+  font-size: 14px;
+}
+
+/* --- Écran de veille ------------------------------------------------------------ */
+
+.ecran-veille {
+  position: fixed;
+  inset: var(--hauteur-bandeau) 0 0 0; /* sous le bandeau d'accueil */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6vh;
+  padding: 4vw;
+  /* Dégradé bleu nuit, plus clair en haut au centre (comme en v1) */
+  background: radial-gradient(ellipse at 50% 0%, #17325a 0%, #0c1a2b 65%);
+  cursor: pointer;
+}
+
+.ecran-veille[hidden] { display: none; }
+
+.veille-cartes {
+  width: 100%;
+  max-width: 1800px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5vw;
+}
+
+/* Les deux cartes ont le même format 16/9 et des coins arrondis */
+.veille-carte {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--bleu-nuit);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+}
+
+.veille-carte svg {
+  width: 100%;
+  height: 100%;
+}
+
+.veille-carte svg path {
+  fill: var(--terre);
+  stroke: var(--bleu-nuit);
+  stroke-width: 0.5;
+}
+
+/* Deux images superposées pour le fondu enchaîné */
+.diapo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.diapo.visible { opacity: 1; }
+
+.veille-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+}
+
+.veille-logo strong { font-size: 34px; letter-spacing: 1px; }
+.veille-logo span { font-size: 13px; line-height: 1.15; font-weight: 600; }
+
+.veille-plein-ecran {
+  position: absolute;
+  right: var(--marge);
+  bottom: var(--marge);
+}
+
+/* Tablette en portrait : les deux cartes l'une sous l'autre */
+@media (orientation: portrait) {
+  .veille-cartes { grid-template-columns: 1fr; }
+}
+
+/* --- Bandeau d'accueil de l'église ------------------------------------------- */
+
+.bandeau {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--hauteur-bandeau);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 8px 24px;
+  background: white;
+  border-bottom: 3px solid var(--orange);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.bandeau[hidden] { display: none; }
+
+.bandeau-logo {
+  flex-shrink: 0;
+  max-height: 56px;
+  max-width: 220px;
+  object-fit: contain;
+}
+
+.bandeau-logo[hidden] { display: none; }
+
+/* La phrase tient sur deux lignes au plus */
+.bandeau-phrase {
+  margin: 0;
+  color: var(--texte);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Écrans étroits : phrase plus petite */
+@media (max-width: 900px) {
+  .bandeau-phrase { font-size: 18px; }
+  .bandeau-logo { max-width: 140px; }
+}
+
+/* Réglages du bandeau */
+.case-a-cocher {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.case-a-cocher input {
+  width: 28px;
+  height: 28px;
+  accent-color: var(--orange);
+}
+
+.etiquette {
+  margin: 10px 0 6px !important;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.apercu-logo {
+  display: flex;
+  align-items: center;
+  min-height: 72px;
+  padding: 8px;
+  border-radius: 10px;
+  background: #f1f2f4;
+  color: #5d6873;
+}
+
+.apercu-logo img {
+  max-height: 56px;
+  max-width: 100%;
+}
+
+.apercu-logo img[hidden],
+#sans-logo[hidden],
+#bouton-retirer-logo[hidden] { display: none; }
+
+#bandeau-phrases { margin-top: 16px; }
+#bandeau-phrases .champ { margin-bottom: 12px; }
+
+/* --- Recherche (loupe) ------------------------------------------------------------ */
+
+/* Fenêtre en haut de l'écran : le clavier tactile s'ouvre en bas sans la cacher */
+.panneau-recherche {
+  align-items: flex-start;
+  padding-top: calc(var(--hauteur-bandeau) + 6vh);
+}
+
+.fenetre-recherche {
+  width: min(720px, 94vw);
+  max-height: calc(100vh - var(--hauteur-bandeau) - 12vh);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.recherche-entete {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Le bouton ✕ est ici dans le flux, pas en haut à droite */
+.recherche-entete .bouton-fermer { position: static; flex-shrink: 0; }
+
+#champ-recherche {
+  flex: 1;
+  min-width: 0;
+  min-height: 60px;
+  padding: 0 20px;
+  border: 2px solid #c9d0d6;
+  border-radius: 30px;
+  color: var(--texte);
+  font: inherit;
+  font-size: 22px;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+#champ-recherche:focus {
+  outline: none;
+  border-color: var(--orange);
+}
+
+.resultats {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  overflow-y: auto;
+}
+
+.resultats .vide {
+  padding: 16px 8px;
+  color: #5d6873;
+}
+
+/* Un résultat = une grande ligne à toucher */
+.resultat {
+  width: 100%;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--texte);
+  text-align: left;
+}
+
+.resultat:active { background: #fbe7d3; }
+
+.resultat-icone {
+  flex-shrink: 0;
+  width: 36px;
+  height: 26px;
+  border-radius: 3px;
+}
+
+.fi.resultat-icone { background-size: cover; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); }
+
+.icone-langue {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--orange);
+}
+
+.resultat-texte {
+  display: flex;
+  flex-direction: column;
+}
+
+.resultat-texte strong { font-size: 20px; }
+
+.resultat-texte small {
+  color: #5d6873;
+  font-size: 15px;
+}

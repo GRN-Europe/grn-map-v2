@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="120" viewBox="0 0 360 120">
+  <!-- Logo d'exemple (fictif) pour tester le bandeau d'accueil : un phare et le nom de l'église -->
+  <rect width="360" height="120" rx="16" fill="#ffffff"/>
+  <!-- Faisceaux de lumière -->
+  <path d="M60 34 L14 18 L14 50 Z" fill="#ffd66b"/>
+  <path d="M60 34 L106 18 L106 50 Z" fill="#ffd66b"/>
+  <!-- Phare -->
+  <rect x="52" y="24" width="16" height="12" rx="2" fill="#0c1a2b"/>
+  <path d="M50 38 H70 L76 104 H44 Z" fill="#c4561a"/>
+  <rect x="47" y="56" width="26" height="8" fill="#ffffff"/>
+  <rect x="45" y="78" width="30" height="8" fill="#ffffff"/>
+  <rect x="36" y="104" width="48" height="6" rx="2" fill="#0c1a2b"/>
+  <!-- Nom -->
+  <text x="124" y="58" font-family="Georgia, serif" font-size="30" font-weight="700" fill="#0c1a2b">Église</text>
+  <text x="124" y="92" font-family="Georgia, serif" font-size="30" font-weight="700" fill="#c4561a">du Phare</text>
+</svg>

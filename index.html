@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <!-- user-scalable=no : empêche le zoom de toute la page (le zoom se fait uniquement sur la carte) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>GRN map</title>
+</head>
+<body>
+  <!-- La carte occupe tout l'écran ; les commandes flottent par-dessus (comme en v1) -->
+  <main class="zone-carte" id="zone-carte">
+    <svg id="carte"></svg>
+    <div class="couche-drapeaux" id="couche-drapeaux"></div>
+
+    <!-- Rangée du haut : zoom et titre à gauche, onglets au centre -->
+    <div class="haut">
+      <div class="coin-haut-gauche">
+        <div class="boutons-zoom">
+          <button type="button" id="zoom-plus" data-texte-aria="zoomPlus">+</button>
+          <button type="button" id="zoom-moins" data-texte-aria="zoomMoins">−</button>
+        </div>
+        <p class="titre-carte" data-texte="titreCarte"></p>
+      </div>
+
+      <!-- En haut au centre : pastille blanche avec les onglets et la recherche -->
+      <nav class="barre-onglets">
+        <div class="onglets" id="onglets">
+          <!-- Les onglets sont créés par src/main.js à partir de la liste des régions -->
+        </div>
+        <button class="bouton-rond" id="bouton-recherche" type="button" data-texte-aria="recherche">
+          <!-- Icône loupe -->
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+            <circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/>
+            <line x1="15" y1="15" x2="21" y2="21" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </nav>
+    </div>
+
+    <!-- En bas à gauche : logo GRN (lien vers grneu.org) — logo provisoire en texte -->
+    <a class="logo-grn" href="https://grneu.org" target="_blank" rel="noopener" data-texte-aria="logoAria">
+      <strong>GRN</strong>
+      <span>Global<br>Recordings<br>Network</span>
+    </a>
+
+    <!-- En bas à droite : plein écran et réglages -->
+    <div class="coin-bas-droite">
+      <button class="bouton-discret" id="bouton-plein-ecran" type="button" data-texte-aria="pleinEcran">
+        <!-- Icône plein écran (quatre coins) -->
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/>
+        </svg>
+      </button>
+      <button class="bouton-discret" id="bouton-reglages" type="button" data-texte-aria="reglages">
+        <!-- Icône roue dentée -->
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3.2"/>
+          <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>
+        </svg>
+      </button>
+    </div>
+  </main>
+
+  <!-- 1. Panneau d'un pays, à droite : ses langues, chacune avec un petit QR code -->
+  <aside class="panneau-pays" id="panneau-pays" hidden>
+    <button class="bouton-fermer" id="panneau-pays-fermer" type="button" data-texte-aria="fermerPanneau">✕</button>
+    <h2 id="pays-nom"></h2>
+    <p class="pays-sous-titre" id="pays-nombre"></p>
+    <p class="pays-consigne" data-texte="choisissezLangue"></p>
+    <ul class="liste-langues" id="pays-langues"></ul>
+    <!-- Option en bas de la liste, décochée par défaut (comme en v1) -->
+    <label class="case-diaspora" id="case-diaspora">
+      <input type="checkbox" id="afficher-diaspora">
+      <span data-texte="afficherDiaspora"></span>
+    </label>
+  </aside>
+
+  <!-- 2. Fenêtre du QR code d'une langue -->
+  <div class="panneau" id="fenetre-qr" hidden>
+    <div class="panneau-contenu fenetre-qr">
+      <h2 id="qr-langue"></h2>
+      <p class="qr-pays" id="qr-pays"></p>
+      <div class="qr-grand" id="qr-code"></div>
+      <p data-texte="scannez"></p>
+      <div class="boutons">
+        <button class="bouton-secondaire" id="qr-fermer" type="button" data-texte="fermer"></button>
+        <button class="bouton-principal" id="qr-ouvrir-ici" type="button" data-texte="ouvrirIci"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Écran « Ouvrir ici » : la page 5fish dans un cadre, sous une barre avec compte à rebours -->
+  <section class="ecran-5fish" id="ecran-5fish" hidden>
+    <div class="barre-5fish">
+      <button class="bouton-principal" id="retour-carte" type="button" data-texte="retourCarte"></button>
+      <span class="titre-5fish" id="titre-5fish"></span>
+      <span class="compte-a-rebours" id="compte-a-rebours"></span>
+    </div>
+    <!-- sandbox sans « allow-top-navigation » ni « allow-popups » : la page 5fish
+         ne peut ni remplacer l'application ni ouvrir d'autres onglets sur la borne -->
+    <iframe id="cadre-5fish" title="5fish"
+      sandbox="allow-scripts allow-same-origin allow-forms allow-presentation"
+      allow="autoplay; fullscreen"></iframe>
+  </section>
+
+  <!-- 4. Écran de veille (mode borne) : mini-carte + diaporama, logo GRN dessous -->
+  <section class="ecran-veille" id="ecran-veille" hidden>
+    <div class="veille-cartes">
+      <div class="veille-carte"><svg id="veille-carte" aria-hidden="true"></svg></div>
+      <div class="veille-carte veille-diaporama">
+        <img class="diapo" alt="">
+        <img class="diapo" alt="">
+      </div>
+    </div>
+    <div class="veille-logo">
+      <strong>GRN</strong>
+      <span>Global<br>Recordings<br>Network</span>
+    </div>
+    <button class="bouton-discret veille-plein-ecran" id="veille-plein-ecran" type="button" data-texte-aria="pleinEcran">
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/>
+      </svg>
+    </button>
+  </section>
+
+  <!-- Bandeau d'accueil de l'église (réglages ⚙) : visible sur la carte et sur l'écran de veille.
+       Placé après l'écran de veille dans la page pour passer devant lui. -->
+  <header class="bandeau" id="bandeau" hidden>
+    <img class="bandeau-logo" id="bandeau-logo" alt="" hidden>
+    <p class="bandeau-phrase" id="bandeau-phrase"></p>
+  </header>
+
+  <!-- 5. Réglages de la borne (roue ⚙), protégés par un code d'accès -->
+  <div class="panneau" id="fenetre-reglages" hidden>
+    <div class="panneau-contenu fenetre-reglages">
+      <h2 data-texte="reglagesTitre"></h2>
+      <p class="sous-titre" data-texte="reglagesSousTitre"></p>
+
+      <!-- Étape 1 : code d'accès -->
+      <form id="reglages-code" autocomplete="off">
+        <label class="champ">
+          <span data-texte="codeAcces"></span>
+          <input id="champ-code" type="password" autocapitalize="characters">
+        </label>
+        <p class="erreur" id="erreur-code" hidden data-texte="codeIncorrect"></p>
+        <div class="boutons boutons-gauche">
+          <button class="bouton-principal" type="submit" data-texte="valider"></button>
+          <button class="bouton-secondaire" id="reglages-code-fermer" type="button" data-texte="fermer"></button>
+        </div>
+      </form>
+
+      <!-- Étape 2 : les réglages -->
+      <!-- novalidate : pas de bulle d'erreur du navigateur ; les valeurs hors limites
+           sont ramenées dans les limites par reglages.js -->
+      <form id="reglages-formulaire" hidden autocomplete="off" novalidate>
+        <label class="champ">
+          <span data-texte="langueInterface"></span>
+          <select id="liste-langues"></select>
+        </label>
+        <label class="champ">
+          <span data-texte="dureeImage"></span>
+          <input name="dureeImage" type="number" inputmode="numeric" min="3" max="600">
+        </label>
+        <label class="champ">
+          <span data-texte="inactivite"></span>
+          <input name="inactivite" type="number" inputmode="numeric" min="30" max="3600">
+        </label>
+        <label class="champ">
+          <span data-texte="retour5fish"></span>
+          <small data-texte="retour5fishAide"></small>
+          <input name="retour5fish" type="number" inputmode="numeric" min="0" max="3600">
+        </label>
+
+        <fieldset class="bloc-diaporama">
+          <legend data-texte="imagesDiaporama"></legend>
+          <p id="etat-diaporama"></p>
+          <small data-texte="pdfAide"></small>
+          <div class="boutons boutons-gauche">
+            <button class="bouton-secondaire" id="bouton-charger-pdf" type="button" data-texte="chargerPdf"></button>
+            <button class="bouton-secondaire" id="bouton-diaporama-origine" type="button" data-texte="boutonDiaporamaOrigine"></button>
+          </div>
+          <input id="fichier-pdf" type="file" accept="application/pdf" hidden>
+        </fieldset>
+
+        <fieldset class="bloc-diaporama">
+          <legend data-texte="bandeauTitre"></legend>
+          <label class="case-a-cocher">
+            <input name="bandeauActif" type="checkbox">
+            <span data-texte="bandeauAfficher"></span>
+          </label>
+          <p class="etiquette" data-texte="bandeauLogo"></p>
+          <div class="apercu-logo">
+            <img id="apercu-logo" alt="" hidden>
+            <span id="sans-logo" data-texte="aucunLogo"></span>
+          </div>
+          <div class="boutons boutons-gauche">
+            <button class="bouton-secondaire" id="bouton-charger-logo" type="button" data-texte="chargerLogo"></button>
+            <button class="bouton-secondaire" id="bouton-retirer-logo" type="button" data-texte="retirerLogo"></button>
+          </div>
+          <input id="fichier-logo" type="file" accept="image/png,image/jpeg,image/svg+xml" hidden>
+          <!-- Une case « Phrase d'accueil » par langue de la borne (créées par reglages.js) -->
+          <div id="bandeau-phrases"></div>
+          <small data-texte="bandeauPhraseAide"></small>
+        </fieldset>
+
+        <label class="champ">
+          <span data-texte="nouveauCode"></span>
+          <small data-texte="nouveauCodeAide"></small>
+          <input name="nouveauCode" type="text" autocapitalize="characters" spellcheck="false">
+        </label>
+
+        <p class="message" id="reglages-message" aria-live="polite"></p>
+
+        <div class="boutons boutons-gauche">
+          <button class="bouton-principal" type="submit" data-texte="enregistrer"></button>
+          <button class="bouton-secondaire" id="reglages-copier-lien" type="button" data-texte="copierLien"></button>
+          <button class="bouton-secondaire" id="reglages-defaut" type="button" data-texte="valeursDefaut"></button>
+          <button class="bouton-secondaire" id="reglages-fermer" type="button" data-texte="fermer"></button>
+        </div>
+
+        <p class="date-donnees" id="date-donnees"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Recherche (loupe) : placée en haut de l'écran pour laisser la place au clavier tactile -->
+  <div class="panneau panneau-recherche" id="fenetre-recherche" hidden>
+    <div class="panneau-contenu fenetre-recherche">
+      <div class="recherche-entete">
+        <input id="champ-recherche" type="search" autocomplete="off" autocorrect="off"
+          spellcheck="false" enterkeyhint="search" data-texte-placeholder="rechercheIndication">
+        <button class="bouton-fermer" id="recherche-fermer" type="button" data-texte-aria="fermer">✕</button>
+      </div>
+      <ul class="resultats" id="resultats-recherche"></ul>
+    </div>
+  </div>
+
+  <!-- « Je suis toujours là » : les 10 dernières secondes avant un retour automatique
+       (en dernier dans la page pour passer devant tout le reste) -->
+  <div class="panneau" id="toujours-la" hidden>
+    <div class="panneau-contenu fenetre-toujours-la">
+      <h2 data-texte="toujoursLaQuestion"></h2>
+      <p id="toujours-la-secondes"></p>
+      <button class="bouton-principal bouton-geant" id="bouton-toujours-la" type="button" data-texte="toujoursLa"></button>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
