@@ -32,8 +32,8 @@
   le bouton orange « ↩ Retour à la carte », le nom « Langue (Pays) » et
   « Retour à la carte dans m:ss ». Délai par défaut : 3 minutes, réglable.
 - Pendant les 10 dernières secondes : fenêtre « Je suis toujours là » ; la toucher relance le délai.
-- Les drapeaux de tous les pays apparaissent dès le premier zoom (comme en v1), en 26 × 18 px
-  comme en v1 (32 × 24 rendait la carte brouillon).
+- Les drapeaux de tous les pays apparaissent dès le premier zoom (comme en v1), en 20 × 14 px
+  comme en v1 (32 × 24 puis 26 × 18 rendaient la carte brouillon) ; onglet Amériques cadré comme en v1.
 - Diaporama de veille : chaque image reste 20 secondes par défaut (valeur de la v1), réglable.
 - Écran de veille de la v1 : fond en dégradé bleu nuit (plus clair en haut au centre) ; deux
   cartes arrondies côte à côte de même taille — à gauche une carte du monde miniature

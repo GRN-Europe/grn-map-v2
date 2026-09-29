@@ -24,7 +24,9 @@ export const REGIONS = {
   europe: [[-13, 35], [42, 66]],
   afrique: [[-20, -36], [52, 38]],
   asie: [[26, -11], [150, 56]],
-  ameriques: [[-170, -56], [-30, 72]],
+  // Amériques : cadrées comme en v1, du nord des États-Unis au sud du Brésil
+  // (le Grand Nord canadien et la Patagonie restent accessibles en faisant glisser la carte)
+  ameriques: [[-125, -45], [-35, 55]],
   oceanie: [[110, -48], [180, 0]],
 };
 
