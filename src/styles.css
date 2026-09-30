@@ -15,7 +15,7 @@
 }
 
 /* Hauteur modérée du bandeau, pour ne pas réduire la carte sur les écrans tactiles */
-body.avec-bandeau { --hauteur-bandeau: 76px; }
+body.avec-bandeau { --hauteur-bandeau: 96px; }
 
 * { box-sizing: border-box; }
 
@@ -740,8 +740,8 @@ body.pays-ouvert .coin-bas-droite {
 
 .bandeau-logo {
   flex-shrink: 0;
-  max-height: 56px;
-  max-width: 220px;
+  max-height: 72px;
+  max-width: 280px;
   object-fit: contain;
 }
 
@@ -751,7 +751,7 @@ body.pays-ouvert .coin-bas-droite {
 .bandeau-phrase {
   margin: 0;
   color: var(--texte);
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 700;
   line-height: 1.2;
   display: -webkit-box;
