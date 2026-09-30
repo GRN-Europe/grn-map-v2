@@ -12,7 +12,7 @@ sur son téléphone (5fish).
    - le mode borne (écran d'accueil, retours automatiques) est actif sur l'adresse simple ;
      pour un site normal sans diaporama : http://localhost:5173/?presentation=0
 
-Site publié : https://grn-map-v2.vercel.app (déploiement automatique à chaque envoi sur GitHub).
+Site publié : https://map.grneu.org (administration des codes : https://map.grneu.org/admin.html) (déploiement automatique à chaque envoi sur GitHub).
 
 ## Réglages de la borne
 

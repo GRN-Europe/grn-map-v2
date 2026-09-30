@@ -27,7 +27,8 @@
 - Mode borne actif sur l'adresse simple (choix de GRN Europe) : l'application démarre sur
   l'écran d'accueil (diaporama). ?presentation=0 désactive le mode borne (site normal).
 - Publication : GitHub GRN-Europe/grn-map-v2 (public), Vercel équipe GRN-Europe (Hobby),
-  https://grn-map-v2.vercel.app. Git en ligne de commande n'est pas installé : les envois se font
+  adresse officielle https://map.grneu.org (CNAME map chez Hostinger vers Vercel ; ancienne adresse
+  https://grn-map-v2.vercel.app). Git en ligne de commande n'est pas installé : les envois se font
   avec GitHub Desktop.
 - Plein écran (mode borne) : le bouton ⛶ demande le code pour en sortir ; après une sortie par Échap
   ou geste, le plein écran revient au toucher suivant. Un site ne peut pas bloquer totalement la sortie :
