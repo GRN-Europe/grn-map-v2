@@ -267,6 +267,20 @@
     </div>
   </div>
 
+  <!-- Code d'accès : cache toute la carte tant que l'appareil n'est pas activé
+       (en dernier dans la page pour passer devant tout le reste) -->
+  <section class="ecran-activation" id="ecran-activation" hidden>
+    <form class="carte-activation" id="formulaire-activation" autocomplete="off">
+      <img class="logo-grn-couleur" src="/logos/grn-europe.png" alt="Global Recordings Network Europe">
+      <h1 data-texte="activationTitre"></h1>
+      <p data-texte="activationTexte"></p>
+      <input id="champ-activation" type="text" autocapitalize="characters" spellcheck="false"
+        placeholder="XXXX-XXXX" maxlength="12" required>
+      <button class="bouton-principal" type="submit" data-texte="activer"></button>
+      <p class="message-activation" id="message-activation" aria-live="polite"></p>
+    </form>
+  </section>
+
   <script type="module" src="/src/main.js"></script>
 </body>
 </html>

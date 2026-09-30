@@ -26,6 +26,18 @@ Site publié : https://grn-map-v2.vercel.app (déploiement automatique à chaque
   rognées automatiquement) et phrase d'accueil dans chaque langue de la borne.
   Logo d'exemple pour les tests : `public/exemples/logo-eglise-du-phare.svg`.
 
+## Codes d'accès (un par église ou personne, valable sur un seul appareil)
+
+- Toute personne qui ouvre la carte (borne ou visiteur) doit d'abord entrer un code d'accès.
+- Les codes se créent sur **/admin.html** (mot de passe administrateur, page en français et en anglais) :
+  nombre de codes, d'appareils activés, d'appareils utilisés ces 30 derniers jours ;
+  boutons Libérer (changement d'appareil), Désactiver, Réactiver.
+- Chaque appareil activé envoie un « signe de vie » au démarrage puis une fois par jour.
+- Configuration dans Vercel : une base Redis (menu Storage, Upstash) et la variable
+  d'environnement `ADMIN_MOT_DE_PASSE`. En local (`npm run dev`) : base en mémoire,
+  mot de passe `admin-local`.
+- Limite : ce n'est pas un coffre-fort (le site est public) ; c'est un accès simple et un suivi.
+
 ## Organisation des fichiers
 
 | Fichier | Rôle |
@@ -38,6 +50,9 @@ Site publié : https://grn-map-v2.vercel.app (déploiement automatique à chaque
 | `src/qr.js` | Fabrique les QR codes (hors ligne) |
 | `src/recherche.js` | Recherche (loupe) : langues et pays, sans tenir compte des accents |
 | `src/borne.js` | Mode borne (actif par défaut, `?presentation=0` pour le désactiver) : inactivité, « Je suis toujours là », retours automatiques |
+| `src/activation.js` | Écran « Code d'accès » et signe de vie quotidien |
+| `admin.html`, `src/admin.js`, `src/admin.css` | Page d'administration des codes (FR / EN) |
+| `api/` | Partie serveur (Vercel) : `activer`, `verifier`, `admin`, et `_base.js` (base de données) |
 | `src/plein-ecran.js` | Plein écran : code demandé pour en sortir, retour automatique (mode borne) |
 | `src/veille.js` | Écran de veille : mini-carte, diaporama en fondu, logo |
 | `src/diaporama.js` | Images du diaporama : d'origine ou issues d'un PDF chargé |

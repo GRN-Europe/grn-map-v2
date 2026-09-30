@@ -82,6 +82,15 @@ export default {
     zoomPlus: 'Acercar',
     zoomMoins: 'Alejar',
     fermer: 'Cerrar',
+    // Écran « Code d’accès » (activation de l’appareil)
+    activationTitre: 'Código de acceso',
+    activationTexte: 'Introduzca el código de acceso proporcionado por GRN Europe.',
+    activer: 'Activar',
+    activationEnCours: 'Comprobando…',
+    activationInconnu: 'Código desconocido. Compruebe el código proporcionado por GRN Europe.',
+    activationDejaUtilise: 'Este código ya se utiliza en otro dispositivo. Póngase en contacto con GRN Europe.',
+    activationDesactive: 'Este código ha sido desactivado. Póngase en contacto con GRN Europe.',
+    activationHorsLigne: 'Sin conexión a internet. La activación necesita internet una sola vez.',
     logoAria: 'Global Recordings Network — grneu.org',
   },
 };

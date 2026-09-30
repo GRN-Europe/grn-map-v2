@@ -8,11 +8,39 @@
 // À chaque nouvelle publication, la borne récupère automatiquement la nouvelle version
 // dès qu'elle a de nouveau internet.
 
+import { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
+// Sur l'ordinateur (npm run dev), les adresses /api/… (codes d'accès) sont servies par les
+// mêmes fichiers que sur Vercel (dossier api/), avec une base de données en mémoire.
+const apiLocale = {
+  name: 'api-locale',
+  configureServer(serveur) {
+    serveur.middlewares.use(async (req, res, suite) => {
+      const nom = req.url.match(/^\/api\/([a-z]+)(\?|$)/)?.[1];
+      if (!nom) return suite();
+      try {
+        const module = await import(pathToFileURL(resolve('api', `${nom}.js`)).href);
+        await module.default(req, res);
+      } catch (erreur) {
+        res.statusCode = 500;
+        res.end(String(erreur));
+      }
+    });
+  },
+};
+
 export default defineConfig({
+  // Deux pages : la carte (index.html) et l'administration des codes (admin.html)
+  build: {
+    rollupOptions: {
+      input: { carte: resolve('index.html'), admin: resolve('admin.html') },
+    },
+  },
   plugins: [
+    apiLocale,
     VitePWA({
       registerType: 'autoUpdate', // met à jour l'application sans rien demander
       includeAssets: ['icones/apple-touch-icon.png'],
@@ -39,6 +67,8 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         // Toute adresse de l'application (par ex. …/?config=…) s'ouvre aussi hors ligne
         navigateFallback: '/index.html',
+        // … sauf l'administration et les adresses du serveur, qui ne sont pas la carte
+        navigateFallbackDenylist: [/^\/admin/, /^\/api\//],
       },
     }),
   ],

@@ -14,6 +14,7 @@ import { creerEcranReglages } from './reglages.js';
 import { creerBandeau } from './bandeau.js';
 import { creerRecherche } from './recherche.js';
 import { creerPleinEcran } from './plein-ecran.js';
+import { creerActivation } from './activation.js';
 import { lireReglages, appliquerConfigurationDeLAdresse } from './stockage.js';
 
 // Empêche le zoom de la page entière (pincement Safari/iPad, double toucher)
@@ -187,6 +188,10 @@ document.getElementById('bouton-recherche').addEventListener('click', () => rech
 
 traduireLaPage();
 changerLangue(reglages.langue);
+
+// Code d'accès : tant que l'appareil n'est pas activé, l'écran « Code d'accès » cache la carte
+creerActivation();
+
 bandeau.afficher(reglages);
 choisirRegion('monde');
 borne.changerEtat('carte');

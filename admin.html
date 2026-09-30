@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>GRN map — Codes d'accès / Access codes</title>
+</head>
+<body>
+  <!-- Page réservée à GRN Europe : créer et suivre les codes d'accès à la carte.
+       Textes en français et en anglais : voir TEXTES dans src/admin.js (attribut data-t). -->
+  <main class="admin">
+    <header class="entete-admin">
+      <h1 data-t="titre"></h1>
+      <div class="choix-langue-admin">
+        <button type="button" data-langue="fr">FR</button>
+        <button type="button" data-langue="en">EN</button>
+      </div>
+    </header>
+
+    <!-- 1. Mot de passe administrateur -->
+    <form id="connexion" class="bloc">
+      <label><span data-t="motDePasse"></span>
+        <input id="mot-de-passe" type="password" autocomplete="current-password" required>
+      </label>
+      <button type="submit" data-t="entrer"></button>
+      <p class="erreur" id="erreur-connexion" hidden data-t="motDePasseIncorrect"></p>
+    </form>
+
+    <div id="espace" hidden>
+      <!-- 2. Chiffres clés -->
+      <section class="chiffres">
+        <div><strong id="nb-codes">0</strong><span data-t="codesCrees"></span></div>
+        <div><strong id="nb-actives">0</strong><span data-t="appareilsActives"></span></div>
+        <div><strong id="nb-recents">0</strong><span data-t="utilises30Jours"></span></div>
+      </section>
+
+      <!-- 3. Nouveau code -->
+      <form id="creation" class="bloc">
+        <h2 data-t="nouveauCode"></h2>
+        <label><span data-t="eglise"></span> <input id="nom" required maxlength="120" placeholder="Église du Phare"></label>
+        <label><span data-t="ville"></span> <input id="ville" maxlength="120" placeholder="Lyon"></label>
+        <button type="submit" data-t="creer"></button>
+        <p class="nouveau-code" id="nouveau-code" hidden></p>
+      </form>
+
+      <!-- 4. Liste -->
+      <section class="bloc">
+        <h2 data-t="tousLesCodes"></h2>
+        <table>
+          <thead>
+            <tr>
+              <th data-t="colCode"></th><th data-t="eglise"></th><th data-t="ville"></th><th data-t="colEtat"></th>
+              <th data-t="colActive"></th><th data-t="colVu"></th><th></th>
+            </tr>
+          </thead>
+          <tbody id="liste"></tbody>
+        </table>
+      </section>
+    </div>
+  </main>
+
+  <script type="module" src="/src/admin.js"></script>
+</body>
+</html>

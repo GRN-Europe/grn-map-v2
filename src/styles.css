@@ -973,3 +973,56 @@ body.pays-ouvert .coin-bas-droite {
 /* Résultats de recherche */
 .resultat-texte strong { font-size: 16px; font-weight: 600; color: #333; }
 .resultat-texte small { font-size: 13px; color: #999; }
+
+/* --- Écran « Code d'accès » (appareil pas encore activé) ------------------------------- */
+
+.ecran-activation {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: radial-gradient(ellipse at 50% 0%, #17325a 0%, #0c1a2b 65%);
+}
+
+.ecran-activation[hidden] { display: none; }
+
+.carte-activation {
+  width: min(460px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 32px 28px;
+  border-radius: 20px;
+  background: white;
+  text-align: center;
+}
+
+.logo-grn-couleur { width: 200px; height: auto; margin-bottom: 8px; }
+
+.carte-activation h1 { margin: 0; font-size: 26px; color: #111; }
+.carte-activation p { margin: 0; font-size: 16px; color: #666; }
+
+#champ-activation {
+  width: 100%;
+  min-height: 60px;
+  border: 2px solid #c9d0d6;
+  border-radius: 12px;
+  font: inherit;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-align: center;
+  text-transform: uppercase;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+#champ-activation:focus { outline: none; border-color: var(--orange); }
+
+.carte-activation .bouton-principal { width: 100%; }
+.carte-activation .bouton-principal:disabled { opacity: 0.6; }
+
+.message-activation { min-height: 1.3em; color: #c0392b !important; font-weight: 600; }

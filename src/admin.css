@@ -1,0 +1,94 @@
+/* Page d'administration des codes d'accès (usage interne GRN Europe, sur ordinateur) */
+
+/* Un élément marqué « hidden » reste caché, même s'il a un style d'affichage */
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  background: #f4f5f7;
+  color: #1c2733;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.admin {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+}
+
+h1 { margin: 0 0 24px; font-size: 26px; }
+h2 { margin: 0 0 16px; font-size: 19px; }
+
+.bloc {
+  margin-bottom: 24px;
+  padding: 20px 24px;
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+form.bloc { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px; }
+form.bloc h2 { width: 100%; }
+
+label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: 14px; }
+
+input {
+  min-width: 240px;
+  padding: 10px 12px;
+  border: 1px solid #c9d0d6;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 400;
+}
+
+button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #ff6a13;
+  color: white;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.actions button { margin-right: 6px; padding: 6px 12px; background: #eef0f3; color: #1c2733; font-size: 13px; }
+
+.erreur { width: 100%; margin: 0; color: #c0392b; font-weight: 600; }
+
+.nouveau-code {
+  width: 100%;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #e8f5e9;
+  color: #1b5e20;
+  font-weight: 600;
+}
+
+.chiffres { display: flex; gap: 16px; margin-bottom: 24px; }
+
+.chiffres div {
+  flex: 1;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: #0c1a2b;
+  color: white;
+}
+
+.chiffres strong { display: block; font-size: 34px; color: #ff6a13; }
+.chiffres span { font-size: 14px; color: #cfd8e3; }
+
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { padding: 10px 8px; border-bottom: 1px solid #eceff2; text-align: left; }
+th { color: #5d6873; font-weight: 600; }
+td.code { font-family: ui-monospace, Menlo, monospace; font-weight: 700; letter-spacing: 1px; }
+tr.desactive td { color: #9aa3ab; }
+
+/* En-tête : titre à gauche, choix FR | EN à droite */
+.entete-admin { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+.entete-admin h1 { margin: 0; }
+.choix-langue-admin { display: flex; gap: 4px; padding: 4px; border-radius: 10px; background: #e3e7eb; }
+.choix-langue-admin button { padding: 6px 14px; background: transparent; color: #5d6873; }
+.choix-langue-admin button.actif { background: white; color: #1c2733; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15); }
+label span { display: block; }
