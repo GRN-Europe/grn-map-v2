@@ -83,6 +83,12 @@ export function creerPleinEcran() {
   // le prochain toucher sur l'écran.
   if (MODE_BORNE) {
     document.addEventListener('click', () => {
+      // Jamais pendant les réglages, la fenêtre du code ou l'écran « Code d'accès » :
+      // Chrome quitte le plein écran pour ouvrir un choix de fichier (logo, PDF) ou le clavier,
+      // et le lui redemander au même moment peut le bloquer.
+      const fenetreOuverte = ['fenetre-reglages', 'fenetre-code-sortie', 'ecran-activation']
+        .some((id) => !document.getElementById(id).hidden);
+      if (fenetreOuverte) return;
       if (!sortieAutorisee && !estEnPleinEcran()) entrer();
     }, true);
   }

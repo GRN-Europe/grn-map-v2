@@ -1026,3 +1026,27 @@ body.pays-ouvert .coin-bas-droite {
 .carte-activation .bouton-principal:disabled { opacity: 0.6; }
 
 .message-activation { min-height: 1.3em; color: #c0392b !important; font-weight: 600; }
+
+/* --- QR codes : à scanner avec un téléphone, pas à toucher -----------------------------
+   Certains navigateurs tactiles (iPad, Android, Windows) reconnaissent un QR code affiché
+   et proposent de l'ouvrir lors d'un appui (long) : la page 5fish s'ouvrirait alors dans un
+   nouvel onglet, HORS de la carte, sans « Retour à la carte ». On rend donc les QR codes
+   inertes : le toucher passe au bouton qui les contient (carte de langue). */
+.qr-grand,
+.qr-petit,
+.qr-grand svg,
+.qr-petit svg {
+  pointer-events: none;
+  -webkit-touch-callout: none; /* pas de menu d'appui long (iPad, iPhone) */
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* --- Ordre d'empilement des écrans (du plus bas au plus haut) -------------------------
+   carte, panneau d'un pays, écran d'accueil  <  bandeau de l'église  <  écran 5fish
+   <  fenêtres (QR code, recherche, réglages, « Je suis toujours là »…)  <  « Code d'accès ».
+   Sans cela, le bandeau recouvrait la barre « ↩ Retour à la carte » de l'écran 5fish. */
+.bandeau { z-index: 2; }
+.ecran-5fish { z-index: 3; }
+.panneau { z-index: 4; }
+.ecran-activation { z-index: 5; }

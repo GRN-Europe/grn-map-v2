@@ -42,6 +42,8 @@
   la carte, le panneau d'un pays et l'écran de veille se placent dessous. « Valeurs par défaut »
   ne touche ni au code de l'église ni au bandeau.
 
+- Ordre d'empilement (fin de styles.css) : carte / panneau / veille < bandeau < écran 5fish < fenêtres
+  < « Code d'accès » (le bandeau recouvrait la barre « Retour à la carte »). QR codes inertes au toucher.
 - « Ouvrir ici » : la page 5fish s'affiche dans un cadre (iframe) sous une barre sombre avec
   le bouton orange « ↩ Retour à la carte », le nom « Langue (Pays) » et
   « Retour à la carte dans m:ss ». Délai par défaut : 3 minutes, réglable.
