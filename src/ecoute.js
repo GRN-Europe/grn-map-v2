@@ -5,6 +5,7 @@
 // Le compte à rebours et « Je suis toujours là » sont gérés par borne.js.
 
 import { qrCodeSvg } from './qr.js';
+import { langue } from './traductions.js';
 
 export function creerEcoute({ quand5fishOuvert, quandRetourCarte }) {
   const fenetreQr = document.getElementById('fenetre-qr');
@@ -33,7 +34,11 @@ export function creerEcoute({ quand5fishOuvert, quandRetourCarte }) {
     fermerQr();
     document.getElementById('titre-5fish').textContent =
       `${langueChoisie.nomLangue} (${langueChoisie.nomPays})`;
-    cadre.src = langueChoisie.lien;
+    // Sur la borne, 5fish s'affiche dans la langue choisie dans les réglages (paramètre « ui »).
+    // (Le QR code, lui, n'impose pas de langue : 5fish suit la langue du téléphone du visiteur.)
+    const adresse = new URL(langueChoisie.lien);
+    adresse.searchParams.set('ui', langue());
+    cadre.src = adresse.toString();
     ecran5fish.hidden = false;
     quand5fishOuvert();
   }

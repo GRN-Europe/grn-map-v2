@@ -47,6 +47,8 @@
 - « Ouvrir ici » : la page 5fish s'affiche dans un cadre (iframe) sous une barre sombre avec
   le bouton orange « ↩ Retour à la carte », le nom « Langue (Pays) » et
   « Retour à la carte dans m:ss ». Délai par défaut : 3 minutes, réglable.
+  5fish s'y ouvre dans la langue de la borne (paramètre ?ui=fr|en|de|es|it|pt|nl) ; le QR code
+  n'impose pas de langue (5fish suit alors la langue du téléphone du visiteur).
 - Pendant les 10 dernières secondes : fenêtre « Je suis toujours là » ; la toucher relance le délai.
 - Les drapeaux de tous les pays apparaissent dès le premier zoom (comme en v1), en 20 × 14 px
   comme en v1 (32 × 24 puis 26 × 18 rendaient la carte brouillon) ; onglet Amériques cadré comme en v1.
