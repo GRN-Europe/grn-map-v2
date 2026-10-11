@@ -1,9 +1,9 @@
-// Animation de l'écran d'accueil : sur la mini-carte, une flèche de souris se promène
+// Animation de l'écran d'accueil : sur la mini-carte, une main (index tendu) se promène
 // d'un pays à l'autre et « clique » (une onde s'élargit et le pays s'éclaire).
 // À côté de la mini-carte, une bulle « L'Évangile dans ta langue ici ! » (dans index.html).
 // But : donner envie de toucher l'écran.
 //
-// La flèche est dessinée DANS le dessin de la mini-carte (SVG) : elle suit donc exactement
+// La main est dessinée DANS le dessin de la mini-carte (SVG) : elle suit donc exactement
 // la carte, quelle que soit la taille de l'écran.
 
 // Pays visités, dans l'ordre (codes à 2 lettres) : un tour du monde
@@ -12,15 +12,21 @@ const ETAPES = ['FR', 'CD', 'BR', 'IN', 'US', 'NG', 'CN', 'MX', 'ET', 'ID', 'DE'
 const DUREE_TRAJET = 1600; // millisecondes pour aller d'un pays au suivant
 const DUREE_ARRET = 1800;  // millisecondes passées sur un pays (avec le « clic »)
 
-// Forme d'une flèche de souris classique (pointe en 0,0)
-const FLECHE = 'M0 0 L0 83 L22 64 L36 96 L51 90 L36 59 L65 59 Z';
+// Forme d'une main avec l'index tendu, comme le curseur « main » d'un ordinateur.
+// Le bout de l'index est en 0,0 : c'est là que se fait le « clic ».
+const MAIN = 'M-6 6 Q-6 0 0 0 Q6 0 6 6 L6 30 Q6 26 11 26 Q16 26 16 31 L16 33 Q16 29 21 29 '
+  + 'Q26 29 26 34 L26 36 Q26 32 31 32 Q36 32 36 37 L36 56 Q36 70 22 70 L6 70 Q-4 70 -9 60 '
+  + 'L-18 44 Q-21 38 -16 36 Q-12 34 -9 39 L-6 44 Z';
+// Petits traits entre les doigts repliés
+const DOIGTS = 'M16 33 L16 43 M26 36 L26 45';
 
 export function creerCurseurVeille({ svg, positions }) {
   const ns = 'http://www.w3.org/2000/svg';
   const curseur = document.createElementNS(ns, 'g');
   curseur.setAttribute('class', 'curseur-veille');
   curseur.innerHTML = `<circle class="curseur-onde" r="6"></circle>
-    <path class="curseur-fleche" d="${FLECHE}"></path>`;
+    <path class="curseur-main" d="${MAIN}"></path>
+    <path class="curseur-doigts" d="${DOIGTS}"></path>`;
   svg.appendChild(curseur);
 
   // Seulement les pays présents sur la mini-carte

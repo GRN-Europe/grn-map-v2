@@ -1095,14 +1095,14 @@ body.pays-ouvert .coin-bas-droite {
   50% { transform: translateY(-50%) scale(1.06); }
 }
 
-/* Flèche de souris qui se promène sur la mini-carte (curseur-veille.js) */
+/* Main (index tendu) qui se promène sur la mini-carte (curseur-veille.js) */
 .curseur-veille {
   transition: transform 1.6s ease-in-out;
   pointer-events: none;
 }
 
-/* (sélecteur précis : sinon la règle « pays en orange » de la mini-carte s’applique aussi à la flèche) */
-.veille-carte svg path.curseur-fleche {
+/* (sélecteur précis : sinon la règle « pays en orange » de la mini-carte s’applique aussi à la main) */
+.veille-carte svg path.curseur-main {
   fill: white;
   stroke: var(--bleu-nuit);
   stroke-width: 4;
@@ -1110,7 +1110,9 @@ body.pays-ouvert .coin-bas-droite {
   filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.5));
 }
 
-/* Le « clic » : une onde blanche s'élargit à la pointe de la flèche */
+.veille-carte svg path.curseur-doigts { fill: none; stroke: var(--bleu-nuit); stroke-width: 2.5; stroke-linecap: round; }
+
+/* Le « clic » : une onde blanche s'élargit au bout de l'index */
 .curseur-onde { fill: none; stroke: white; stroke-width: 4; opacity: 0; }
 .curseur-veille.clic .curseur-onde { animation: onde-clic 0.9s ease-out; }
 

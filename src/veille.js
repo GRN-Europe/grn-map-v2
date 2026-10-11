@@ -2,7 +2,7 @@
 // côte à côte — à gauche une carte du monde miniature, à droite le diaporama —
 // et le logo GRN dessous. Un toucher n'importe où ramène à la carte.
 // Pour inviter à toucher : une bulle « L'Évangile dans ta langue ici ! » à côté de la
-// mini-carte, et une flèche de souris qui se promène sur elle (curseur-veille.js).
+// mini-carte, et une main (index tendu) qui se promène sur elle (curseur-veille.js).
 
 import { geoMercator, geoPath } from 'd3-geo';
 import { feature } from 'topojson-client';
@@ -81,7 +81,7 @@ export function creerVeille({ quandReveil }) {
 
 // Dessine la carte du monde miniature (orange sur bleu nuit, sans l'Antarctique).
 // Renvoie la position (dans le dessin) du centre de chaque pays : { FR: [x, y], … },
-// utilisée par la flèche de souris.
+// utilisée par la main animée.
 function dessinerMiniCarte(svgElement) {
   const largeur = 1000;
   const hauteur = 620;

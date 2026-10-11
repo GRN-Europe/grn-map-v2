@@ -55,7 +55,7 @@ Site publié : https://map.grneu.org (administration des codes : https://map.grn
 | `api/` | Partie serveur (Vercel) : `activer`, `verifier`, `admin`, et `_base.js` (base de données) |
 | `src/plein-ecran.js` | Plein écran : code demandé pour en sortir, retour automatique (mode borne) |
 | `src/veille.js` | Écran de veille : mini-carte, diaporama en fondu, logo |
-| `src/curseur-veille.js` | Écran d'accueil : flèche de souris qui se promène sur la mini-carte et « clique » sur des pays |
+| `src/curseur-veille.js` | Écran d'accueil : main (index tendu) qui se promène sur la mini-carte et « clique » sur des pays |
 | `src/diaporama.js` | Images du diaporama : d'origine ou issues d'un PDF chargé |
 | `src/reglages.js` | Écran « Réglages de la borne » |
 | `src/bandeau.js` | Bandeau d'accueil de l'église : affichage, phrase selon la langue, préparation du logo (marges rognées) |
