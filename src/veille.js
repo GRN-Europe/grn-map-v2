@@ -1,11 +1,16 @@
 // Écran de veille (comme en v1) : fond bleu nuit en dégradé, deux cartes arrondies
 // côte à côte — à gauche une carte du monde miniature, à droite le diaporama —
 // et le logo GRN dessous. Un toucher n'importe où ramène à la carte.
+// Pour inviter à toucher : une bulle « L'Évangile dans ta langue ici ! » à côté de la
+// mini-carte, et une flèche de souris qui se promène sur elle (curseur-veille.js).
 
 import { geoMercator, geoPath } from 'd3-geo';
 import { feature } from 'topojson-client';
 import monde from 'world-atlas/countries-50m.json';
 import { imagesDuDiaporama } from './diaporama.js';
+import { codeDuPays } from './pays.js';
+import { centreDeLaPlusGrandePartie } from './carte.js';
+import { creerCurseurVeille } from './curseur-veille.js';
 
 export function creerVeille({ quandReveil }) {
   const ecran = document.getElementById('ecran-veille');
@@ -17,7 +22,9 @@ export function creerVeille({ quandReveil }) {
   let imageVisible = 0;
   let minuterie = null;
 
-  dessinerMiniCarte(document.getElementById('veille-carte'));
+  const svgMiniCarte = document.getElementById('veille-carte');
+  const positions = dessinerMiniCarte(svgMiniCarte);
+  const curseur = creerCurseurVeille({ svg: svgMiniCarte, positions });
 
   // Recharge la liste des images (au démarrage, et quand on change le diaporama dans les réglages)
   async function chargerImages() {
@@ -40,11 +47,13 @@ export function creerVeille({ quandReveil }) {
         afficherImage();
       }, dureeImage * 1000);
     }
+    curseur.demarrer();
   }
 
   function cacher() {
     clearInterval(minuterie);
     minuterie = null;
+    curseur.arreter();
     ecran.hidden = true;
   }
 
@@ -70,15 +79,24 @@ export function creerVeille({ quandReveil }) {
   return { chargerImages, montrer, cacher, estVisible: () => !ecran.hidden };
 }
 
-// Dessine la carte du monde miniature (orange sur bleu nuit, sans l'Antarctique)
+// Dessine la carte du monde miniature (orange sur bleu nuit, sans l'Antarctique).
+// Renvoie la position (dans le dessin) du centre de chaque pays : { FR: [x, y], … },
+// utilisée par la flèche de souris.
 function dessinerMiniCarte(svgElement) {
   const largeur = 1000;
   const hauteur = 620;
   const pays = feature(monde, monde.objects.countries).features
     .filter((entite) => entite.properties.name !== 'Antarctica');
   const collection = { type: 'FeatureCollection', features: pays };
-  const chemin = geoPath(geoMercator().fitExtent([[20, 20], [largeur - 20, hauteur - 20]], collection));
+  const projection = geoMercator().fitExtent([[20, 20], [largeur - 20, hauteur - 20]], collection);
+  const chemin = geoPath(projection);
 
   svgElement.setAttribute('viewBox', `0 0 ${largeur} ${hauteur}`);
-  svgElement.innerHTML = pays.map((entite) => `<path d="${chemin(entite)}"></path>`).join('');
+  const positions = {};
+  svgElement.innerHTML = pays.map((entite) => {
+    const code = codeDuPays(entite);
+    if (code) positions[code] = projection(centreDeLaPlusGrandePartie(entite));
+    return `<path d="${chemin(entite)}"${code ? ` data-code="${code}"` : ''}></path>`;
+  }).join('');
+  return positions;
 }

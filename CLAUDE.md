@@ -52,6 +52,9 @@
 - Pendant les 10 dernières secondes : fenêtre « Je suis toujours là » ; la toucher relance le délai.
 - Les drapeaux de tous les pays apparaissent dès le premier zoom (comme en v1), en 20 × 14 px
   comme en v1 (32 × 24 puis 26 × 18 rendaient la carte brouillon) ; onglet Amériques cadré comme en v1.
+- Écran d'accueil (demande de GRN Europe) : bulle « L'Évangile dans ta langue ici ! » posée sur le bord
+  de la mini-carte (texte veilleBulle, 7 langues) et flèche de souris animée qui va de pays en pays
+  en « cliquant » (onde + pays éclairé) — src/curseur-veille.js.
 - Diaporama de veille : chaque image reste 20 secondes par défaut (valeur de la v1), réglable.
 - Écran de veille de la v1 : fond en dégradé bleu nuit (plus clair en haut au centre) ; deux
   cartes arrondies côte à côte de même taille — à gauche une carte du monde miniature

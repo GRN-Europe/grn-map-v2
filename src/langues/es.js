@@ -38,6 +38,7 @@ export default {
     resultatPays: 'País',
     resultatLangue: 'Idioma',
     veilleDansSecondes: 'Volver a la pantalla de inicio en {n} s',
+    veilleBulle: '¡El Evangelio en tu idioma aquí!', // bulle à côté de la mini-carte de l’écran d’accueil
     reglages: 'Ajustes',
     // Écran des réglages
     reglagesTitre: 'Ajustes del terminal',

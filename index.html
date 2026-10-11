@@ -111,7 +111,12 @@
   <!-- 4. Écran de veille (mode borne) : mini-carte + diaporama, logo GRN dessous -->
   <section class="ecran-veille" id="ecran-veille" hidden>
     <div class="veille-cartes">
-      <div class="veille-carte"><svg id="veille-carte" aria-hidden="true"></svg></div>
+      <!-- Mini-carte, avec la bulle d'invitation posée sur son bord
+           (la flèche de souris animée est ajoutée dans le dessin par curseur-veille.js) -->
+      <div class="bloc-mini-carte">
+        <div class="veille-carte"><svg id="veille-carte" aria-hidden="true"></svg></div>
+        <p class="bulle-invitation" data-texte="veilleBulle"></p>
+      </div>
       <div class="veille-carte veille-diaporama">
         <img class="diapo" alt="">
         <img class="diapo" alt="">

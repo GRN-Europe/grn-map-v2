@@ -206,7 +206,7 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
 
 // Pour un pays en plusieurs morceaux (îles, territoires d'outre-mer),
 // renvoie le centre du plus grand morceau.
-function centreDeLaPlusGrandePartie(entite) {
+export function centreDeLaPlusGrandePartie(entite) {
   if (entite.geometry.type !== 'MultiPolygon') return geoCentroid(entite);
   const morceaux = entite.geometry.coordinates.map((coordonnees) => ({
     type: 'Polygon',

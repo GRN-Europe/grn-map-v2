@@ -38,6 +38,7 @@ export default {
     resultatPays: 'Land',
     resultatLangue: 'Taal',
     veilleDansSecondes: 'Terug naar het startscherm over {n} s',
+    veilleBulle: 'Het evangelie in jouw taal – hier!', // bulle à côté de la mini-carte de l’écran d’accueil
     reglages: 'Instellingen',
     // Écran des réglages
     reglagesTitre: 'Instellingen van de zuil',

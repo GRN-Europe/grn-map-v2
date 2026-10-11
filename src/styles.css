@@ -1050,3 +1050,74 @@ body.pays-ouvert .coin-bas-droite {
 .ecran-5fish { z-index: 3; }
 .panneau { z-index: 4; }
 .ecran-activation { z-index: 5; }
+
+/* --- Écran d'accueil : invitation à toucher la carte -------------------------------- */
+
+.bloc-mini-carte { position: relative; }
+
+/* Bulle « L'Évangile dans ta langue ici ! », posée sur le bord haut de la mini-carte */
+.bulle-invitation {
+  position: absolute;
+  top: 0;
+  left: 6%;
+  z-index: 1;
+  margin: 0;
+  padding: 0.6em 1.1em;
+  border-radius: 22px;
+  background: white;
+  border: 3px solid var(--orange);
+  color: var(--bleu-nuit);
+  font-size: clamp(16px, 1.6vw, 34px);
+  font-weight: 800;
+  max-width: 88%;           /* sur un écran étroit, le texte passe à la ligne */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  transform: translateY(-50%);
+  animation: bulle-respire 2.4s ease-in-out infinite;
+}
+
+/* Pointe de la bulle, tournée vers la carte */
+.bulle-invitation::after {
+  content: '';
+  position: absolute;
+  left: 2em;
+  bottom: -14px;
+  width: 22px;
+  height: 22px;
+  background: white;
+  border-right: 3px solid var(--orange);
+  border-bottom: 3px solid var(--orange);
+  transform: rotate(45deg);
+}
+
+/* La bulle « respire » doucement pour attirer l'œil */
+@keyframes bulle-respire {
+  0%, 100% { transform: translateY(-50%) scale(1); }
+  50% { transform: translateY(-50%) scale(1.06); }
+}
+
+/* Flèche de souris qui se promène sur la mini-carte (curseur-veille.js) */
+.curseur-veille {
+  transition: transform 1.6s ease-in-out;
+  pointer-events: none;
+}
+
+/* (sélecteur précis : sinon la règle « pays en orange » de la mini-carte s’applique aussi à la flèche) */
+.veille-carte svg path.curseur-fleche {
+  fill: white;
+  stroke: var(--bleu-nuit);
+  stroke-width: 4;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.5));
+}
+
+/* Le « clic » : une onde blanche s'élargit à la pointe de la flèche */
+.curseur-onde { fill: none; stroke: white; stroke-width: 4; opacity: 0; }
+.curseur-veille.clic .curseur-onde { animation: onde-clic 0.9s ease-out; }
+
+@keyframes onde-clic {
+  from { r: 6px; opacity: 0.95; }
+  to { r: 60px; opacity: 0; }
+}
+
+/* Pays « cliqué » : il s'éclaire un instant */
+.veille-carte svg path.pays-vise { fill: #f4a24c; transition: fill 0.3s; }

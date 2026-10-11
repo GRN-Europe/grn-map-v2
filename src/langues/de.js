@@ -38,6 +38,7 @@ export default {
     resultatPays: 'Land',
     resultatLangue: 'Sprache',
     veilleDansSecondes: 'Zurück zum Startbildschirm in {n} s',
+    veilleBulle: 'Das Evangelium in deiner Sprache – hier!', // bulle à côté de la mini-carte de l’écran d’accueil
     reglages: 'Einstellungen',
     // Écran des réglages
     reglagesTitre: 'Einstellungen des Terminals',
