@@ -32,6 +32,7 @@ export default {
     toujoursLaQuestion: 'Êtes-vous toujours là ?',
     retourDansSecondes: 'Retour à la carte dans {n} s',
     toujoursLa: 'Je suis toujours là',
+    suiteTelephone: '📱 Vidéos : continuez sur votre téléphone', // barre de l’écran 5fish, à côté du petit QR code
     recherche: 'Rechercher',
     rechercheIndication: 'Rechercher une langue ou un pays…',
     aucunResultat: 'Aucun résultat.',

@@ -32,6 +32,7 @@ export default {
     toujoursLaQuestion: 'Bent u er nog?',
     retourDansSecondes: 'Terug naar de kaart over {n} s',
     toujoursLa: 'Ik ben er nog',
+    suiteTelephone: '📱 Video’s: verder op uw telefoon', // barre de l’écran 5fish, à côté du petit QR code
     recherche: 'Zoeken',
     rechercheIndication: 'Zoek een taal of een land…',
     aucunResultat: 'Geen resultaten.',

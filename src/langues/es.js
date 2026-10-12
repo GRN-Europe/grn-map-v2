@@ -32,6 +32,7 @@ export default {
     toujoursLaQuestion: '¿Sigue ahí?',
     retourDansSecondes: 'Volver al mapa en {n} s',
     toujoursLa: 'Sigo aquí',
+    suiteTelephone: '📱 Vídeos: continúe en su teléfono', // barre de l’écran 5fish, à côté du petit QR code
     recherche: 'Buscar',
     rechercheIndication: 'Buscar un idioma o un país…',
     aucunResultat: 'Sin resultados.',

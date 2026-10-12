@@ -39,6 +39,11 @@ export function creerEcoute({ quand5fishOuvert, quandRetourCarte }) {
     const adresse = new URL(langueChoisie.lien);
     adresse.searchParams.set('ui', langue());
     cadre.src = adresse.toString();
+    // Petit QR code « continuez sur votre téléphone » (sans langue imposée : 5fish suivra
+    // la langue du téléphone), pour les vidéos qui ne s'ouvrent pas sur la borne
+    qrCodeSvg(langueChoisie.lien).then((svg) => {
+      document.getElementById('qr-5fish').innerHTML = svg;
+    });
     ecran5fish.hidden = false;
     quand5fishOuvert();
   }

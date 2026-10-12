@@ -32,6 +32,7 @@ export default {
     toujoursLaQuestion: 'Sei ancora qui?',
     retourDansSecondes: 'Ritorno alla mappa tra {n} s',
     toujoursLa: 'Sono ancora qui',
+    suiteTelephone: '📱 Video: continua sul tuo telefono', // barre de l’écran 5fish, à côté du petit QR code
     recherche: 'Cerca',
     rechercheIndication: 'Cerca una lingua o un paese…',
     aucunResultat: 'Nessun risultato.',

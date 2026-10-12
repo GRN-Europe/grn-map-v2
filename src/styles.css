@@ -1123,3 +1123,32 @@ body.pays-ouvert .coin-bas-droite {
 
 /* Pays « cliqué » : il s'éclaire un instant */
 .veille-carte svg path.pays-vise { fill: #f4a24c; transition: fill 0.3s; }
+
+/* --- Écran 5fish : « Vidéos : continuez sur votre téléphone » + petit QR code ---------- */
+
+.suite-telephone {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Fond blanc autour du QR code : indispensable pour qu'un téléphone le lise */
+.qr-5fish {
+  width: 64px;
+  height: 64px;
+  padding: 5px;
+  border-radius: 6px;
+  background: white;
+  pointer-events: none; /* QR code inerte au toucher (voir « QR codes » plus haut) */
+}
+
+.qr-5fish svg { display: block; width: 100%; height: 100%; }
+
+/* Écran étroit : on garde seulement le QR code */
+@media (max-width: 900px) {
+  .suite-telephone span { display: none; }
+}

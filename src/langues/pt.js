@@ -32,6 +32,7 @@ export default {
     toujoursLaQuestion: 'Ainda está aí?',
     retourDansSecondes: 'Voltar ao mapa dentro de {n} s',
     toujoursLa: 'Ainda estou aqui',
+    suiteTelephone: '📱 Vídeos: continue no seu telemóvel', // barre de l’écran 5fish, à côté du petit QR code
     recherche: 'Pesquisar',
     rechercheIndication: 'Pesquisar uma língua ou um país…',
     aucunResultat: 'Sem resultados.',

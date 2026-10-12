@@ -49,6 +49,9 @@
   « Retour à la carte dans m:ss ». Délai par défaut : 3 minutes, réglable.
   5fish s'y ouvre dans la langue de la borne (paramètre ?ui=fr|en|de|es|it|pt|nl) ; le QR code
   n'impose pas de langue (5fish suit alors la langue du téléphone du visiteur).
+- Vidéos de 5fish (film JÉSUS, YouTube…) : elles ouvrent d'autres sites, bloqués dans le cadre
+  de la borne (volontairement : le visiteur ne doit pas quitter la borne). Dans la barre sombre,
+  « 📱 Vidéos : continuez sur votre téléphone » + petit QR code de la page de la langue (solution A).
 - Pendant les 10 dernières secondes : fenêtre « Je suis toujours là » ; la toucher relance le délai.
 - Les drapeaux de tous les pays apparaissent dès le premier zoom (comme en v1), en 20 × 14 px
   comme en v1 (32 × 24 puis 26 × 18 rendaient la carte brouillon) ; onglet Amériques cadré comme en v1.

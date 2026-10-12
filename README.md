@@ -46,7 +46,7 @@ Site publié : https://map.grneu.org (administration des codes : https://map.grn
 | `src/main.js` | Démarrage : relie la carte, les panneaux, le mode borne et les réglages |
 | `src/carte.js` | Carte du monde : dessin, zoom, régions des onglets, drapeaux, pays sélectionné |
 | `src/panneau-pays.js` | Panneau d'un pays (à droite) : langues avec petit QR code, case diaspora |
-| `src/ecoute.js` | Fenêtre du QR code et écran « Ouvrir ici » (page 5fish dans un cadre) |
+| `src/ecoute.js` | Fenêtre du QR code et écran « Ouvrir ici » (page 5fish dans un cadre, avec un petit QR code « Vidéos : continuez sur votre téléphone », car les vidéos de 5fish ne s'ouvrent pas sur la borne) |
 | `src/qr.js` | Fabrique les QR codes (hors ligne) |
 | `src/recherche.js` | Recherche (loupe) : langues et pays, sans tenir compte des accents |
 | `src/borne.js` | Mode borne (actif par défaut, `?presentation=0` pour le désactiver) : inactivité, « Je suis toujours là », retours automatiques |
