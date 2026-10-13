@@ -17,8 +17,8 @@ Site publié : https://map.grneu.org (administration des codes : https://map.grn
 ## Réglages de la borne
 
 - Roue ⚙ en bas à droite, protégée par un code d'accès.
-- Code par défaut : **GRNERD**. Chaque église peut choisir son propre code dans les réglages ;
-  GRNERD reste toujours valable comme code de secours de GRN Europe.
+- Code par défaut : **GRNMAP**. Chaque église peut choisir son propre code dans les réglages ;
+  GRNMAP reste toujours valable comme code de secours de GRN Europe.
 - Les réglages sont enregistrés sur l'appareil. « Copier le lien de configuration » donne un
   lien qui, ouvert sur une autre borne, lui applique les mêmes réglages, bandeau et logo compris
   (mais sans les images du PDF).

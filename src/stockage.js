@@ -12,7 +12,7 @@ const CLE_REGLAGES = 'grn-map-reglages';
 // Code d'accès par défaut, qui reste toujours valable comme code de secours de GRN Europe.
 // ATTENTION : ce code est lisible par quiconque regarde le code de l'application.
 // Il empêche un visiteur de modifier la borne, ce n'est pas une vraie sécurité.
-export const CODE_DE_SECOURS = 'GRNERD';
+export const CODE_DE_SECOURS = 'GRNMAP';
 
 // Valeurs par défaut (reprises de la v1, sauf le retour depuis 5fish : 3 min au lieu de 4)
 export const REGLAGES_PAR_DEFAUT = {
@@ -48,9 +48,9 @@ export function enregistrerReglages(reglages) {
 // --- Code d'accès --------------------------------------------------------
 
 // Transforme un code en « empreinte » pour ne pas l'enregistrer en clair.
-// Majuscules/minuscules et espaces autour sont ignorés (plus simple sur un clavier tactile).
+// Majuscules/minuscules et espaces sont ignorés (« GRN MAP » = « grnmap ») (plus simple sur un clavier tactile).
 export function empreinteDuCode(code) {
-  const texte = code.trim().toUpperCase();
+  const texte = code.replace(/\s+/g, '').toUpperCase();
   let empreinte = 5381;
   for (const caractere of texte) {
     empreinte = ((empreinte * 33) ^ caractere.charCodeAt(0)) >>> 0;

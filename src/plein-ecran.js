@@ -1,7 +1,7 @@
 // Plein écran de la borne.
 //
 // En mode borne :
-// 1. sortir du plein écran avec le bouton ⛶ demande le code d'accès (GRNERD ou celui de l'église) ;
+// 1. sortir du plein écran avec le bouton ⛶ demande le code d'accès (GRNMAP ou celui de l'église) ;
 // 2. si quelqu'un sort du plein écran autrement (touche Échap, geste du système…),
 //    le plein écran revient au toucher suivant.
 //

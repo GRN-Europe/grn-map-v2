@@ -19,7 +19,7 @@
   un code par église ou personne, valable sur un seul appareil ; création et suivi sur /admin.html
   (FR / EN, exception à la règle des 7 langues : page interne). Serveur : dossier api/, base Redis
   Upstash dans Vercel, mot de passe ADMIN_MOT_DE_PASSE (variable d'environnement Vercel).
-- Code des réglages de la borne : GRNERD par défaut et toujours valable comme code de secours de GRN Europe ;
+- Code des réglages de la borne : GRNMAP par défaut et toujours valable comme code de secours de GRN Europe ;
   chaque église peut définir le sien (empreinte enregistrée, incluse dans le lien de configuration).
 - Le lien de configuration contient les réglages simples, pas les images du PDF.
 - Diaporama d'origine : public/diaporama/diapo-1…6.jpg (export de la présentation GRN) ;
