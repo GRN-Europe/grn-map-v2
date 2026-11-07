@@ -40,10 +40,51 @@ const ZOOM_MAX = 40;
 // Durée des zooms animés (en millisecondes)
 const DUREE_ANIMATION = 750;
 
+// Territoires d'outre-mer que la carte dessine comme une partie de la France.
+// Chaque morceau de la France est rattaché à son territoire selon sa position
+// [longitude, latitude] ; tout le reste (métropole, Corse, îles) reste la France.
+const OUTRE_MER_DE_LA_FRANCE = [
+  { code: 'GF', ouest: -55, est: -51, sud: 1, nord: 6.5 },      // Guyane
+  { code: 'GP', ouest: -62, est: -60.9, sud: 15.7, nord: 16.6 }, // Guadeloupe
+  { code: 'MQ', ouest: -61.3, est: -60.7, sud: 14.3, nord: 15 }, // Martinique
+  { code: 'RE', ouest: 55, est: 56, sud: -21.5, nord: -20.8 },   // La Réunion
+  { code: 'YT', ouest: 44.9, est: 45.4, sud: -13.1, nord: -12.5 }, // Mayotte
+];
+
+function territoireDuMorceau(polygone) {
+  const [longitude, latitude] = geoCentroid({ type: 'Polygon', coordinates: polygone });
+  const territoire = OUTRE_MER_DE_LA_FRANCE.find((t) =>
+    longitude >= t.ouest && longitude <= t.est && latitude >= t.sud && latitude <= t.nord);
+  return territoire?.code ?? 'FR';
+}
+
+// Sépare la France en France + territoires d'outre-mer, pour que chacun soit touchable
+// à part (avec son nom et ses langues). Les coordonnées ne changent pas : chaque morceau
+// garde exactement son tracé d'origine, dans le même ordre, il est juste rangé à part.
+function separerLOutreMer(entite) {
+  if (entite.properties.name !== 'France' || entite.geometry.type !== 'MultiPolygon') {
+    return [{ entite, code: codeDuPays(entite) }];
+  }
+  const morceauxParCode = new Map();
+  entite.geometry.coordinates.forEach((polygone) => {
+    const code = territoireDuMorceau(polygone);
+    if (!morceauxParCode.has(code)) morceauxParCode.set(code, []);
+    morceauxParCode.get(code).push(polygone);
+  });
+  return [...morceauxParCode].map(([code, polygones]) => ({
+    code,
+    entite: {
+      ...entite,
+      properties: { ...entite.properties, territoire: code },
+      geometry: { type: 'MultiPolygon', coordinates: polygones },
+    },
+  }));
+}
+
 // Liste des pays de la carte (sans l'Antarctique, inutile ici)
 const PAYS = feature(monde, monde.objects.countries).features
   .filter((entite) => entite.properties.name !== 'Antarctica')
-  .map((entite) => ({ entite, code: codeDuPays(entite) }));
+  .flatMap(separerLOutreMer);
 
 // Codes à 2 lettres de tous les pays de la carte (utilisés par la recherche)
 export const CODES_PAYS = PAYS.map((p) => p.code).filter(Boolean);

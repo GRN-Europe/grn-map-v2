@@ -93,3 +93,7 @@
   sa place de 64 × 64 px est réservée (carré pâle) ; QR codes gardés en mémoire (src/qr.js).
   Mesure (CPU ralenti ×6) : ouverture de la Chine 1,7 s → ~120 ms. Ne pas revenir à un calcul
   de tous les QR codes à l'ouverture.
+- Outre-mer : world-atlas dessine la Guyane, la Guadeloupe, la Martinique, La Réunion et Mayotte
+  dans la France. carte.js (separerLOutreMer) range ces morceaux dans des tracés à part (GF, GP, MQ,
+  RE, YT), sans changer une seule coordonnée : chacun a son nom, son drapeau et ses langues 5fish.
+  La mini-carte de l'écran de veille n'est pas concernée.
