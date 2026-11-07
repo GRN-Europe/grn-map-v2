@@ -1152,3 +1152,19 @@ body.pays-ouvert .coin-bas-droite {
 @media (max-width: 900px) {
   .suite-telephone span { display: none; }
 }
+
+/* --- Liste des langues : place du petit QR code réservée ---------------------------------
+   Le QR code n'est calculé que lorsqu'il arrive à l'écran (panneau-pays.js). En attendant,
+   son emplacement garde sa taille (64 × 64 px) et montre un carré pâle : rien ne bouge
+   quand le QR code apparaît. */
+.carte-langue .qr-petit {
+  display: block;
+  width: 64px;
+  height: 64px;
+  flex: 0 0 64px;
+}
+
+.carte-langue .qr-petit:empty {
+  border-radius: 6px;
+  background: #f6e9dc;
+}

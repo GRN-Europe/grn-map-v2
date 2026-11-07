@@ -87,3 +87,9 @@
 - Textes : police du système et tailles de la v1 (onglets 17 px, noms de langues 17 px demi-gras #333,
   nom du pays 28 px) — section « alignées sur la v1 » à la fin de styles.css.
 - Couleurs de la v1 : mer bleu nuit #0c1a2b, pays orange brûlé #c4561a, onglet actif orange #ff6a13.
+- Panneau d'un pays (rapidité sur tablette modeste, la Chine a 341 langues) : les 30 premières
+  langues s'affichent tout de suite (nom seul), la suite par lots de 80 en rendant la main ;
+  chaque petit QR code n'est calculé que lorsqu'il arrive à l'écran (IntersectionObserver),
+  sa place de 64 × 64 px est réservée (carré pâle) ; QR codes gardés en mémoire (src/qr.js).
+  Mesure (CPU ralenti ×6) : ouverture de la Chine 1,7 s → ~120 ms. Ne pas revenir à un calcul
+  de tous les QR codes à l'ouverture.
