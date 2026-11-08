@@ -13,6 +13,7 @@ import {
   imagesDuDiaporama, nombreImagesDOrigine, chargerPdf, revenirAuDiaporamaDOrigine,
 } from './diaporama.js';
 import { preparerLogo } from './bandeau.js';
+import { creerMiseAJour } from './mise-a-jour.js';
 
 // Limites des champs (en secondes)
 const LIMITES = {
@@ -44,6 +45,9 @@ export function creerEcranReglages({ donnees, quandEnregistre, quandDiaporamaCha
     champ.querySelector('span').dataset.nomLangue = nom;
     zonePhrases.appendChild(champ);
   });
+
+  // Section « Mise à jour » (date de la version installée, bouton « Mettre à jour »)
+  const miseAJour = creerMiseAJour();
 
   // Logo choisi dans le formulaire (gardé seulement avec « Enregistrer »)
   let logoEnCours = null;
@@ -100,6 +104,7 @@ export function creerEcranReglages({ donnees, quandEnregistre, quandDiaporamaCha
     message.textContent = '';
     afficherEtatDiaporama();
     afficherDateDonnees();
+    miseAJour.preparer();
   }
 
   // Lit les champs et renvoie les réglages correspondants (valeurs ramenées dans les limites)
@@ -247,6 +252,7 @@ export function creerEcranReglages({ donnees, quandEnregistre, quandDiaporamaCha
     afficherEtatDiaporama();
     afficherDateDonnees();
     afficherEtiquettesPhrases();
+    miseAJour.afficherVersion();
   });
 
   return { ouvrir, fermer };

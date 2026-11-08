@@ -32,7 +32,31 @@ const apiLocale = {
   },
 };
 
+// Date de cette version de l'application : elle change automatiquement à chaque publication
+// (Vercel refait « npm run build » à chaque envoi sur GitHub). Elle est :
+// - écrite dans le code (__DATE_VERSION__) : c'est la « version installée » des réglages ;
+// - publiée dans /version.json, jamais gardé hors ligne : le bouton « Mettre à jour » le lit
+//   sur internet pour savoir s'il existe une version plus récente.
+const DATE_VERSION = new Date().toISOString();
+
+const fichierVersion = {
+  name: 'fichier-version',
+  // Pendant « npm run dev »
+  configureServer(serveur) {
+    serveur.middlewares.use('/version.json', (req, res) => {
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Cache-Control', 'no-store');
+      res.end(JSON.stringify({ version: DATE_VERSION }));
+    });
+  },
+  // Dans la version publiée (dossier dist/)
+  generateBundle() {
+    this.emitFile({ type: 'asset', fileName: 'version.json', source: JSON.stringify({ version: DATE_VERSION }) });
+  },
+};
+
 export default defineConfig({
+  define: { __DATE_VERSION__: JSON.stringify(DATE_VERSION) },
   // Deux pages : la carte (index.html) et l'administration des codes (admin.html)
   build: {
     rollupOptions: {
@@ -41,6 +65,7 @@ export default defineConfig({
   },
   plugins: [
     apiLocale,
+    fichierVersion,
     VitePWA({
       registerType: 'autoUpdate', // met à jour l'application sans rien demander
       includeAssets: ['icones/apple-touch-icon.png'],
@@ -63,6 +88,8 @@ export default defineConfig({
         // Fichiers gardés sur l'appareil pour fonctionner hors ligne :
         // code, styles, drapeaux (svg), images du diaporama (jpg), icônes (png)
         globPatterns: ['**/*.{js,mjs,css,html,svg,jpg,png,json}'],
+        // … sauf version.json, qui doit toujours venir d'internet (bouton « Mettre à jour »)
+        globIgnores: ['version.json'],
         // Certains fichiers dépassent la limite par défaut (2 Mo), comme le lecteur de PDF
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         // Toute adresse de l'application (par ex. …/?config=…) s'ouvre aussi hors ligne

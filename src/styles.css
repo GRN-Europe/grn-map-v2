@@ -1168,3 +1168,9 @@ body.pays-ouvert .coin-bas-droite {
   border-radius: 6px;
   background: #f6e9dc;
 }
+
+/* --- Réglages : section « Mise à jour » ------------------------------------------------- */
+.version-installee { font-size: 18px; font-weight: 600; color: #222; }
+.message-maj { margin: 12px 0 0; font-weight: 600; }
+.message-maj.attente { color: #5d6873; }
+.message-maj.erreur-maj { color: #c0392b; }

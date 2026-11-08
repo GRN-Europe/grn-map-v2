@@ -97,3 +97,9 @@
   dans la France. carte.js (separerLOutreMer) range ces morceaux dans des tracés à part (GF, GP, MQ,
   RE, YT), sans changer une seule coordonnée : chacun a son nom, son drapeau et ses langues 5fish.
   La mini-carte de l'écran de veille n'est pas concernée.
+- Réglages, section « Mise à jour » (src/mise-a-jour.js) : « Version du … » = date de la publication
+  (__DATE_VERSION__, fixée par vite.config.js à chaque « npm run build », donc à chaque envoi sur
+  GitHub). Le bouton « Mettre à jour » lit /version.json sur internet (exclu de la mémoire hors ligne),
+  et si la version publiée est plus récente : enregistrement.update() du service worker, attente de
+  son activation, message « Mise à jour effectuée », rechargement. Sinon « La map est à jour » ;
+  sans réseau « Pas de connexion internet… ». Le hors-ligne ne change pas.
