@@ -103,7 +103,11 @@
   et si la version publiée est plus récente : enregistrement.update() du service worker, attente de
   son activation, message « Mise à jour effectuée », rechargement. Sinon « La map est à jour » ;
   sans réseau « Pas de connexion internet… ». Le hors-ligne ne change pas.
-- Glissement en vue « Monde » (demande de GRN Europe) : translateExtent élargi d'une marge à gauche
-  (largeur du panneau) et à droite (moitié de l'écran). À l'ouverture d'un pays caché par le panneau,
-  carte.montrerAGaucheDuPanneau(code) fait glisser la carte (sans changer le zoom) pour l'amener
-  au milieu de la partie visible (Australie, Japon, Nouvelle-Zélande…).
+- Carte sans fin (demande de GRN Europe) : en glissant à droite, les Amériques reviennent après l'Asie.
+  carte.js : les vrais tracés sont dans <g id="pays-original"> (jamais modifiés), replacé sous le
+  milieu de l'écran (tourActuel) ; des copies <use> à ±1 et ±2 tours du monde, affichées seulement
+  si visibles (une copie se redessine à chaque mise en valeur). Toucher une copie : geoContains
+  retrouve le pays. Les drapeaux vont sur l'exemplaire le plus proche du milieu de l'écran.
+  Glissement horizontal sans limite (translateExtent ±Infinity).
+- Toucher un pays (carte, drapeau ou recherche) : carte.montrerAGaucheDuPanneau(code) le fait glisser
+  au milieu de la partie visible, à gauche du panneau des langues, sans changer le zoom.

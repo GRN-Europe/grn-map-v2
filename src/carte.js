@@ -8,9 +8,9 @@
 // - les drapeaux sont des boutons HTML posés au-dessus de la carte ; ils apparaissent
 //   dès le premier zoom et gardent toujours la même taille à l'écran.
 
-import { geoMercator, geoPath, geoArea, geoCentroid } from 'd3-geo';
+import { geoMercator, geoPath, geoArea, geoCentroid, geoContains } from 'd3-geo';
 import { zoom, zoomIdentity, zoomTransform } from 'd3-zoom';
-import { select } from 'd3-selection';
+import { select, pointer } from 'd3-selection';
 import 'd3-transition'; // permet les zooms animés (.transition())
 import { feature } from 'topojson-client';
 import monde from 'world-atlas/countries-50m.json';
@@ -94,8 +94,20 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
   const projection = geoMercator();
   const chemin = geoPath(projection);
 
-  // Groupe qui contient tous les pays : c'est lui qu'on agrandit quand on zoome
-  const groupePays = svg.append('g').attr('class', 'pays');
+  // Carte « sans fin » : en glissant vers la droite, on retrouve les Amériques après l'Asie,
+  // comme sur un globe. Le groupe des pays (les vrais tracés, jamais modifiés) est affiché
+  // plusieurs fois côte à côte : l'original, toujours placé là où l'on regarde, et des copies
+  // (<use>, simples reflets de l'original) à sa gauche et à sa droite.
+  // Le groupe « zoom » est celui qu'on agrandit et déplace quand on zoome ou glisse.
+  const groupeZoom = svg.append('g').attr('class', 'zoom-carte');
+  const groupePays = groupeZoom.append('g').attr('class', 'pays').attr('id', 'pays-original');
+  const DECALAGES_COPIES = [-2, -1, 1, 2]; // en « tours du monde » par rapport à l'original
+  const copies = groupeZoom.selectAll('use')
+    .data(DECALAGES_COPIES)
+    .join('use')
+    .attr('class', 'pays-copie'); // le lien vers l'original est posé quand la copie est visible
+  let largeurMonde = 0;  // largeur d'un tour du monde, en pixels (zoom 1)
+  let tourActuel = 0;    // n° du tour du monde où se trouve l'original (0 = position de départ)
 
   // Un <path> par pays
   const formes = groupePays.selectAll('path')
@@ -127,7 +139,8 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     .scaleExtent([1, ZOOM_MAX])
     .clickDistance(12) // un toucher qui bouge un peu compte encore comme un toucher
     .on('zoom', (evenement) => {
-      groupePays.attr('transform', evenement.transform);
+      groupeZoom.attr('transform', evenement.transform);
+      placerOriginal(evenement.transform);
       placerDrapeaux(evenement.transform);
     });
   svg.call(comportementZoom);
@@ -138,6 +151,46 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
   svg.on('click', (evenement) => {
     if (evenement.target === svgElement) quandMerTouchee();
   });
+
+  // Toucher une copie : on retrouve le point touché sur la carte d'origine,
+  // puis le pays qui contient ce point (ou la mer)
+  copies.on('click', (evenement, n) => {
+    const [x, y] = pointer(evenement, groupeZoom.node());
+    const xOriginal = x - (tourActuel + n) * largeurMonde;
+    let [longitude, latitude] = projection.invert([xOriginal, y]);
+    longitude = ((((longitude + 180) % 360) + 360) % 360) - 180;
+    const touche = PAYS.find((p) => p.code && geoContains(p.entite, [longitude, latitude]));
+    if (touche) quandPaysTouche(touche.code);
+    else quandMerTouchee();
+  });
+
+  // Tour du monde le plus proche d'un point x de l'écran, pour un point x0 de la carte d'origine
+  function tourLePlusProche(transformation, x0, xEcran) {
+    return Math.round((xEcran - transformation.applyX(x0)) / (largeurMonde * transformation.k));
+  }
+
+  // Place l'original sous le milieu de l'écran, et les copies de part et d'autre
+  function placerOriginal(transformation) {
+    if (!largeurMonde) return;
+    const centreCarte = projection.translate()[0];
+    const tour = tourLePlusProche(transformation, centreCarte, largeur / 2);
+    if (tour !== tourActuel || !groupePays.attr('transform')) {
+      tourActuel = tour;
+      groupePays.attr('transform', `translate(${tour * largeurMonde},0)`);
+      copies.attr('x', (n) => n * largeurMonde);
+    }
+    // Seules les copies visibles à l'écran sont affichées : une copie coûte cher à
+    // redessiner (par exemple quand un pays est mis en valeur)
+    copies.each(function afficherSiVisible(n) {
+      const gauche = transformation.applyX(centreCarte + (tourActuel + n - 0.5) * largeurMonde);
+      const droite = transformation.applyX(centreCarte + (tourActuel + n + 0.5) * largeurMonde);
+      const visible = droite > 0 && gauche < largeur;
+      if (visible !== (this.getAttribute('href') !== null)) {
+        if (visible) this.setAttribute('href', '#pays-original');
+        else this.removeAttribute('href');
+      }
+    });
+  }
 
   // Largeur du panneau d'un pays (variable CSS --largeur-panneau-pays, par ex. 400 px)
   function largeurPanneau() {
@@ -178,16 +231,16 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     formes.attr('d', (p) => chemin(p.entite));
     drapeaux.forEach((d) => { d.position = projection(d.centre); });
 
-    // Limites du glissement : la carte entière, et au minimum l'écran, plus une marge de chaque
-    // côté. Ainsi, même en vue « Monde », on peut faire glisser la carte à gauche ou à droite.
-    // À droite, la marge est plus grande (la moitié de l'écran) : un pays caché par le panneau
-    // (Australie, Japon, Nouvelle-Zélande…) peut venir jusqu'au milieu de la partie visible.
-    const [[x0, y0], [x1, y1]] = chemin.bounds(toutLeMonde);
-    const margeGauche = largeurPanneau();
-    const margeDroite = Math.max(largeurPanneau(), largeur / 2);
+    // Largeur d'un tour du monde (projection de Mercator : 2π × l'échelle)
+    largeurMonde = 2 * Math.PI * projection.scale();
+    groupePays.attr('transform', null); // l'original et les copies seront replacés par placerOriginal
+
+    // Limites du glissement : sans limite à gauche ni à droite (la carte fait le tour du monde) ;
+    // en haut et en bas, la carte entière, et au minimum l'écran.
+    const [[, y0], [, y1]] = chemin.bounds(toutLeMonde);
     comportementZoom.translateExtent([
-      [Math.min(0, x0) - margeGauche, Math.min(0, y0)],
-      [Math.max(largeur, x1) + margeDroite, Math.max(hauteur, y1)],
+      [-Infinity, Math.min(0, y0)],
+      [Infinity, Math.max(hauteur, y1)],
     ]);
     allerA(regionActuelle, false);
   }
@@ -198,7 +251,9 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     coucheDrapeaux.classList.toggle('visible', visibles);
     if (!visibles) return;
     drapeaux.forEach((d) => {
-      const [x, y] = transformation.apply(d.position);
+      // Le drapeau va sur l'exemplaire du pays le plus proche du milieu de l'écran
+      const tour = tourLePlusProche(transformation, d.position[0], largeur / 2);
+      const [x, y] = transformation.apply([d.position[0] + tour * largeurMonde, d.position[1]]);
       d.bouton.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
     });
   }
@@ -220,6 +275,9 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
         .translate(-(x0 + x1) / 2, -(y0 + y1) / 2);
     }
 
+    // On reste dans le tour du monde actuel (pas de long voyage vers la position de départ)
+    if (largeurMonde) transformation = transformation.translate(-tourActuel * largeurMonde, 0);
+
     if (animer) {
       svg.transition().duration(DUREE_ANIMATION).call(comportementZoom.transform, transformation);
     } else {
@@ -234,19 +292,21 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     formes.filter('.selectionne').raise(); // passe devant ses voisins pour que le contour se voie
   }
 
-  // Quand le panneau d'un pays s'ouvre à droite, il cache une partie de la carte.
-  // Si le pays choisi est caché (ou presque), on fait glisser la carte vers la gauche
-  // pour l'amener au milieu de la partie visible. Le zoom ne change pas.
+  // Quand on touche un pays, la carte glisse pour l'amener au milieu de la partie visible,
+  // à gauche du panneau des langues (sur l'exemplaire du pays le plus proche). Le zoom ne change pas.
   function montrerAGaucheDuPanneau(code) {
     const pays = drapeaux.find((d) => d.code === code);
     if (!pays) return;
     const transformation = zoomTransform(svgElement);
-    const [x] = transformation.apply(pays.position);
-    const visible = largeur - largeurPanneau();
-    const bord = Math.min(80, visible / 4); // un pays collé au bord est déplacé lui aussi
-    if (x >= bord && x <= visible - bord) return; // déjà bien visible
-    const decalage = (visible / 2 - x) / transformation.k;
-    svg.transition().duration(DUREE_ANIMATION).call(comportementZoom.translateBy, decalage, 0);
+    const centreVisible = [(largeur - largeurPanneau()) / 2, hauteur / 2];
+    const tour = tourLePlusProche(transformation, pays.position[0], centreVisible[0]);
+    const [x, y] = transformation.apply([pays.position[0] + tour * largeurMonde, pays.position[1]]);
+    // (en haut et en bas, la carte ne dépasse pas ses bords : le pays s'en approche au mieux)
+    svg.transition().duration(DUREE_ANIMATION).call(
+      comportementZoom.translateBy,
+      (centreVisible[0] - x) / transformation.k,
+      (centreVisible[1] - y) / transformation.k,
+    );
   }
 
   // Boutons + et − : zoome ou dézoome autour du centre de l'écran
