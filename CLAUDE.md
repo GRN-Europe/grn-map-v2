@@ -103,3 +103,7 @@
   et si la version publiée est plus récente : enregistrement.update() du service worker, attente de
   son activation, message « Mise à jour effectuée », rechargement. Sinon « La map est à jour » ;
   sans réseau « Pas de connexion internet… ». Le hors-ligne ne change pas.
+- Glissement en vue « Monde » (demande de GRN Europe) : translateExtent élargi d'une marge à gauche
+  (largeur du panneau) et à droite (moitié de l'écran). À l'ouverture d'un pays caché par le panneau,
+  carte.montrerAGaucheDuPanneau(code) fait glisser la carte (sans changer le zoom) pour l'amener
+  au milieu de la partie visible (Australie, Japon, Nouvelle-Zélande…).

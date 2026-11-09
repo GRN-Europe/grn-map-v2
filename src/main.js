@@ -144,6 +144,7 @@ function ouvrirPays(code) {
   carte.selectionnerPays(code);
   panneauPays.ouvrir(code);
   document.body.classList.add('pays-ouvert'); // décale les commandes vers la gauche
+  carte.montrerAGaucheDuPanneau(code); // le pays ne reste pas caché sous le panneau
 }
 
 // --- Écran des réglages (roue ⚙) -----------------------------------------

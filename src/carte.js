@@ -9,7 +9,7 @@
 //   dès le premier zoom et gardent toujours la même taille à l'écran.
 
 import { geoMercator, geoPath, geoArea, geoCentroid } from 'd3-geo';
-import { zoom, zoomIdentity } from 'd3-zoom';
+import { zoom, zoomIdentity, zoomTransform } from 'd3-zoom';
 import { select } from 'd3-selection';
 import 'd3-transition'; // permet les zooms animés (.transition())
 import { feature } from 'topojson-client';
@@ -139,6 +139,16 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     if (evenement.target === svgElement) quandMerTouchee();
   });
 
+  // Largeur du panneau d'un pays (variable CSS --largeur-panneau-pays, par ex. 400 px)
+  function largeurPanneau() {
+    const essai = document.createElement('div');
+    essai.style.cssText = 'position:absolute;visibility:hidden;width:var(--largeur-panneau-pays)';
+    document.body.appendChild(essai);
+    const resultat = essai.getBoundingClientRect().width;
+    essai.remove();
+    return resultat;
+  }
+
   let largeur = 0;
   let hauteur = 0;
   let regionActuelle = 'monde';
@@ -168,11 +178,16 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     formes.attr('d', (p) => chemin(p.entite));
     drapeaux.forEach((d) => { d.position = projection(d.centre); });
 
-    // Limites du glissement : la carte entière, et au minimum l'écran
+    // Limites du glissement : la carte entière, et au minimum l'écran, plus une marge de chaque
+    // côté. Ainsi, même en vue « Monde », on peut faire glisser la carte à gauche ou à droite.
+    // À droite, la marge est plus grande (la moitié de l'écran) : un pays caché par le panneau
+    // (Australie, Japon, Nouvelle-Zélande…) peut venir jusqu'au milieu de la partie visible.
     const [[x0, y0], [x1, y1]] = chemin.bounds(toutLeMonde);
+    const margeGauche = largeurPanneau();
+    const margeDroite = Math.max(largeurPanneau(), largeur / 2);
     comportementZoom.translateExtent([
-      [Math.min(0, x0), Math.min(0, y0)],
-      [Math.max(largeur, x1), Math.max(hauteur, y1)],
+      [Math.min(0, x0) - margeGauche, Math.min(0, y0)],
+      [Math.max(largeur, x1) + margeDroite, Math.max(hauteur, y1)],
     ]);
     allerA(regionActuelle, false);
   }
@@ -219,6 +234,21 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     formes.filter('.selectionne').raise(); // passe devant ses voisins pour que le contour se voie
   }
 
+  // Quand le panneau d'un pays s'ouvre à droite, il cache une partie de la carte.
+  // Si le pays choisi est caché (ou presque), on fait glisser la carte vers la gauche
+  // pour l'amener au milieu de la partie visible. Le zoom ne change pas.
+  function montrerAGaucheDuPanneau(code) {
+    const pays = drapeaux.find((d) => d.code === code);
+    if (!pays) return;
+    const transformation = zoomTransform(svgElement);
+    const [x] = transformation.apply(pays.position);
+    const visible = largeur - largeurPanneau();
+    const bord = Math.min(80, visible / 4); // un pays collé au bord est déplacé lui aussi
+    if (x >= bord && x <= visible - bord) return; // déjà bien visible
+    const decalage = (visible / 2 - x) / transformation.k;
+    svg.transition().duration(DUREE_ANIMATION).call(comportementZoom.translateBy, decalage, 0);
+  }
+
   // Boutons + et − : zoome ou dézoome autour du centre de l'écran
   function zoomer(facteur) {
     svg.transition().duration(300).call(comportementZoom.scaleBy, facteur);
@@ -242,7 +272,9 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
 
   // « redimensionner » : à appeler quand la zone de la carte change de taille
   // sans que la fenêtre change (par exemple quand le bandeau d'accueil apparaît)
-  return { allerA, zoomer, selectionnerPays, traduire, redimensionner: ajusterTaille };
+  return {
+    allerA, zoomer, selectionnerPays, montrerAGaucheDuPanneau, traduire, redimensionner: ajusterTaille,
+  };
 }
 
 // Pour un pays en plusieurs morceaux (îles, territoires d'outre-mer),
