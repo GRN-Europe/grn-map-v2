@@ -130,3 +130,5 @@
   #pays-original forçait le navigateur à recopier toutes les copies <use> du monde. Le panneau ne lit
   ni n'écrit scrollTop à la première ouverture (mise en page forcée) ; les lignes de la liste ont
   content-visibility: auto (Chine : 341 langues mises en page seulement à l'écran).
+- Logo GRN Europe en bas à gauche (2026-11-13) : simple image, plus de lien vers grneu.org
+  (un toucher sur une borne ne doit pas faire sortir de la map).
