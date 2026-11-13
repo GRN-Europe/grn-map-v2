@@ -102,7 +102,15 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
   const cadreElement = document.createElement('div');
   cadreElement.className = 'cadre-carte';
   svgElement.parentNode.insertBefore(cadreElement, svgElement);
-  cadreElement.append(svgElement, coucheDrapeaux);
+  // Image de fond du monde entier (voir dessinerLeFond) : derrière la carte, visible seulement
+  // pendant un dézoom, pour montrer tout de suite les pays qui entrent dans l'écran
+  const fond = document.createElement('canvas');
+  fond.className = 'fond-monde';
+  cadreElement.append(fond, svgElement, coucheDrapeaux);
+  let fondPret = false;
+  let fondGauche = 0; // position (zoom 1) du bord gauche de l'image de fond, sur la carte
+  let fondHaut = 0;
+  let hautEtBasDuMonde = [0, 0]; // haut et bas de la carte du monde au zoom 1 (ajusterTaille)
   const zoneGestes = select(cadreElement);
   const projection = geoMercator();
   const chemin = geoPath(projection);
@@ -162,6 +170,7 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     svgElement.style.transform = '';
     coucheDrapeaux.style.transform = '';
     coucheDrapeaux.style.opacity = '';
+    fond.style.opacity = '0';
   }
 
   // Pendant un geste : on déplace et agrandit l'image déjà dessinée, sans la redessiner
@@ -175,6 +184,49 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     coucheDrapeaux.style.transform = css;
     // Les drapeaux ne doivent pas grossir avec la carte : cachés le temps d'un zoom
     coucheDrapeaux.style.opacity = Math.abs(echelle - 1) > 0.001 ? '0' : '';
+    // En dézoomant, l'image dessinée rétrécit et laisse des bords vides : l'image de fond du
+    // monde, placée au même zoom, les remplit jusqu'à ce que la carte nette soit redessinée.
+    // (Rien ne change pour un simple glissement.)
+    if (fondPret && echelle < 0.999) {
+      const tour = tourLePlusProche(transformation, projection.translate()[0], largeur / 2);
+      const x = transformation.applyX(fondGauche + tour * largeurMonde);
+      const y = transformation.applyY(fondHaut);
+      fond.style.transform = `translate(${x}px, ${y}px) scale(${transformation.k})`;
+      fond.style.opacity = '1';
+    }
+  }
+
+  // Dessine une fois (au repos) l'image de fond : le monde au zoom 1, trois fois côte à côte
+  // (carte sans fin), avec exactement les mêmes tracés que la carte. Image simple, peu coûteuse
+  // pour la carte graphique.
+  let fondDemande = 0;
+  function dessinerLeFond() {
+    fondPret = false;
+    fond.style.opacity = '0';
+    if (fondDemande) (window.cancelIdleCallback || clearTimeout)(fondDemande);
+    const attendre = window.requestIdleCallback || ((f) => setTimeout(f, 500));
+    fondDemande = attendre(() => {
+      fondDemande = 0;
+      const [y0, y1] = hautEtBasDuMonde;
+      fondGauche = projection.translate()[0] - 1.5 * largeurMonde;
+      fondHaut = y0;
+      fond.width = Math.ceil(3 * largeurMonde);
+      fond.height = Math.ceil(y1 - y0);
+      const style = getComputedStyle(formes.node());
+      const ctx = fond.getContext('2d');
+      ctx.fillStyle = style.fill;
+      ctx.strokeStyle = style.stroke;
+      ctx.lineWidth = 0.6;
+      const traces = formes.nodes().map((n) => new Path2D(n.getAttribute('d')));
+      // Le monde est dessiné une fois au milieu, puis recopié à gauche et à droite (plus rapide)
+      ctx.setTransform(1, 0, 0, 1, -fondGauche, -fondHaut);
+      traces.forEach((t) => { ctx.fill(t); ctx.stroke(t); });
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      const l = Math.round(largeurMonde);
+      ctx.drawImage(fond, l, 0, l, fond.height, 0, 0, l, fond.height);
+      ctx.drawImage(fond, l, 0, l, fond.height, 2 * l, 0, l, fond.height);
+      fondPret = true;
+    });
   }
 
   const comportementZoom = zoom()
@@ -292,12 +344,14 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     // Limites du glissement : sans limite à gauche ni à droite (la carte fait le tour du monde) ;
     // en haut et en bas, la carte entière, et au minimum l'écran.
     const [[, y0], [, y1]] = chemin.bounds(toutLeMonde);
+    hautEtBasDuMonde = [y0, y1];
     comportementZoom.translateExtent([
       [-Infinity, Math.min(0, y0)],
       [Infinity, Math.max(hauteur, y1)],
     ]);
     allerA(regionActuelle, false);
     if (paysSelectionne) selectionnerPays(paysSelectionne); // tracés recalculés : calque aussi
+    dessinerLeFond();
   }
 
   // Place les drapeaux selon le zoom actuel, et les cache si on n'a pas encore zoomé
