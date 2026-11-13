@@ -51,10 +51,21 @@ button {
   overflow: hidden;
 }
 
+/* Cadre qui reçoit les gestes (glisser, pincer) ; la carte y déborde d'un écran de chaque côté */
+.cadre-carte {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
 #carte {
   display: block;
-  width: 100%;
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 300%;
   height: 100%;
+  will-change: transform; /* pendant un geste, l'image est déplacée par la carte graphique */
 }
 
 .pays path {
@@ -73,11 +84,15 @@ button {
 .couche-drapeaux {
   position: absolute;
   inset: 0;
+  transform-origin: 0 0;
+  will-change: transform;
   pointer-events: none;          /* les gestes passent à la carte… */
-  display: none;
+  visibility: hidden;            /* invisible, mais drapeaux déjà chargés (voir carte.js) */
 }
 
-.couche-drapeaux.visible { display: block; }
+.couche-drapeaux.visible { visibility: visible; }
+
+.drapeau[hidden] { display: none; }
 
 .drapeau {
   position: absolute;

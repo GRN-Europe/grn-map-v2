@@ -91,6 +91,19 @@ export const CODES_PAYS = PAYS.map((p) => p.code).filter(Boolean);
 
 export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouche, quandMerTouchee }) {
   const svg = select(svgElement);
+
+  // Fluidité sur les tablettes modestes : pendant un geste (glisser, zoomer) ou une animation,
+  // on ne redessine pas la carte à chaque image. On déplace et on agrandit l'image déjà dessinée
+  // (transformation CSS, faite par la carte graphique), puis on redessine la carte nette une seule
+  // fois à la fin du geste. Pour cela :
+  // - les gestes sont écoutés sur un cadre (div) qui contient la carte et les drapeaux ;
+  // - la carte (svg) est trois fois plus large que l'écran (un écran de plus à gauche et à droite),
+  //   pour qu'en glissant on voie déjà la suite de la carte et pas un bord vide.
+  const cadreElement = document.createElement('div');
+  cadreElement.className = 'cadre-carte';
+  svgElement.parentNode.insertBefore(cadreElement, svgElement);
+  cadreElement.append(svgElement, coucheDrapeaux);
+  const zoneGestes = select(cadreElement);
   const projection = geoMercator();
   const chemin = geoPath(projection);
 
@@ -135,15 +148,45 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
   });
 
   // Gestion du zoom et du déplacement au doigt
+  let transformationDessinee = null; // zoom de la carte telle qu'elle est dessinée (null = jamais)
+
+  // Redessine la carte nette pour un zoom donné (tracés, copies, drapeaux)
+  function dessiner(transformation) {
+    transformationDessinee = transformation;
+    groupeZoom.attr('transform', transformation);
+    placerOriginal(transformation);
+    placerDrapeaux(transformation);
+    svgElement.style.transform = '';
+    coucheDrapeaux.style.transform = '';
+    coucheDrapeaux.style.opacity = '';
+  }
+
+  // Pendant un geste : on déplace et agrandit l'image déjà dessinée, sans la redessiner
+  function deplacerLImage(transformation) {
+    const t0 = transformationDessinee;
+    const echelle = transformation.k / t0.k;
+    const dx = transformation.x - t0.x * echelle;
+    const dy = transformation.y - t0.y * echelle;
+    const css = `translate(${dx}px, ${dy}px) scale(${echelle})`;
+    svgElement.style.transform = css;
+    coucheDrapeaux.style.transform = css;
+    // Les drapeaux ne doivent pas grossir avec la carte : cachés le temps d'un zoom
+    coucheDrapeaux.style.opacity = Math.abs(echelle - 1) > 0.001 ? '0' : '';
+  }
+
   const comportementZoom = zoom()
     .scaleExtent([1, ZOOM_MAX])
     .clickDistance(12) // un toucher qui bouge un peu compte encore comme un toucher
+    // (d3-zoom annonce toujours « start », puis les « zoom », puis « end », même sans animation)
     .on('zoom', (evenement) => {
-      groupeZoom.attr('transform', evenement.transform);
-      placerOriginal(evenement.transform);
-      placerDrapeaux(evenement.transform);
+      if (transformationDessinee) deplacerLImage(evenement.transform);
+      else dessiner(evenement.transform); // tout premier affichage
+    })
+    .on('end', (evenement) => {
+      dessiner(evenement.transform); // fin du geste ou de l'animation : carte nette
     });
-  svg.call(comportementZoom);
+  zoneGestes.call(comportementZoom);
+
 
   // Toucher la mer (le fond de la carte, hors des pays) : par exemple pour fermer le panneau
   // d'un pays. Après un glissement de la carte, d3-zoom annule ce « clic » : seul un toucher
@@ -184,7 +227,7 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     copies.each(function afficherSiVisible(n) {
       const gauche = transformation.applyX(centreCarte + (tourActuel + n - 0.5) * largeurMonde);
       const droite = transformation.applyX(centreCarte + (tourActuel + n + 0.5) * largeurMonde);
-      const visible = droite > 0 && gauche < largeur;
+      const visible = droite > -largeur && gauche < 2 * largeur; // la carte fait 3 écrans de large
       if (visible !== (this.getAttribute('href') !== null)) {
         if (visible) this.setAttribute('href', '#pays-original');
         else this.removeAttribute('href');
@@ -192,8 +235,12 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     });
   }
 
-  // Largeur du panneau d'un pays (variable CSS --largeur-panneau-pays, par ex. 400 px)
-  function largeurPanneau() {
+  // Largeur du panneau d'un pays (variable CSS --largeur-panneau-pays, par ex. 400 px).
+  // Mesurée une fois par taille d'écran (dans ajusterTaille) : la mesurer au moment du toucher
+  // forçait la tablette à recalculer toute la page.
+  let largeurPanneauMesuree = 0;
+  const largeurPanneau = () => largeurPanneauMesuree;
+  function mesurerLargeurPanneau() {
     const essai = document.createElement('div');
     essai.style.cssText = 'position:absolute;visibility:hidden;width:var(--largeur-panneau-pays)';
     document.body.appendChild(essai);
@@ -208,9 +255,13 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
 
   // Calcule la taille de la carte pour remplir la zone disponible
   function ajusterTaille() {
-    largeur = svgElement.clientWidth;
-    hauteur = svgElement.clientHeight;
-    svg.attr('viewBox', `0 0 ${largeur} ${hauteur}`);
+    largeur = cadreElement.clientWidth;
+    hauteur = cadreElement.clientHeight;
+    largeurPanneauMesuree = mesurerLargeurPanneau();
+    // La carte déborde d'un écran à gauche et à droite (voir plus haut) : mêmes coordonnées,
+    // de -largeur à 2 × largeur
+    svg.attr('viewBox', `${-largeur} 0 ${3 * largeur} ${hauteur}`);
+    svgElement.style.transformOrigin = `${largeur}px 0`; // le coin de l'écran, dans la carte
 
     const toutLeMonde = { type: 'FeatureCollection', features: PAYS.map((p) => p.entite) };
 
@@ -247,14 +298,18 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
 
   // Place les drapeaux selon le zoom actuel, et les cache si on n'a pas encore zoomé
   function placerDrapeaux(transformation) {
-    const visibles = transformation.k >= ZOOM_DRAPEAUX;
-    coucheDrapeaux.classList.toggle('visible', visibles);
-    if (!visibles) return;
+    // Avant le premier zoom, les drapeaux sont invisibles mais déjà placés et chargés : les ~250
+    // petites images SVG sont ainsi préparées dès le démarrage, et non au premier zoom (ce qui
+    // bloquait une tablette modeste plus d'une seconde).
+    coucheDrapeaux.classList.toggle('visible', transformation.k >= ZOOM_DRAPEAUX);
     drapeaux.forEach((d) => {
       // Le drapeau va sur l'exemplaire du pays le plus proche du milieu de l'écran
       const tour = tourLePlusProche(transformation, d.position[0], largeur / 2);
       const [x, y] = transformation.apply([d.position[0] + tour * largeurMonde, d.position[1]]);
-      d.bouton.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+      // Seuls les drapeaux à l'écran (ou juste à côté) sont affichés : moins de travail pour la tablette
+      const aLEcran = x > -largeur && x < 2 * largeur && y > -hauteur && y < 2 * hauteur;
+      d.bouton.hidden = !aLEcran;
+      if (aLEcran) d.bouton.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
     });
   }
 
@@ -279,9 +334,9 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     if (largeurMonde) transformation = transformation.translate(-tourActuel * largeurMonde, 0);
 
     if (animer) {
-      svg.transition().duration(DUREE_ANIMATION).call(comportementZoom.transform, transformation);
+      zoneGestes.transition().duration(DUREE_ANIMATION).call(comportementZoom.transform, transformation);
     } else {
-      svg.call(comportementZoom.transform, transformation);
+      zoneGestes.call(comportementZoom.transform, transformation);
     }
   }
 
@@ -297,12 +352,12 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
   function montrerAGaucheDuPanneau(code) {
     const pays = drapeaux.find((d) => d.code === code);
     if (!pays) return;
-    const transformation = zoomTransform(svgElement);
+    const transformation = zoomTransform(cadreElement);
     const centreVisible = [(largeur - largeurPanneau()) / 2, hauteur / 2];
     const tour = tourLePlusProche(transformation, pays.position[0], centreVisible[0]);
     const [x, y] = transformation.apply([pays.position[0] + tour * largeurMonde, pays.position[1]]);
     // (en haut et en bas, la carte ne dépasse pas ses bords : le pays s'en approche au mieux)
-    svg.transition().duration(DUREE_ANIMATION).call(
+    zoneGestes.transition().duration(DUREE_ANIMATION).call(
       comportementZoom.translateBy,
       (centreVisible[0] - x) / transformation.k,
       (centreVisible[1] - y) / transformation.k,
@@ -311,7 +366,7 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
 
   // Boutons + et − : zoome ou dézoome autour du centre de l'écran
   function zoomer(facteur) {
-    svg.transition().duration(300).call(comportementZoom.scaleBy, facteur);
+    zoneGestes.transition().duration(300).call(comportementZoom.scaleBy, facteur);
   }
 
   // Met à jour le nom des pays (utilisé par les lecteurs d'écran) quand la langue change

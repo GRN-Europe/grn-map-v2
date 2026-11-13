@@ -118,3 +118,10 @@
   « Code d'accès » (les codes des Églises ne sont jamais consommés), réglages « Version d'essai du … ».
   Avant de déposer des fichiers chez Samuel, lui faire vérifier la branche active dans GitHub Desktop.
   Passer un essai en officiel : sur main, Branch > Merge into current branch… > essais, puis Push origin.
+- Fluidité sur tablette modeste (Acer, 2026-11-13) : pendant un geste ou une animation, la carte n'est
+  pas redessinée ; carte.js déplace/agrandit l'image déjà dessinée en CSS (svg et couche des drapeaux,
+  will-change: transform) et redessine net à l'événement « end » de d3-zoom. Les gestes sont écoutés
+  sur un cadre div (.cadre-carte) ; le svg fait 3 écrans de large (viewBox -largeur…2×largeur).
+  Les drapeaux sont placés et chargés dès le démarrage (visibility: hidden) : les ~250 SVG de
+  flag-icons préparés au premier zoom bloquaient la tablette > 1 s. Drapeaux hors écran : hidden.
+  Largeur du panneau mesurée une fois par taille d'écran (pas au toucher).
