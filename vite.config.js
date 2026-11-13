@@ -39,6 +39,12 @@ const apiLocale = {
 //   sur internet pour savoir s'il existe une version plus récente.
 const DATE_VERSION = new Date().toISOString();
 
+// Version d'essai : Vercel publie chaque branche autre que « main » (par ex. « essais ») à une
+// adresse à part (« Preview »), avec VERCEL_ENV = 'preview'. Les bornes, elles, sont sur
+// map.grneu.org (branche « main ») et ne voient jamais la version d'essai : une adresse web
+// différente a sa propre mémoire hors ligne et son propre bouton « Mettre à jour ».
+const VERSION_ESSAI = process.env.VERCEL_ENV === 'preview';
+
 const fichierVersion = {
   name: 'fichier-version',
   // Pendant « npm run dev »
@@ -56,7 +62,10 @@ const fichierVersion = {
 };
 
 export default defineConfig({
-  define: { __DATE_VERSION__: JSON.stringify(DATE_VERSION) },
+  define: {
+    __DATE_VERSION__: JSON.stringify(DATE_VERSION),
+    __VERSION_ESSAI__: JSON.stringify(VERSION_ESSAI),
+  },
   // Deux pages : la carte (index.html) et l'administration des codes (admin.html)
   build: {
     rollupOptions: {

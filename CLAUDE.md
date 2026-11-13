@@ -111,3 +111,10 @@
   Glissement horizontal sans limite (translateExtent ±Infinity).
 - Toucher un pays (carte, drapeau ou recherche) : carte.montrerAGaucheDuPanneau(code) le fait glisser
   au milieu de la partie visible, à gauche du panneau des langues, sans changer le zoom.
+- Version d'essai : branche « essais » (GitHub Desktop), publiée par Vercel en « Preview » à une adresse
+  à part (…-git-essais-….vercel.app) ; « main » = map.grneu.org = les bornes. Une adresse différente a sa
+  propre mémoire hors ligne : les bornes ne voient jamais l'essai. Sur l'essai (VERCEL_ENV=preview,
+  __VERSION_ESSAI__, src/essai.js) : étiquette jaune « Version d'essai : pas pour les bornes », pas d'écran
+  « Code d'accès » (les codes des Églises ne sont jamais consommés), réglages « Version d'essai du … ».
+  Avant de déposer des fichiers chez Samuel, lui faire vérifier la branche active dans GitHub Desktop.
+  Passer un essai en officiel : sur main, Branch > Merge into current branch… > essais, puis Push origin.

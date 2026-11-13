@@ -7,6 +7,7 @@
 // Le fonctionnement hors ligne ne change pas : sans internet, la carte reste celle installée.
 
 import { texte, langue } from './traductions.js';
+import { VERSION_ESSAI } from './essai.js';
 
 /* global __DATE_VERSION__ */
 const VERSION_INSTALLEE = __DATE_VERSION__;
@@ -64,7 +65,7 @@ export function creerMiseAJour() {
     const date = new Date(VERSION_INSTALLEE).toLocaleDateString(langue(), {
       day: 'numeric', month: 'long', year: 'numeric',
     });
-    zoneVersion.textContent = texte('majVersion', { date });
+    zoneVersion.textContent = texte(VERSION_ESSAI ? 'majVersionEssai' : 'majVersion', { date });
   }
 
   async function mettreAJour() {

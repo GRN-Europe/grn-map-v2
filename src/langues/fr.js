@@ -82,6 +82,8 @@ export default {
     // Section « Mise à jour » des réglages
     majTitre: 'Mise à jour',
     majVersion: 'Version du {date}',
+    majVersionEssai: 'Version d’essai du {date}',
+    versionEssai: 'Version d’essai : pas pour les bornes',
     majBouton: 'Mettre à jour',
     majVerification: 'Recherche d’une nouvelle version…',
     majTelechargement: 'Téléchargement de la nouvelle version…',

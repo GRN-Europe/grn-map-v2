@@ -1174,3 +1174,20 @@ body.pays-ouvert .coin-bas-droite {
 .message-maj { margin: 12px 0 0; font-weight: 600; }
 .message-maj.attente { color: #5d6873; }
 .message-maj.erreur-maj { color: #c0392b; }
+
+/* --- Version d'essai (branche « essais ») : étiquette rayée en bas de l'écran ------------ */
+.etiquette-essai {
+  position: fixed;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  z-index: 10;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: repeating-linear-gradient(45deg, #ffd400 0 14px, #ffbf00 14px 28px);
+  color: #1a1a1a;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  pointer-events: none; /* n'empêche pas de toucher la carte */
+}

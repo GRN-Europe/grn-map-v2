@@ -82,6 +82,8 @@ export default {
     // Section « Mise à jour » des réglages
     majTitre: 'Update',
     majVersion: 'Version of {date}',
+    majVersionEssai: 'Test version of {date}',
+    versionEssai: 'Test version: not for kiosks',
     majBouton: 'Update',
     majVerification: 'Looking for a new version…',
     majTelechargement: 'Downloading the new version…',

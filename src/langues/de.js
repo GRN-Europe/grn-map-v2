@@ -82,6 +82,8 @@ export default {
     // Section « Mise à jour » des réglages
     majTitre: 'Aktualisierung',
     majVersion: 'Version vom {date}',
+    majVersionEssai: 'Testversion vom {date}',
+    versionEssai: 'Testversion: nicht für Terminals',
     majBouton: 'Aktualisieren',
     majVerification: 'Suche nach einer neuen Version…',
     majTelechargement: 'Die neue Version wird heruntergeladen…',

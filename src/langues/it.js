@@ -82,6 +82,8 @@ export default {
     // Section « Mise à jour » des réglages
     majTitre: 'Aggiornamento',
     majVersion: 'Versione del {date}',
+    majVersionEssai: 'Versione di prova del {date}',
+    versionEssai: 'Versione di prova: non per i totem',
     majBouton: 'Aggiorna',
     majVerification: 'Ricerca di una nuova versione…',
     majTelechargement: 'Download della nuova versione…',

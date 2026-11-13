@@ -82,6 +82,8 @@ export default {
     // Section « Mise à jour » des réglages
     majTitre: 'Bijwerken',
     majVersion: 'Versie van {date}',
+    majVersionEssai: 'Testversie van {date}',
+    versionEssai: 'Testversie: niet voor de zuilen',
     majBouton: 'Bijwerken',
     majVerification: 'Zoeken naar een nieuwe versie…',
     majTelechargement: 'De nieuwe versie wordt gedownload…',

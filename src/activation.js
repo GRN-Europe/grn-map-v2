@@ -9,6 +9,7 @@
 // LIMITE : ce n'est pas un coffre-fort (le site est public) ; c'est un accès simple et un suivi.
 
 import { texte } from './traductions.js';
+import { VERSION_ESSAI } from './essai.js';
 
 const CLE_ACCES = 'grn-map-acces';       // { jeton, nom } une fois l'appareil activé
 const CLE_APPAREIL = 'grn-map-appareil'; // identifiant tiré au hasard, propre à cet appareil
@@ -100,6 +101,12 @@ export function creerActivation() {
     }
     bouton.disabled = false;
   });
+
+  // Version d'essai : pas de code d'accès (voir essai.js)
+  if (VERSION_ESSAI) {
+    cacher();
+    return;
+  }
 
   // Démarrage : carte si l'appareil est déjà activé, sinon écran du code
   if (lire(CLE_ACCES)) cacher();
