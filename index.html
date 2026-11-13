@@ -10,6 +10,35 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="GRN map">
   <link rel="apple-touch-icon" href="/icones/apple-touch-icon.png">
+  <!-- Filet de sécurité de la mémoire hors ligne (service worker). Si une publication tombe au
+       mauvais moment, le navigateur peut garder une page qui pointe vers des fichiers disparus :
+       la carte ne démarre plus (page sans mise en forme, logo géant), même après rechargement.
+       Si la carte n'a pas démarré au bout de 20 s ALORS QU'INTERNET MARCHE, on vide cette mémoire
+       et on recharge, une seule fois par onglet. Hors ligne, on ne touche à rien. -->
+  <script>
+    setTimeout(function () {
+      if (window.__carteDemarree || navigator.onLine === false) return;
+      try {
+        if (sessionStorage.getItem('grn-map-reparation')) return; // déjà essayé : pas de boucle
+        sessionStorage.setItem('grn-map-reparation', '1');
+      } catch (e) { return; }
+      fetch('/version.json?t=' + Date.now(), { cache: 'no-store' }).then(function (reponse) {
+        if (!reponse.ok) return; // pas de vraie connexion : on garde la mémoire hors ligne
+        var etapes = [];
+        if (navigator.serviceWorker) {
+          etapes.push(navigator.serviceWorker.getRegistrations().then(function (liste) {
+            return Promise.all(liste.map(function (r) { return r.unregister(); }));
+          }));
+        }
+        if (window.caches) {
+          etapes.push(caches.keys().then(function (noms) {
+            return Promise.all(noms.map(function (n) { return caches.delete(n); }));
+          }));
+        }
+        return Promise.all(etapes).then(function () { location.reload(); });
+      }).catch(function () {});
+    }, 20000);
+  </script>
 </head>
 <body>
   <!-- La carte occupe tout l'écran ; les commandes flottent par-dessus (comme en v1) -->

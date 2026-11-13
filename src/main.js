@@ -18,6 +18,9 @@ import { creerActivation } from './activation.js';
 import { afficherEtiquetteEssai } from './essai.js';
 import { lireReglages, appliquerConfigurationDeLAdresse } from './stockage.js';
 
+// Tout le code est bien arrivé : la carte démarre (voir le filet de sécurité dans index.html)
+window.__carteDemarree = true;
+
 // Empêche le zoom de la page entière (pincement Safari/iPad, double toucher)
 document.addEventListener('gesturestart', (e) => e.preventDefault());
 

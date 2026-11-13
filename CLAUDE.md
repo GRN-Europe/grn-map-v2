@@ -132,3 +132,9 @@
   content-visibility: auto (Chine : 341 langues mises en page seulement à l'écran).
 - Logo GRN Europe en bas à gauche (2026-11-13) : simple image, plus de lien vers grneu.org
   (un toucher sur une borne ne doit pas faire sortir de la map).
+- Filet de sécurité hors ligne (2026-11-13) : après plusieurs publications rapprochées, Chrome a
+  gardé une mémoire (service worker) qui servait une page pointant vers des fichiers disparus :
+  page sans mise en forme, même après Cmd+Maj+R ; réparé par « Clear site data ». Protection : script
+  en ligne dans index.html ; main.js pose window.__carteDemarree. Si la carte n'a pas démarré au bout
+  de 20 s et que /version.json répond, on désinscrit le service worker, on vide les caches et on
+  recharge, une fois par onglet (sessionStorage). Hors ligne : rien n'est effacé.
