@@ -70,12 +70,15 @@ export function creerPanneauPays({ donnees, quandLangueChoisie, quandFerme }) {
 
   // Ouvre le panneau pour un pays (code à 2 lettres, par ex. "FR")
   function ouvrir(code) {
+    const dejaOuvert = !panneau.hidden;
     paysOuvert = code;
     caseDiaspora.checked = false; // chaque nouveau pays repart sans la diaspora
     remplir();
     panneau.hidden = false;
-    liste.scrollTop = 0;
-    panneau.scrollTop = 0;
+    // Remonter en haut de la liste n'est utile que si le panneau était déjà ouvert (un panneau
+    // caché repart toujours du haut). L'éviter sinon : cela obligeait la tablette à recalculer
+    // toute la page au moment du toucher.
+    if (dejaOuvert) panneau.scrollTop = 0;
   }
 
   function fermer() {

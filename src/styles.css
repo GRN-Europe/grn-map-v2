@@ -326,7 +326,9 @@ button {
 
 /* --- Pays sélectionné sur la carte (orange clair, contour blanc, comme en v1) --- */
 
-.pays path.selectionne {
+.selection path {
+  pointer-events: none; /* le toucher passe au pays d'origine, juste dessous */
+  vector-effect: non-scaling-stroke;
   fill: #f4a24c;
   stroke: white;
   stroke-width: 2;
@@ -1205,4 +1207,11 @@ body.pays-ouvert .coin-bas-droite {
   font-weight: 700;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   pointer-events: none; /* n'empêche pas de toucher la carte */
+}
+
+/* Liste des langues : les lignes hors de l'écran ne sont pas mises en page tant qu'on n'y défile
+   pas (la Chine en a 341). Hauteur réservée d'une ligne : 88 px (QR code 64 px + marges). */
+.liste-langues > li {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 88px;
 }

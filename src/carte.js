@@ -119,6 +119,9 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     .data(DECALAGES_COPIES)
     .join('use')
     .attr('class', 'pays-copie'); // le lien vers l'original est posé quand la copie est visible
+  // Calque de mise en valeur du pays choisi, au-dessus de tout (voir selectionnerPays)
+  const calqueSelection = groupeZoom.append('g').attr('class', 'selection');
+  let paysSelectionne = null;
   let largeurMonde = 0;  // largeur d'un tour du monde, en pixels (zoom 1)
   let tourActuel = 0;    // n° du tour du monde où se trouve l'original (0 = position de départ)
 
@@ -294,6 +297,7 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
       [Infinity, Math.max(hauteur, y1)],
     ]);
     allerA(regionActuelle, false);
+    if (paysSelectionne) selectionnerPays(paysSelectionne); // tracés recalculés : calque aussi
   }
 
   // Place les drapeaux selon le zoom actuel, et les cache si on n'a pas encore zoomé
@@ -342,9 +346,23 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
 
   // Met un pays en valeur (orange clair, contour blanc), ou aucun si code = null.
   // Tous les morceaux du pays sont éclairés (pour la France : aussi la Guyane, etc.).
+  // Les tracés d'origine ne sont pas touchés : on dessine par-dessus une copie exacte du tracé
+  // du pays (même attribut « d »), en orange clair avec un contour blanc. Modifier les tracés
+  // d'origine obligeait la tablette à refaire toutes les copies de la carte (carte sans fin).
+  // Le calque est posé sur l'exemplaire du pays qui sera amené au milieu de l'écran,
+  // et sur ses voisins de gauche et de droite.
   function selectionnerPays(code) {
-    formes.classed('selectionne', (p) => code !== null && p.code === code);
-    formes.filter('.selectionne').raise(); // passe devant ses voisins pour que le contour se voie
+    paysSelectionne = code;
+    calqueSelection.selectAll('*').remove();
+    const pays = drapeaux.find((d) => d.code === code);
+    if (!pays || !largeurMonde) return;
+    const traces = formes.filter((p) => p.code === code).nodes().map((n) => n.getAttribute('d'));
+    const transformation = zoomTransform(cadreElement);
+    const tour = tourLePlusProche(transformation, pays.position[0], (largeur - largeurPanneau()) / 2);
+    [tour - 1, tour, tour + 1].forEach((t) => {
+      const groupe = calqueSelection.append('g').attr('transform', `translate(${t * largeurMonde},0)`);
+      traces.forEach((d) => groupe.append('path').attr('d', d));
+    });
   }
 
   // Quand on touche un pays, la carte glisse pour l'amener au milieu de la partie visible,

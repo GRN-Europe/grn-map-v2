@@ -125,3 +125,8 @@
   Les drapeaux sont placés et chargés dès le démarrage (visibility: hidden) : les ~250 SVG de
   flag-icons préparés au premier zoom bloquaient la tablette > 1 s. Drapeaux hors écran : hidden.
   Largeur du panneau mesurée une fois par taille d'écran (pas au toucher).
+- Toucher d'un pays (2026-11-13) : le pays choisi est dessiné dans un calque à part (g.selection,
+  copie des tracés, pointer-events: none) au lieu d'une classe sur le tracé : changer une classe sur
+  #pays-original forçait le navigateur à recopier toutes les copies <use> du monde. Le panneau ne lit
+  ni n'écrit scrollTop à la première ouverture (mise en page forcée) ; les lignes de la liste ont
+  content-visibility: auto (Chine : 341 langues mises en page seulement à l'écran).
