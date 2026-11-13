@@ -132,8 +132,3 @@
   content-visibility: auto (Chine : 341 langues mises en page seulement à l'écran).
 - Logo GRN Europe en bas à gauche (2026-11-13) : simple image, plus de lien vers grneu.org
   (un toucher sur une borne ne doit pas faire sortir de la map).
-- Dézoom (2026-11-13) : NE PAS agrandir le svg (essai 3 × 3 écrans annulé : glissement et dézoom
-  saccadés sur l'Acer, couche graphique trop lourde). À la place : canvas .fond-monde derrière la
-  carte, dessiné une fois au repos (requestIdleCallback) avec les mêmes tracés « d » au zoom 1,
-  monde dessiné au milieu puis recopié à gauche et à droite. Visible (opacity 1) seulement quand
-  deplacerLImage voit un dézoom (échelle < 1) ; caché par dessiner(). Le glissement n'y touche pas.

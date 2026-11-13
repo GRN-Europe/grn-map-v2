@@ -81,17 +81,6 @@ button {
 .pays path.sans-code { pointer-events: none; }
 
 /* Couche des drapeaux : posée sur la carte, invisible tant qu'on n'a pas zoomé */
-/* Image de fond du monde, derrière la carte : visible seulement pendant un dézoom (carte.js) */
-.fond-monde {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform-origin: 0 0;
-  opacity: 0;
-  will-change: transform, opacity;
-  pointer-events: none;
-}
-
 .couche-drapeaux {
   position: absolute;
   inset: 0;
