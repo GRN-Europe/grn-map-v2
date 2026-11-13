@@ -97,8 +97,8 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
   // (transformation CSS, faite par la carte graphique), puis on redessine la carte nette une seule
   // fois à la fin du geste. Pour cela :
   // - les gestes sont écoutés sur un cadre (div) qui contient la carte et les drapeaux ;
-  // - la carte (svg) est trois fois plus large et plus haute que l'écran (un écran de plus de chaque côté),
-  //   pour qu'en glissant ou en dézoomant on voie déjà la suite de la carte et pas un bord vide.
+  // - la carte (svg) est trois fois plus large que l'écran (un écran de plus à gauche et à droite),
+  //   pour qu'en glissant on voie déjà la suite de la carte et pas un bord vide.
   const cadreElement = document.createElement('div');
   cadreElement.className = 'cadre-carte';
   svgElement.parentNode.insertBefore(cadreElement, svgElement);
@@ -165,23 +165,11 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
   }
 
   // Pendant un geste : on déplace et agrandit l'image déjà dessinée, sans la redessiner
-  // Si l'image déjà dessinée ne couvre plus l'écran (en dézoomant, elle rétrécit), on la
-  // redessine tout de suite à la bonne taille, sans attendre la fin du geste.
-  let dernierDessinPendantGeste = 0;
   function deplacerLImage(transformation) {
     const t0 = transformationDessinee;
     const echelle = transformation.k / t0.k;
     const dx = transformation.x - t0.x * echelle;
     const dy = transformation.y - t0.y * echelle;
-    // L'image dessinée va de -1 à +2 écrans dans les deux sens (voir ajusterTaille)
-    const couvreLEcran = dx - echelle * largeur <= 0 && dx + 2 * echelle * largeur >= largeur
-      && dy - echelle * hauteur <= 0 && dy + 2 * echelle * hauteur >= hauteur;
-    const maintenant = performance.now();
-    if (!couvreLEcran && maintenant - dernierDessinPendantGeste > 120) {
-      dernierDessinPendantGeste = maintenant;
-      dessiner(transformation);
-      return;
-    }
     const css = `translate(${dx}px, ${dy}px) scale(${echelle})`;
     svgElement.style.transform = css;
     coucheDrapeaux.style.transform = css;
@@ -275,9 +263,8 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     largeurPanneauMesuree = mesurerLargeurPanneau();
     // La carte déborde d'un écran à gauche et à droite (voir plus haut) : mêmes coordonnées,
     // de -largeur à 2 × largeur
-    // … et d'un écran en haut et en bas, pour qu'en dézoomant on voie déjà les pays autour
-    svg.attr('viewBox', `${-largeur} ${-hauteur} ${3 * largeur} ${3 * hauteur}`);
-    svgElement.style.transformOrigin = `${largeur}px ${hauteur}px`; // le coin de l'écran, dans la carte
+    svg.attr('viewBox', `${-largeur} 0 ${3 * largeur} ${hauteur}`);
+    svgElement.style.transformOrigin = `${largeur}px 0`; // le coin de l'écran, dans la carte
 
     const toutLeMonde = { type: 'FeatureCollection', features: PAYS.map((p) => p.entite) };
 
