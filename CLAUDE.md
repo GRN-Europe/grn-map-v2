@@ -132,3 +132,7 @@
   content-visibility: auto (Chine : 341 langues mises en page seulement à l'écran).
 - Logo GRN Europe en bas à gauche (2026-11-13) : simple image, plus de lien vers grneu.org
   (un toucher sur une borne ne doit pas faire sortir de la map).
+- Dézoom (2026-11-13) : le svg déborde aussi d'un écran en haut et en bas (viewBox -l -h 3l 3h,
+  top/left -100 %, 300 % × 300 %), pour qu'en dézoomant les pays autour soient déjà dessinés.
+  Si l'image ne couvre plus l'écran pendant un geste ou une animation (dézoom de plus de ×3),
+  deplacerLImage la redessine aussitôt (au plus une fois toutes les 120 ms) au lieu d'attendre « end ».

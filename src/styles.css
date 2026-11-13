@@ -61,10 +61,10 @@ button {
 #carte {
   display: block;
   position: absolute;
-  top: 0;
+  top: -100%;
   left: -100%;
   width: 300%;
-  height: 100%;
+  height: 300%;
   will-change: transform; /* pendant un geste, l'image est déplacée par la carte graphique */
 }
 
