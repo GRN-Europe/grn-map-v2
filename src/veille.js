@@ -14,6 +14,13 @@ import { creerCurseurVeille } from './curseur-veille.js';
 
 export function creerVeille({ quandReveil }) {
   const ecran = document.getElementById('ecran-veille');
+
+  // Essai de mise en page (branche « essais-2 ») : diaporama plus grand, mini-carte plus petite.
+  //   par défaut        → mini-carte 1/3 à gauche, diaporama 2/3 à droite
+  //   ?veille=dessous   → petite mini-carte en haut au centre, grand diaporama dessous
+  const disposition = new URLSearchParams(window.location.search).get('veille') === 'dessous'
+    ? 'veille-dessous' : 'veille-tiers';
+  ecran.classList.add(disposition);
   // Deux images superposées : on fait apparaître l'une pendant que l'autre disparaît
   const images = [...ecran.querySelectorAll('.diapo')];
 
