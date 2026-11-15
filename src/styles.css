@@ -4,10 +4,10 @@
 :root {
   --bleu-nuit: #0c1a2b;     /* mer et fonds sombres */
   --orange: #ff6a13;        /* onglet actif et boutons d'action (« Retour à la carte ») */
-  --mer: var(--bleu-nuit);
-  --terre: #c4561a;         /* tous les pays : orange brûlé, comme en v1 */
-  --terre-touchee: #e0692a; /* pays au moment où on le touche */
-  --frontiere: #0c1a2b;
+  --mer: #0d3b66;           /* essai 2 : mer bleu profond (avant : bleu nuit) */
+  --terre: #2a7bc4;         /* essai 2 : pays bleu GRN (avant : orange brûlé #c4561a) */
+  --terre-touchee: #4d9be0; /* pays au moment où on le touche */
+  --frontiere: #0d3b66;
   --texte: #1c2733;
   --ombre: 0 4px 16px rgba(0, 0, 0, 0.35);
   --marge: 16px;            /* espace entre les commandes et le bord de l'écran */
@@ -688,7 +688,7 @@ body.pays-ouvert .coin-bas-droite {
   aspect-ratio: 16 / 9;
   overflow: hidden;
   border-radius: 20px;
-  background: var(--bleu-nuit);
+  background: var(--mer);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
 }
 
@@ -699,7 +699,7 @@ body.pays-ouvert .coin-bas-droite {
 
 .veille-carte svg path {
   fill: var(--terre);
-  stroke: var(--bleu-nuit);
+  stroke: var(--frontiere);
   stroke-width: 0.5;
 }
 
