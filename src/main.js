@@ -21,6 +21,11 @@ import { lireReglages, appliquerConfigurationDeLAdresse } from './stockage.js';
 // Tout le code est bien arrivé : la carte démarre (voir le filet de sécurité dans index.html)
 window.__carteDemarree = true;
 
+// Essai de couleurs (branche « essais-2 ») : ?mer=blanche affiche la mer en blanc
+if (new URLSearchParams(window.location.search).get('mer') === 'blanche') {
+  document.body.classList.add('mer-blanche');
+}
+
 // Empêche le zoom de la page entière (pincement Safari/iPad, double toucher)
 document.addEventListener('gesturestart', (e) => e.preventDefault());
 

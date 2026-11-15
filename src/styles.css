@@ -5,8 +5,8 @@
   --bleu-nuit: #0c1a2b;     /* mer et fonds sombres */
   --orange: #ff6a13;        /* onglet actif et boutons d'action (« Retour à la carte ») */
   --mer: #050f1e;           /* essai 2 : mer presque noire, pour bien détacher les pays bleus */
-  --terre: #005a7e;         /* essai 2 : bleu officiel GRN Europe (avant : orange brûlé #c4561a) */
-  --terre-touchee: #0a7fae; /* pays au moment où on le touche */
+  --terre: #0088bb;         /* essai 2 : bleu GRN éclairci, même teinte que le bleu officiel #005a7e (avant : orange #c4561a) */
+  --terre-touchee: #2aa8dc; /* pays au moment où on le touche */
   --frontiere: #050f1e;
   --texte: #1c2733;
   --ombre: 0 4px 16px rgba(0, 0, 0, 0.35);
@@ -1251,4 +1251,12 @@ body.pays-ouvert .coin-bas-droite {
 .liste-langues > li {
   content-visibility: auto;
   contain-intrinsic-size: auto 88px;
+}
+
+/* Essai de couleurs (branche « essais-2 ») : mer blanche avec ?mer=blanche dans l'adresse */
+body.mer-blanche {
+  --mer: #ffffff;
+  --frontiere: #ffffff;
+  --terre: #005a7e;          /* bleu officiel GRN Europe */
+  --terre-touchee: #0a7fae;
 }
