@@ -103,8 +103,8 @@ button {
   pointer-events: auto;          /* …sauf sur les drapeaux eux-mêmes */
 }
 
-/* Format allongé de la v1 (20 × 14 px au premier zoom) ; la largeur grandit ensuite avec
-   le zoom (réglée par carte.js, voir largeurDesDrapeaux). La marge (padding) du bouton
+/* Format allongé de la v1 (20 × 14) ; la largeur est proportionnelle au zoom
+   (réglée par carte.js, voir largeurDesDrapeaux). La marge (padding) du bouton
    garde une zone à toucher un peu plus grande */
 .drapeau .fi {
   display: block;

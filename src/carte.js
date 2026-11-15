@@ -37,15 +37,16 @@ const ZOOM_DRAPEAUX = 1.05;
 // Zoom maximum autorisé
 const ZOOM_MAX = 40;
 
-// Taille des drapeaux : 20 px de large au premier zoom (comme en v1), puis ils grandissent
-// avec le zoom pour rester lisibles, sans dépasser 64 px (ils resteraient sinon énormes
-// au zoom maximum et se chevaucheraient). La hauteur suit (format allongé 20 × 14).
-const LARGEUR_DRAPEAU_MIN = 20;
+// Taille des drapeaux : proportionnelle au zoom, comme les pays (un drapeau garde la même
+// taille par rapport à son pays). Petits au premier zoom pour ne pas couvrir la carte,
+// puis ils grandissent avec elle, sans dépasser 64 px de large (ils resteraient sinon
+// énormes au zoom maximum). La hauteur suit (format allongé 20 × 14).
+const LARGEUR_DRAPEAU_PAR_ZOOM = 7;  // largeur en px pour un zoom de 1 (×1,6 = 11 px au premier zoom)
+const LARGEUR_DRAPEAU_MIN = 8;
 const LARGEUR_DRAPEAU_MAX = 64;
-const CROISSANCE_DRAPEAUX = 0.45; // 0 = taille fixe, 1 = grandit autant que la carte
 
 function largeurDesDrapeaux(zoomActuel) {
-  const largeur = LARGEUR_DRAPEAU_MIN * Math.pow(Math.max(zoomActuel, 1), CROISSANCE_DRAPEAUX);
+  const largeur = LARGEUR_DRAPEAU_PAR_ZOOM * zoomActuel;
   return Math.round(Math.min(LARGEUR_DRAPEAU_MAX, Math.max(LARGEUR_DRAPEAU_MIN, largeur)));
 }
 
