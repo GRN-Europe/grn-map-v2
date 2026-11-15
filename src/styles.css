@@ -103,12 +103,13 @@ button {
   pointer-events: auto;          /* …sauf sur les drapeaux eux-mêmes */
 }
 
-/* Même taille et même format allongé qu'en v1 (20 × 14 px) pour ne pas encombrer la carte ;
-   la marge (padding) du bouton garde une zone à toucher un peu plus grande */
+/* Format allongé de la v1 (20 × 14 px au premier zoom) ; la largeur grandit ensuite avec
+   le zoom (réglée par carte.js, voir largeurDesDrapeaux). La marge (padding) du bouton
+   garde une zone à toucher un peu plus grande */
 .drapeau .fi {
   display: block;
-  width: 20px;
-  height: 14px;
+  width: var(--largeur-drapeau, 20px);
+  height: calc(var(--largeur-drapeau, 20px) * 0.7);
   background-size: cover;  /* remplit le format allongé sans bandes vides */
   border-radius: 2px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);

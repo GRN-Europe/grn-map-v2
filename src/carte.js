@@ -37,6 +37,18 @@ const ZOOM_DRAPEAUX = 1.05;
 // Zoom maximum autorisé
 const ZOOM_MAX = 40;
 
+// Taille des drapeaux : 20 px de large au premier zoom (comme en v1), puis ils grandissent
+// avec le zoom pour rester lisibles, sans dépasser 64 px (ils resteraient sinon énormes
+// au zoom maximum et se chevaucheraient). La hauteur suit (format allongé 20 × 14).
+const LARGEUR_DRAPEAU_MIN = 20;
+const LARGEUR_DRAPEAU_MAX = 64;
+const CROISSANCE_DRAPEAUX = 0.45; // 0 = taille fixe, 1 = grandit autant que la carte
+
+function largeurDesDrapeaux(zoomActuel) {
+  const largeur = LARGEUR_DRAPEAU_MIN * Math.pow(Math.max(zoomActuel, 1), CROISSANCE_DRAPEAUX);
+  return Math.round(Math.min(LARGEUR_DRAPEAU_MAX, Math.max(LARGEUR_DRAPEAU_MIN, largeur)));
+}
+
 // Durée des zooms animés (en millisecondes)
 const DUREE_ANIMATION = 750;
 
@@ -301,11 +313,18 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
   }
 
   // Place les drapeaux selon le zoom actuel, et les cache si on n'a pas encore zoomé
+  let largeurDrapeauActuelle = 0;
   function placerDrapeaux(transformation) {
     // Avant le premier zoom, les drapeaux sont invisibles mais déjà placés et chargés : les ~250
     // petites images SVG sont ainsi préparées dès le démarrage, et non au premier zoom (ce qui
     // bloquait une tablette modeste plus d'une seconde).
     coucheDrapeaux.classList.toggle('visible', transformation.k >= ZOOM_DRAPEAUX);
+    // Taille des drapeaux selon le zoom (changée seulement à la fin d'un geste, comme leur place)
+    const largeurDrapeau = largeurDesDrapeaux(transformation.k);
+    if (largeurDrapeau !== largeurDrapeauActuelle) {
+      largeurDrapeauActuelle = largeurDrapeau;
+      coucheDrapeaux.style.setProperty('--largeur-drapeau', `${largeurDrapeau}px`);
+    }
     drapeaux.forEach((d) => {
       // Le drapeau va sur l'exemplaire du pays le plus proche du milieu de l'écran
       const tour = tourLePlusProche(transformation, d.position[0], largeur / 2);
