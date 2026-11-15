@@ -5,8 +5,8 @@
   --bleu-nuit: #0c1a2b;     /* mer et fonds sombres */
   --orange: #ff6a13;        /* onglet actif et boutons d'action (« Retour à la carte ») */
   --mer: #050f1e;           /* essai 2 : mer presque noire, pour bien détacher les pays bleus */
-  --terre: #2a7bc4;         /* essai 2 : pays bleu GRN (avant : orange brûlé #c4561a) */
-  --terre-touchee: #4d9be0; /* pays au moment où on le touche */
+  --terre: #005a7e;         /* essai 2 : bleu officiel GRN Europe (avant : orange brûlé #c4561a) */
+  --terre-touchee: #0a7fae; /* pays au moment où on le touche */
   --frontiere: #050f1e;
   --texte: #1c2733;
   --ombre: 0 4px 16px rgba(0, 0, 0, 0.35);
