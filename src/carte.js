@@ -171,16 +171,42 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
 
   // Gestion du zoom et du déplacement au doigt
   let transformationDessinee = null; // zoom de la carte telle qu'elle est dessinée (null = jamais)
+  let drapeauxAJour = true;          // drapeaux placés pour le zoom dessiné ?
+  let dernierRedessinEnCours = 0;    // heure du dernier redessin pendant un dézoom
 
   // Redessine la carte nette pour un zoom donné (tracés, copies, drapeaux)
   function dessiner(transformation) {
+    dessinerLaCarte(transformation);
+    placerDrapeaux(transformation);
+    drapeauxAJour = true;
+    coucheDrapeaux.style.transform = '';
+    coucheDrapeaux.style.opacity = '';
+  }
+
+  // Redessine seulement les pays (pas les drapeaux, qui restent cachés jusqu'à la fin du geste)
+  function dessinerLaCarte(transformation) {
     transformationDessinee = transformation;
     groupeZoom.attr('transform', transformation);
     placerOriginal(transformation);
-    placerDrapeaux(transformation);
     svgElement.style.transform = '';
-    coucheDrapeaux.style.transform = '';
-    coucheDrapeaux.style.opacity = '';
+  }
+
+  // Pendant un dézoom, l'image déjà dessinée rapetisse et laisse des vides autour d'elle.
+  // Plutôt que d'attendre la fin du geste (jusqu'à 2-3 s avec l'élan d'un pavé tactile),
+  // on redessine les pays de temps en temps (au plus tous les 150 ms) : les vides se
+  // remplissent aussitôt, sans redessiner à chaque image (trop lourd pour la tablette).
+  const ECHELLE_AVANT_REDESSIN = 0.92;
+  const DELAI_ENTRE_REDESSINS = 150; // ms
+  function redessinerSiVides(transformation) {
+    const echelle = transformation.k / transformationDessinee.k;
+    if (echelle >= ECHELLE_AVANT_REDESSIN) return false;
+    const maintenant = performance.now();
+    if (maintenant - dernierRedessinEnCours < DELAI_ENTRE_REDESSINS) return false;
+    dernierRedessinEnCours = maintenant;
+    dessinerLaCarte(transformation);
+    drapeauxAJour = false;
+    coucheDrapeaux.style.opacity = '0';
+    return true;
   }
 
   // Pendant un geste : on déplace et agrandit l'image déjà dessinée, sans la redessiner
@@ -193,7 +219,8 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     svgElement.style.transform = css;
     coucheDrapeaux.style.transform = css;
     // Les drapeaux ne doivent pas grossir avec la carte : cachés le temps d'un zoom
-    coucheDrapeaux.style.opacity = Math.abs(echelle - 1) > 0.001 ? '0' : '';
+    // (et tant qu'ils n'ont pas été replacés après un redessin pendant un dézoom)
+    coucheDrapeaux.style.opacity = !drapeauxAJour || Math.abs(echelle - 1) > 0.001 ? '0' : '';
   }
 
   const comportementZoom = zoom()
@@ -201,8 +228,8 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     .clickDistance(12) // un toucher qui bouge un peu compte encore comme un toucher
     // (d3-zoom annonce toujours « start », puis les « zoom », puis « end », même sans animation)
     .on('zoom', (evenement) => {
-      if (transformationDessinee) deplacerLImage(evenement.transform);
-      else dessiner(evenement.transform); // tout premier affichage
+      if (!transformationDessinee) dessiner(evenement.transform); // tout premier affichage
+      else if (!redessinerSiVides(evenement.transform)) deplacerLImage(evenement.transform);
     })
     .on('end', (evenement) => {
       dessiner(evenement.transform); // fin du geste ou de l'animation : carte nette
