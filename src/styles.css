@@ -104,7 +104,7 @@ button {
 }
 
 /* Format allongé de la v1 (20 × 14) ; la largeur est proportionnelle au zoom
-   (réglée par carte.js, voir largeurDesDrapeaux). La marge (padding) du bouton
+   et à la taille du pays (réglée par carte.js, voir largeurDuDrapeau). La marge (padding) du bouton
    garde une zone à toucher un peu plus grande */
 .drapeau .fi {
   display: block;

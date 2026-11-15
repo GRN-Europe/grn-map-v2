@@ -41,13 +41,19 @@ const ZOOM_MAX = 40;
 // taille par rapport à son pays). Petits au premier zoom pour ne pas couvrir la carte,
 // puis ils grandissent avec elle, sans dépasser 64 px de large (ils resteraient sinon
 // énormes au zoom maximum). La hauteur suit (format allongé 20 × 14).
+// Les petits pays (îles des Caraïbes, du Pacifique…) ont un drapeau à leur mesure : pas plus
+// large que le pays lui-même à l'écran, avec un minimum pour rester visible et touchable.
+// Ainsi les drapeaux ne se chevauchent pas et ne cachent pas les îles.
 const LARGEUR_DRAPEAU_PAR_ZOOM = 7;  // largeur en px pour un zoom de 1 (×1,6 = 11 px au premier zoom)
 const LARGEUR_DRAPEAU_MIN = 8;
+const LARGEUR_DRAPEAU_PETIT_PAYS = 12; // minimum quand le zoom est fort, pour les tout petits pays
 const LARGEUR_DRAPEAU_MAX = 64;
 
-function largeurDesDrapeaux(zoomActuel) {
-  const largeur = LARGEUR_DRAPEAU_PAR_ZOOM * zoomActuel;
-  return Math.round(Math.min(LARGEUR_DRAPEAU_MAX, Math.max(LARGEUR_DRAPEAU_MIN, largeur)));
+function largeurDuDrapeau(zoomActuel, tailleDuPays) {
+  const selonLeZoom = LARGEUR_DRAPEAU_PAR_ZOOM * zoomActuel;
+  const selonLePays = Math.max(LARGEUR_DRAPEAU_PETIT_PAYS, tailleDuPays * zoomActuel);
+  const largeur = Math.min(selonLeZoom, selonLePays, LARGEUR_DRAPEAU_MAX);
+  return Math.round(Math.max(LARGEUR_DRAPEAU_MIN, largeur));
 }
 
 // Durée des zooms animés (en millisecondes)
@@ -160,7 +166,7 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     coucheDrapeaux.appendChild(bouton);
     // Point d'ancrage du drapeau : centre de la plus grande partie du pays
     // (pour la France, la métropole plutôt que la moyenne avec la Guyane)
-    return { ...p, bouton, centre: centreDeLaPlusGrandePartie(p.entite), position: [0, 0] };
+    return { ...p, bouton, centre: centreDeLaPlusGrandePartie(p.entite), position: [0, 0], taille: 0, largeur: 0 };
   });
 
   // Gestion du zoom et du déplacement au doigt
@@ -296,7 +302,12 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     }
 
     formes.attr('d', (p) => chemin(p.entite));
-    drapeaux.forEach((d) => { d.position = projection(d.centre); });
+    drapeaux.forEach((d) => {
+      d.position = projection(d.centre);
+      // Taille du pays sur la carte entière (zoom 1), en px : côté moyen du rectangle qui l'entoure
+      const [[x0, y0], [x1, y1]] = chemin.bounds(d.entite);
+      d.taille = Math.sqrt(Math.max(0, x1 - x0) * Math.max(0, y1 - y0));
+    });
 
     // Largeur d'un tour du monde (projection de Mercator : 2π × l'échelle)
     largeurMonde = 2 * Math.PI * projection.scale();
@@ -314,18 +325,11 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
   }
 
   // Place les drapeaux selon le zoom actuel, et les cache si on n'a pas encore zoomé
-  let largeurDrapeauActuelle = 0;
   function placerDrapeaux(transformation) {
     // Avant le premier zoom, les drapeaux sont invisibles mais déjà placés et chargés : les ~250
     // petites images SVG sont ainsi préparées dès le démarrage, et non au premier zoom (ce qui
     // bloquait une tablette modeste plus d'une seconde).
     coucheDrapeaux.classList.toggle('visible', transformation.k >= ZOOM_DRAPEAUX);
-    // Taille des drapeaux selon le zoom (changée seulement à la fin d'un geste, comme leur place)
-    const largeurDrapeau = largeurDesDrapeaux(transformation.k);
-    if (largeurDrapeau !== largeurDrapeauActuelle) {
-      largeurDrapeauActuelle = largeurDrapeau;
-      coucheDrapeaux.style.setProperty('--largeur-drapeau', `${largeurDrapeau}px`);
-    }
     drapeaux.forEach((d) => {
       // Le drapeau va sur l'exemplaire du pays le plus proche du milieu de l'écran
       const tour = tourLePlusProche(transformation, d.position[0], largeur / 2);
@@ -333,7 +337,14 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
       // Seuls les drapeaux à l'écran (ou juste à côté) sont affichés : moins de travail pour la tablette
       const aLEcran = x > -largeur && x < 2 * largeur && y > -hauteur && y < 2 * hauteur;
       d.bouton.hidden = !aLEcran;
-      if (aLEcran) d.bouton.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+      if (!aLEcran) return;
+      // Taille selon le zoom et la taille du pays (changée seulement à la fin d'un geste, comme la place)
+      const largeurDrapeau = largeurDuDrapeau(transformation.k, d.taille);
+      if (largeurDrapeau !== d.largeur) {
+        d.largeur = largeurDrapeau;
+        d.bouton.style.setProperty('--largeur-drapeau', `${largeurDrapeau}px`);
+      }
+      d.bouton.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
     });
   }
 
