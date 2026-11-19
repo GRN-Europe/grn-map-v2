@@ -18,7 +18,7 @@ export const CODE_DE_SECOURS = 'GRNMAP';
 export const REGLAGES_PAR_DEFAUT = {
   langue: 'fr',
   dureeImage: 20,          // secondes par image du diaporama
-  inactivite: 240,         // secondes sans toucher avant le retour au diaporama
+  inactivite: 180,         // secondes sans toucher avant le retour au diaporama
   retour5fish: 180,        // secondes avant le retour à la carte depuis 5fish (0 = jamais)
   empreinteCode: null,     // empreinte du code de l'église (null = seulement le code de secours)
   // Bandeau d'accueil de l'église (désactivé par défaut = écran de la v1)
