@@ -75,7 +75,7 @@
   enregistrés sur cet appareil. » (en v2, la liste déroulante des langues remplace FR | EN) :
   1. d'abord « Code d'accès » + boutons « Valider » (orange) et « Fermer » ;
   2. puis : « Durée de chaque image du diaporama (secondes) » = 20 ;
-     « Retour au diaporama après inactivité (secondes) » = 240 ;
+     « Retour au diaporama après inactivité (secondes) » = 180 (minimum 10 s, v1 : 240) ;
      « Retour à la carte depuis le site GRN (secondes) » = 180 (v1 : 240, 3 min demandé pour la v2),
      aide « 0 = pas de retour automatique. Actif en mode borne uniquement. » ;
      « Images du diaporama » : « PDF « nom.pdf », 6 images, chargé le jj/mm/aaaa. »,
