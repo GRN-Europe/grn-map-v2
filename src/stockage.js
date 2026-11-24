@@ -17,6 +17,7 @@ export const CODE_DE_SECOURS = 'GRNMAP';
 // Valeurs par défaut (reprises de la v1, sauf le retour depuis 5fish : 3 min au lieu de 4)
 export const REGLAGES_PAR_DEFAUT = {
   langue: 'fr',
+  orientation: 'horizontal', // 'horizontal' (écran en paysage) ou 'vertical' (écran debout)
   dureeImage: 20,          // secondes par image du diaporama
   inactivite: 180,         // secondes sans toucher avant le retour au diaporama
   retour5fish: 180,        // secondes avant le retour à la carte depuis 5fish (0 = jamais)

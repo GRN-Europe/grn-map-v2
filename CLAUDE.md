@@ -141,3 +141,8 @@
   en ligne dans index.html ; main.js pose window.__carteDemarree. Si la carte n'a pas démarré au bout
   de 20 s et que /version.json répond, on désinscrit le service worker, on vide les caches et on
   recharge, une fois par onglet (sessionStorage). Hors ligne : rien n'est effacé.
+- Écran vertical (2026-11-24) : réglage « Orientation de l'écran » (horizontal par défaut / vertical),
+  mise en page adaptée, pas une rotation. Classe body.ecran-vertical (main.js), section « Écran vertical »
+  à la fin de styles.css : panneau des langues en bas (--hauteur-panneau-pays, 2 colonnes), grande
+  fenêtre QR, veille : diaporama 2/3 en haut sous le bandeau (images en entier, object-fit: contain), mini-carte 1/3 dessous. carte.js : fitHeight au-dessus du panneau,
+  le pays touché se place au milieu de la partie visible. « Valeurs par défaut » garde l'orientation.

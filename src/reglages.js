@@ -89,6 +89,7 @@ export function creerEcranReglages({ donnees, quandEnregistre, quandDiaporamaCha
 
   function remplirFormulaire(reglages) {
     listeLangues.value = reglages.langue;
+    formulaire.elements.orientation.value = reglages.orientation;
     Object.keys(LIMITES).forEach((cle) => {
       formulaire.elements[cle].value = reglages[cle];
     });
@@ -109,7 +110,11 @@ export function creerEcranReglages({ donnees, quandEnregistre, quandDiaporamaCha
 
   // Lit les champs et renvoie les réglages correspondants (valeurs ramenées dans les limites)
   function reglagesDuFormulaire() {
-    const reglages = { ...lireReglages(), langue: listeLangues.value };
+    const reglages = {
+      ...lireReglages(),
+      langue: listeLangues.value,
+      orientation: formulaire.elements.orientation.value === 'vertical' ? 'vertical' : 'horizontal',
+    };
     Object.entries(LIMITES).forEach(([cle, { min, max }]) => {
       const valeur = Math.round(Number(formulaire.elements[cle].value));
       reglages[cle] = Number.isFinite(valeur) ? Math.min(max, Math.max(min, valeur)) : REGLAGES_PAR_DEFAUT[cle];
@@ -140,10 +145,11 @@ export function creerEcranReglages({ donnees, quandEnregistre, quandDiaporamaCha
 
   document.getElementById('reglages-defaut').addEventListener('click', () => {
     // « Valeurs par défaut » remet la langue et les durées ;
-    // le code de l'église et son bandeau d'accueil sont conservés
+    // le code de l'église, son bandeau d'accueil et l'orientation de l'écran sont conservés
     const actuels = reglagesDuFormulaire();
     remplirFormulaire({
       ...REGLAGES_PAR_DEFAUT,
+      orientation: actuels.orientation,
       empreinteCode: actuels.empreinteCode,
       bandeauActif: actuels.bandeauActif,
       bandeauLogo: actuels.bandeauLogo,

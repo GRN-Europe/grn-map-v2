@@ -287,15 +287,20 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
   // Largeur du panneau d'un pays (variable CSS --largeur-panneau-pays, par ex. 400 px).
   // Mesurée une fois par taille d'écran (dans ajusterTaille) : la mesurer au moment du toucher
   // forçait la tablette à recalculer toute la page.
+  // Écran vertical : le panneau est en bas ; sa hauteur est --hauteur-panneau-pays
+  // (et sa « largeur » à droite vaut 0). Sur un écran horizontal, c'est l'inverse.
   let largeurPanneauMesuree = 0;
+  let hauteurPanneauMesuree = 0;
   const largeurPanneau = () => largeurPanneauMesuree;
-  function mesurerLargeurPanneau() {
+  function mesurerPanneau() {
     const essai = document.createElement('div');
-    essai.style.cssText = 'position:absolute;visibility:hidden;width:var(--largeur-panneau-pays)';
+    essai.style.cssText = 'position:absolute;visibility:hidden;'
+      + 'width:var(--largeur-panneau-pays);height:var(--hauteur-panneau-pays)';
     document.body.appendChild(essai);
-    const resultat = essai.getBoundingClientRect().width;
+    const { width, height } = essai.getBoundingClientRect();
     essai.remove();
-    return resultat;
+    largeurPanneauMesuree = width;
+    hauteurPanneauMesuree = height;
   }
 
   let largeur = 0;
@@ -306,7 +311,7 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
   function ajusterTaille() {
     largeur = cadreElement.clientWidth;
     hauteur = cadreElement.clientHeight;
-    largeurPanneauMesuree = mesurerLargeurPanneau();
+    mesurerPanneau();
     // La carte déborde d'un écran à gauche et à droite (voir plus haut) : mêmes coordonnées,
     // de -largeur à 2 × largeur
     svg.attr('viewBox', `${-largeur} 0 ${3 * largeur} ${hauteur}`);
@@ -321,11 +326,19 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     // comme en v1, on agrandit alors la carte pour remplir toute la largeur,
     // quitte à couper un peu le haut et le bas (on peut y glisser au doigt).
     const [[gauche], [droite]] = chemin.bounds(toutLeMonde);
-    if (droite - gauche < largeur) {
+    if (hauteurPanneauMesuree === 0 && droite - gauche < largeur) {
       projection.fitWidth(largeur, toutLeMonde);
       const [[, haut], [, bas]] = chemin.bounds(toutLeMonde);
       const [tx, ty] = projection.translate();
       projection.translate([tx, ty - (bas - haut - hauteur) / 2]); // centre verticalement
+    } else if (hauteurPanneauMesuree > 0) {
+      // Écran vertical : le monde entier serait une petite bande au milieu. On l'agrandit pour
+      // qu'il occupe la hauteur laissée libre par le panneau des langues (on glisse au doigt
+      // pour voir le reste : la carte fait le tour du monde), centré sur l'écran.
+      projection.fitHeight(hauteur - hauteurPanneauMesuree, toutLeMonde);
+      const [[g, h], [d, b]] = chemin.bounds(toutLeMonde);
+      const [tx, ty] = projection.translate();
+      projection.translate([tx + largeur / 2 - (g + d) / 2, ty + hauteur / 2 - (h + b) / 2]);
     }
 
     formes.attr('d', (p) => chemin(p.entite));
@@ -341,11 +354,12 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
     groupePays.attr('transform', null); // l'original et les copies seront replacés par placerOriginal
 
     // Limites du glissement : sans limite à gauche ni à droite (la carte fait le tour du monde) ;
-    // en haut et en bas, la carte entière, et au minimum l'écran.
+    // en haut et en bas, la carte entière, et au minimum l'écran. Écran vertical : le bas de la
+    // carte peut aussi monter au-dessus du panneau des langues (pour y amener un pays du sud).
     const [[, y0], [, y1]] = chemin.bounds(toutLeMonde);
     comportementZoom.translateExtent([
       [-Infinity, Math.min(0, y0)],
-      [Infinity, Math.max(hauteur, y1)],
+      [Infinity, Math.max(hauteur, y1 + hauteurPanneauMesuree)],
     ]);
     allerA(regionActuelle, false);
     if (paysSelectionne) selectionnerPays(paysSelectionne); // tracés recalculés : calque aussi
@@ -424,12 +438,13 @@ export function creerCarte({ svgElement, coucheDrapeaux, donnees, quandPaysTouch
   }
 
   // Quand on touche un pays, la carte glisse pour l'amener au milieu de la partie visible,
-  // à gauche du panneau des langues (sur l'exemplaire du pays le plus proche). Le zoom ne change pas.
+  // à gauche du panneau des langues, ou au-dessus sur un écran vertical
+  // (sur l'exemplaire du pays le plus proche). Le zoom ne change pas.
   function montrerAGaucheDuPanneau(code) {
     const pays = drapeaux.find((d) => d.code === code);
     if (!pays) return;
     const transformation = zoomTransform(cadreElement);
-    const centreVisible = [(largeur - largeurPanneau()) / 2, hauteur / 2];
+    const centreVisible = [(largeur - largeurPanneau()) / 2, (hauteur - hauteurPanneauMesuree) / 2];
     const tour = tourLePlusProche(transformation, pays.position[0], centreVisible[0]);
     const [x, y] = transformation.apply([pays.position[0] + tour * largeurMonde, pays.position[1]]);
     // (en haut et en bas, la carte ne dépasse pas ses bords : le pays s'en approche au mieux)
