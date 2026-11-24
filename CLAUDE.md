@@ -53,8 +53,11 @@
   de la borne (volontairement : le visiteur ne doit pas quitter la borne). Dans la barre sombre,
   « 📱 Vidéos : continuez sur votre téléphone » + petit QR code de la page de la langue (solution A).
 - Pendant les 10 dernières secondes : fenêtre « Je suis toujours là » ; la toucher relance le délai.
-- Les drapeaux de tous les pays apparaissent dès le premier zoom (comme en v1), en 20 × 14 px
-  comme en v1 (32 × 24 puis 26 × 18 rendaient la carte brouillon) ; onglet Amériques cadré comme en v1.
+- Les drapeaux de tous les pays apparaissent dès le premier zoom (comme en v1), au format 20 × 14
+  de la v1 ; onglet Amériques cadré comme en v1. Taille (2026-11-19, venue de l'essai) : proportionnelle
+  au zoom (7 px × zoom, de 8 à 64 px de large) et jamais plus large que le pays à l'écran (minimum 12 px),
+  pour ne pas cacher les petites îles (carte.js, largeurDuDrapeau). Des tailles fixes plus grandes
+  (32 × 24, 26 × 18) rendaient la carte brouillon.
 - Écran d'accueil (demande de GRN Europe) : bulle « L'Évangile dans ta langue ici ! » posée sur le bord
   de la mini-carte (texte veilleBulle, 7 langues) et main animée (index tendu) qui va de pays en pays
   en « cliquant » (onde + pays éclairé) — src/curseur-veille.js.
@@ -75,7 +78,7 @@
   enregistrés sur cet appareil. » (en v2, la liste déroulante des langues remplace FR | EN) :
   1. d'abord « Code d'accès » + boutons « Valider » (orange) et « Fermer » ;
   2. puis : « Durée de chaque image du diaporama (secondes) » = 20 ;
-     « Retour au diaporama après inactivité (secondes) » = 240 ;
+     « Retour au diaporama après inactivité (secondes) » = 180 (minimum 10 s, v1 : 240) ;
      « Retour à la carte depuis le site GRN (secondes) » = 180 (v1 : 240, 3 min demandé pour la v2),
      aide « 0 = pas de retour automatique. Actif en mode borne uniquement. » ;
      « Images du diaporama » : « PDF « nom.pdf », 6 images, chargé le jj/mm/aaaa. »,

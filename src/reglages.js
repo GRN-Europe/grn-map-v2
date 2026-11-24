@@ -18,7 +18,7 @@ import { creerMiseAJour } from './mise-a-jour.js';
 // Limites des champs (en secondes)
 const LIMITES = {
   dureeImage: { min: 3, max: 600 },
-  inactivite: { min: 30, max: 3600 },
+  inactivite: { min: 10, max: 3600 },
   retour5fish: { min: 0, max: 3600 },
 };
 
