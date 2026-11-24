@@ -1081,7 +1081,7 @@ body.pays-ouvert .coin-bas-droite {
   left: 6%;
   z-index: 1;
   margin: 0;
-  padding: 0.45em 0.9em;
+  padding: 0.6em 1.1em; /* marge du bas assez grande : la pointe ne doit pas mordre sur le texte */
   border-radius: 22px;
   background: white;
   border: 3px solid var(--orange);
