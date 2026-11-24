@@ -1086,7 +1086,7 @@ body.pays-ouvert .coin-bas-droite {
   background: white;
   border: 3px solid var(--orange);
   color: var(--bleu-nuit);
-  font-size: clamp(12px, 0.95vw, 22px); /* plus petite : la mini-carte n'occupe qu'1/3 */
+  font-size: clamp(12px, 1.06vw, 24px); /* plus petite : la mini-carte n'occupe qu'1/3 */
   font-weight: 800;
   max-width: 88%;           /* sur un écran étroit, le texte passe à la ligne */
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
@@ -1291,4 +1291,4 @@ body.ecran-vertical .diapo { object-fit: contain; }
 
 body.ecran-vertical .veille-logo .logo-blanc { width: 180px; }
 
-body.ecran-vertical .bulle-invitation { font-size: clamp(14px, 2.2vw, 30px); }
+body.ecran-vertical .bulle-invitation { font-size: clamp(14px, 2.55vw, 34px); }
