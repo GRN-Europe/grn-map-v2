@@ -39,7 +39,7 @@ export default {
     resultatPays: 'Paese',
     resultatLangue: 'Lingua',
     veilleDansSecondes: 'Ritorno alla schermata iniziale tra {n} s',
-    veilleBulle: 'Il Vangelo nella tua lingua qui!', // bulle à côté de la mini-carte de l’écran d’accueil
+    veilleBulle: 'La Buona Notizia nella tua lingua qui!', // bulle à côté de la mini-carte de l’écran d’accueil
     reglages: 'Impostazioni',
     // Écran des réglages
     reglagesTitre: 'Impostazioni del totem',

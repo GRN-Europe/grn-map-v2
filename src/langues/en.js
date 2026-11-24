@@ -39,7 +39,7 @@ export default {
     resultatPays: 'Country',
     resultatLangue: 'Language',
     veilleDansSecondes: 'Back to the home screen in {n} s',
-    veilleBulle: 'The Gospel in your language here!', // bulle à côté de la mini-carte de l’écran d’accueil
+    veilleBulle: 'The Good News in your language here!', // bulle à côté de la mini-carte de l’écran d’accueil
     reglages: 'Settings',
     // Écran des réglages
     reglagesTitre: 'Kiosk settings',

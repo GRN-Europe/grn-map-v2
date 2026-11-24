@@ -39,7 +39,7 @@ export default {
     resultatPays: 'País',
     resultatLangue: 'Língua',
     veilleDansSecondes: 'Voltar ao ecrã inicial dentro de {n} s',
-    veilleBulle: 'O Evangelho na tua língua aqui!', // bulle à côté de la mini-carte de l’écran d’accueil
+    veilleBulle: 'A Boa Nova na tua língua aqui!', // bulle à côté de la mini-carte de l’écran d’accueil
     reglages: 'Definições',
     // Écran des réglages
     reglagesTitre: 'Definições do terminal',

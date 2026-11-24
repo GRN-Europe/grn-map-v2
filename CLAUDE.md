@@ -58,7 +58,7 @@
   au zoom (7 px × zoom, de 8 à 64 px de large) et jamais plus large que le pays à l'écran (minimum 12 px),
   pour ne pas cacher les petites îles (carte.js, largeurDuDrapeau). Des tailles fixes plus grandes
   (32 × 24, 26 × 18) rendaient la carte brouillon.
-- Écran d'accueil (demande de GRN Europe) : bulle « L'Évangile dans ta langue ici ! » posée sur le bord
+- Écran d'accueil (demande de GRN Europe) : bulle « La Bonne Nouvelle dans ta langue ici ! » posée sur le bord
   de la mini-carte (texte veilleBulle, 7 langues) et main animée (index tendu) qui va de pays en pays
   en « cliquant » (onde + pays éclairé) — src/curseur-veille.js.
 - Diaporama de veille : chaque image reste 20 secondes par défaut (valeur de la v1), réglable.
