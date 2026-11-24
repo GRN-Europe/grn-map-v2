@@ -39,7 +39,7 @@ export default {
     resultatPays: 'Pays',
     resultatLangue: 'Langue',
     veilleDansSecondes: 'Retour à l’accueil dans {n} s',
-    veilleBulle: 'La Bonne Nouvelle dans ta langue ici !', // bulle à côté de la mini-carte de l’écran d’accueil
+    veilleBulle: 'La Bonne Nouvelle dans ta langue ici\u00A0!', // bulle à côté de la mini-carte de l’écran d’accueil
     reglages: 'Réglages',
     // Écran des réglages
     reglagesTitre: 'Réglages de la borne',
