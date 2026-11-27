@@ -39,7 +39,7 @@ export default {
     resultatPays: 'Land',
     resultatLangue: 'Taal',
     veilleDansSecondes: 'Terug naar het startscherm over {n} s',
-    veilleBulle: 'Het evangelie in jouw taal – hier!', // bulle à côté de la mini-carte de l’écran d’accueil
+    veilleBulle: 'Het goede nieuws in jouw taal – hier!', // bulle à côté de la mini-carte de l’écran d’accueil
     reglages: 'Instellingen',
     // Écran des réglages
     reglagesTitre: 'Instellingen van de zuil',
@@ -48,6 +48,9 @@ export default {
     valider: 'Bevestigen',
     codeIncorrect: 'Onjuiste code.',
     langueInterface: 'Taal van de zuil',
+    orientationEcran: 'Schermoriëntatie',
+    orientationHorizontal: 'Horizontaal (liggend)',
+    orientationVertical: 'Verticaal (staand)',
     dureeImage: 'Duur van elke afbeelding van de diavoorstelling (seconden)',
     inactivite: 'Terug naar de diavoorstelling na inactiviteit (seconden)',
     retour5fish: 'Terug naar de kaart vanaf de GRN-website (seconden)',

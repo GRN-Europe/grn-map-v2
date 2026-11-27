@@ -39,7 +39,7 @@ export default {
     resultatPays: 'Country',
     resultatLangue: 'Language',
     veilleDansSecondes: 'Back to the home screen in {n} s',
-    veilleBulle: 'The Gospel in your language here!', // bulle à côté de la mini-carte de l’écran d’accueil
+    veilleBulle: 'The Good News in your language here!', // bulle à côté de la mini-carte de l’écran d’accueil
     reglages: 'Settings',
     // Écran des réglages
     reglagesTitre: 'Kiosk settings',
@@ -48,6 +48,9 @@ export default {
     valider: 'Confirm',
     codeIncorrect: 'Incorrect code.',
     langueInterface: 'Kiosk language',
+    orientationEcran: 'Screen orientation',
+    orientationHorizontal: 'Horizontal (landscape)',
+    orientationVertical: 'Vertical (portrait)',
     dureeImage: 'Duration of each slideshow image (seconds)',
     inactivite: 'Back to the slideshow after inactivity (seconds)',
     retour5fish: 'Back to the map from the GRN website (seconds)',

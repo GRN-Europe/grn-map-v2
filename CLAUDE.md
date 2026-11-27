@@ -53,9 +53,12 @@
   de la borne (volontairement : le visiteur ne doit pas quitter la borne). Dans la barre sombre,
   « 📱 Vidéos : continuez sur votre téléphone » + petit QR code de la page de la langue (solution A).
 - Pendant les 10 dernières secondes : fenêtre « Je suis toujours là » ; la toucher relance le délai.
-- Les drapeaux de tous les pays apparaissent dès le premier zoom (comme en v1), en 20 × 14 px
-  comme en v1 (32 × 24 puis 26 × 18 rendaient la carte brouillon) ; onglet Amériques cadré comme en v1.
-- Écran d'accueil (demande de GRN Europe) : bulle « L'Évangile dans ta langue ici ! » posée sur le bord
+- Les drapeaux de tous les pays apparaissent dès le premier zoom (comme en v1), au format 20 × 14
+  de la v1 ; onglet Amériques cadré comme en v1. Taille (2026-11-19, venue de l'essai) : proportionnelle
+  au zoom (7 px × zoom, de 8 à 64 px de large) et jamais plus large que le pays à l'écran (minimum 12 px),
+  pour ne pas cacher les petites îles (carte.js, largeurDuDrapeau). Des tailles fixes plus grandes
+  (32 × 24, 26 × 18) rendaient la carte brouillon.
+- Écran d'accueil (demande de GRN Europe) : bulle « La Bonne Nouvelle dans ta langue ici ! » posée sur le bord
   de la mini-carte (texte veilleBulle, 7 langues) et main animée (index tendu) qui va de pays en pays
   en « cliquant » (onde + pays éclairé) — src/curseur-veille.js.
 - Diaporama de veille : chaque image reste 20 secondes par défaut (valeur de la v1), réglable.
@@ -138,3 +141,8 @@
   en ligne dans index.html ; main.js pose window.__carteDemarree. Si la carte n'a pas démarré au bout
   de 20 s et que /version.json répond, on désinscrit le service worker, on vide les caches et on
   recharge, une fois par onglet (sessionStorage). Hors ligne : rien n'est effacé.
+- Écran vertical (2026-11-24) : réglage « Orientation de l'écran » (horizontal par défaut / vertical),
+  mise en page adaptée, pas une rotation. Classe body.ecran-vertical (main.js), section « Écran vertical »
+  à la fin de styles.css : panneau des langues en bas (--hauteur-panneau-pays, 2 colonnes), grande
+  fenêtre QR, veille : diaporama 2/3 en haut sous le bandeau (images en entier, object-fit: contain), mini-carte 1/3 dessous. carte.js : fitHeight au-dessus du panneau,
+  le pays touché se place au milieu de la partie visible. « Valeurs par défaut » garde l'orientation.

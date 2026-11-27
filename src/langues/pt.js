@@ -39,7 +39,7 @@ export default {
     resultatPays: 'País',
     resultatLangue: 'Língua',
     veilleDansSecondes: 'Voltar ao ecrã inicial dentro de {n} s',
-    veilleBulle: 'O Evangelho na tua língua aqui!', // bulle à côté de la mini-carte de l’écran d’accueil
+    veilleBulle: 'A Boa Nova na tua língua aqui!', // bulle à côté de la mini-carte de l’écran d’accueil
     reglages: 'Definições',
     // Écran des réglages
     reglagesTitre: 'Definições do terminal',
@@ -48,6 +48,9 @@ export default {
     valider: 'Confirmar',
     codeIncorrect: 'Código incorreto.',
     langueInterface: 'Língua do terminal',
+    orientationEcran: 'Orientação do ecrã',
+    orientationHorizontal: 'Horizontal',
+    orientationVertical: 'Vertical',
     dureeImage: 'Duração de cada imagem da apresentação (segundos)',
     inactivite: 'Voltar à apresentação após inatividade (segundos)',
     retour5fish: 'Voltar ao mapa a partir do site da GRN (segundos)',

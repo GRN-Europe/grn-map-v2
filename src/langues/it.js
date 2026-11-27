@@ -39,7 +39,7 @@ export default {
     resultatPays: 'Paese',
     resultatLangue: 'Lingua',
     veilleDansSecondes: 'Ritorno alla schermata iniziale tra {n} s',
-    veilleBulle: 'Il Vangelo nella tua lingua qui!', // bulle à côté de la mini-carte de l’écran d’accueil
+    veilleBulle: 'La Buona Notizia nella tua lingua qui!', // bulle à côté de la mini-carte de l’écran d’accueil
     reglages: 'Impostazioni',
     // Écran des réglages
     reglagesTitre: 'Impostazioni del totem',
@@ -48,6 +48,9 @@ export default {
     valider: 'Conferma',
     codeIncorrect: 'Codice errato.',
     langueInterface: 'Lingua del totem',
+    orientationEcran: 'Orientamento dello schermo',
+    orientationHorizontal: 'Orizzontale',
+    orientationVertical: 'Verticale',
     dureeImage: 'Durata di ogni immagine della presentazione (secondi)',
     inactivite: 'Ritorno alla presentazione dopo inattività (secondi)',
     retour5fish: 'Ritorno alla mappa dal sito GRN (secondi)',

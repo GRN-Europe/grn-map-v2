@@ -678,7 +678,8 @@ body.pays-ouvert .coin-bas-droite {
   width: 100%;
   max-width: 1800px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 2fr; /* mini-carte 1/3, diaporama 2/3 */
+  align-items: center;
   gap: 2.5vw;
 }
 
@@ -738,9 +739,7 @@ body.pays-ouvert .coin-bas-droite {
 
 /* --- Essais de mise en page de l'écran de veille (branche « essais-2 ») ----------- */
 
-/* Bulle un peu plus petite, car la mini-carte est plus petite */
-.veille-tiers .bulle-invitation,
-.veille-dessous .bulle-invitation { font-size: clamp(14px, 1.25vw, 28px); }
+/* (taille de la bulle : celle des bornes, voir « Écran d'accueil : invitation à toucher la carte ») */
 
 /* Choix A : mini-carte 1/3 à gauche, diaporama 2/3 à droite */
 .veille-tiers .veille-cartes {
@@ -1116,12 +1115,12 @@ body.pays-ouvert .coin-bas-droite {
   left: 6%;
   z-index: 1;
   margin: 0;
-  padding: 0.6em 1.1em;
+  padding: 0.6em 1.1em; /* marge du bas assez grande : la pointe ne doit pas mordre sur le texte */
   border-radius: 22px;
   background: white;
   border: 3px solid var(--orange);
   color: var(--bleu-nuit);
-  font-size: clamp(16px, 1.6vw, 34px);
+  font-size: clamp(12px, 1.06vw, 24px); /* plus petite : la mini-carte n'occupe qu'1/3 */
   font-weight: 800;
   max-width: 88%;           /* sur un écran étroit, le texte passe à la ligne */
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
@@ -1252,6 +1251,81 @@ body.pays-ouvert .coin-bas-droite {
   content-visibility: auto;
   contain-intrinsic-size: auto 88px;
 }
+
+/* --- Écran vertical (réglage « Orientation de l'écran » = Vertical) ---------------------
+   body.ecran-vertical (main.js). La carte occupe tout l'écran ; le panneau des langues monte
+   depuis le bas (au lieu de s'ouvrir à droite) et le pays touché se place juste au-dessus
+   (carte.js lit --hauteur-panneau-pays). Écran d'accueil : mini-carte au-dessus du diaporama. */
+:root { --hauteur-panneau-pays: 0px; }
+
+body.ecran-vertical {
+  --largeur-panneau-pays: 0px;
+  --hauteur-panneau-pays: min(46vh, calc(100vh - var(--hauteur-bandeau) - 240px));
+}
+
+body.ecran-vertical .panneau-pays {
+  top: auto;
+  left: 0;
+  right: 0;
+  width: auto;
+  height: var(--hauteur-panneau-pays);
+  padding: 20px 24px 28px;
+  border-radius: 24px 24px 0 0;
+  box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* Les langues sur 2 colonnes pour profiter de la largeur (1 seule sur un écran étroit) */
+body.ecran-vertical .liste-langues {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 700px) {
+  body.ecran-vertical .liste-langues { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Panneau ouvert : le logo GRN et les boutons du bas remontent au-dessus du panneau */
+body.ecran-vertical.pays-ouvert .logo-grn,
+body.ecran-vertical.pays-ouvert .coin-bas-droite {
+  bottom: calc(var(--hauteur-panneau-pays) + var(--marge));
+}
+
+/* Fenêtre du QR code plus grande : sur un écran debout, elle est à hauteur des yeux */
+body.ecran-vertical .fenetre-qr { width: min(640px, 92vw); }
+body.ecran-vertical .qr-grand { width: min(460px, 80vw); height: min(460px, 80vw); }
+
+/* Écran d'accueil : diaporama sur les 2/3 du haut, juste sous le bandeau, mini-carte sur le
+   1/3 du bas, logo GRN dessous. Les images gardent leurs proportions (object-fit: contain) :
+   une présentation en paysage comme en portrait s'affiche en entier. */
+body.ecran-vertical .ecran-veille {
+  justify-content: flex-start;
+  gap: 2.5vh;
+  padding: 2.5vh 3vw;
+}
+
+body.ecran-vertical .veille-cartes {
+  flex: 1;
+  min-height: 0;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 2fr) minmax(0, 1fr); /* diaporama 2/3, mini-carte 1/3 */
+  align-items: stretch;
+  gap: 3vh;
+}
+
+body.ecran-vertical .veille-diaporama { order: -1; } /* le diaporama passe au-dessus */
+
+body.ecran-vertical .veille-carte {
+  aspect-ratio: auto;
+  height: 100%;
+}
+
+body.ecran-vertical .bloc-mini-carte { height: 100%; }
+
+body.ecran-vertical .diapo { object-fit: contain; }
+
+body.ecran-vertical .veille-logo .logo-blanc { width: 180px; }
+
+body.ecran-vertical .bulle-invitation { font-size: clamp(14px, 2.55vw, 34px); }
 
 /* Essai de couleurs (branche « essais-2 ») : mer blanche avec ?mer=blanche dans l'adresse */
 body.mer-blanche {

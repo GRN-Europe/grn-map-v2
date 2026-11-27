@@ -39,7 +39,7 @@ export default {
     resultatPays: 'Land',
     resultatLangue: 'Sprache',
     veilleDansSecondes: 'Zurück zum Startbildschirm in {n} s',
-    veilleBulle: 'Das Evangelium in deiner Sprache – hier!', // bulle à côté de la mini-carte de l’écran d’accueil
+    veilleBulle: 'Die Gute Nachricht in deiner Sprache – hier!', // bulle à côté de la mini-carte de l’écran d’accueil
     reglages: 'Einstellungen',
     // Écran des réglages
     reglagesTitre: 'Einstellungen des Terminals',
@@ -48,6 +48,9 @@ export default {
     valider: 'Bestätigen',
     codeIncorrect: 'Falscher Code.',
     langueInterface: 'Sprache des Terminals',
+    orientationEcran: 'Bildschirmausrichtung',
+    orientationHorizontal: 'Horizontal (Querformat)',
+    orientationVertical: 'Vertikal (Hochformat)',
     dureeImage: 'Anzeigedauer jedes Bildes der Diashow (Sekunden)',
     inactivite: 'Zurück zur Diashow nach Inaktivität (Sekunden)',
     retour5fish: 'Zurück zur Karte von der GRN-Website (Sekunden)',

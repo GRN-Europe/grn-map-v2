@@ -202,6 +202,14 @@
           <span data-texte="langueInterface"></span>
           <select id="liste-langues"></select>
         </label>
+        <!-- Écran posé à l'horizontale (par défaut) ou debout : la mise en page s'adapte -->
+        <label class="champ">
+          <span data-texte="orientationEcran"></span>
+          <select name="orientation">
+            <option value="horizontal" data-texte="orientationHorizontal"></option>
+            <option value="vertical" data-texte="orientationVertical"></option>
+          </select>
+        </label>
         <label class="champ">
           <span data-texte="dureeImage"></span>
           <input name="dureeImage" type="number" inputmode="numeric" min="3" max="600">

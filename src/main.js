@@ -35,6 +35,13 @@ document.addEventListener('gesturestart', (e) => e.preventDefault());
 appliquerConfigurationDeLAdresse();
 let reglages = lireReglages();
 
+// Écran debout (réglage « Orientation de l'écran ») : mise en page verticale (styles.css,
+// « Écran vertical »). Appliquée avant de dessiner la carte, qui mesure la place disponible.
+function appliquerOrientation() {
+  document.body.classList.toggle('ecran-vertical', reglages.orientation === 'vertical');
+}
+appliquerOrientation();
+
 // --- Carte ---------------------------------------------------------------
 
 const carte = creerCarte({
@@ -152,7 +159,7 @@ const panneauPays = creerPanneauPays({
 function ouvrirPays(code) {
   carte.selectionnerPays(code);
   panneauPays.ouvrir(code);
-  document.body.classList.add('pays-ouvert'); // décale les commandes vers la gauche
+  document.body.classList.add('pays-ouvert'); // décale les commandes vers la gauche (ou vers le haut)
   carte.montrerAGaucheDuPanneau(code); // le pays ne reste pas caché sous le panneau
 }
 
@@ -162,6 +169,8 @@ const ecranReglages = creerEcranReglages({
   donnees,
   quandEnregistre: (nouveaux) => {
     reglages = nouveaux;
+    appliquerOrientation();
+    carte.redimensionner(); // la place du panneau des langues a pu changer
     changerLangue(reglages.langue);
     bandeau.afficher(reglages);
     borne.relancer();

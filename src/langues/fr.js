@@ -39,7 +39,7 @@ export default {
     resultatPays: 'Pays',
     resultatLangue: 'Langue',
     veilleDansSecondes: 'Retour à l’accueil dans {n} s',
-    veilleBulle: 'L’Évangile dans ta langue ici !', // bulle à côté de la mini-carte de l’écran d’accueil
+    veilleBulle: 'La Bonne Nouvelle dans ta langue ici\u00A0!', // bulle à côté de la mini-carte de l’écran d’accueil
     reglages: 'Réglages',
     // Écran des réglages
     reglagesTitre: 'Réglages de la borne',
@@ -48,6 +48,9 @@ export default {
     valider: 'Valider',
     codeIncorrect: 'Code incorrect.',
     langueInterface: 'Langue de la borne',
+    orientationEcran: 'Orientation de l’écran',
+    orientationHorizontal: 'Horizontal (paysage)',
+    orientationVertical: 'Vertical (portrait)',
     dureeImage: 'Durée de chaque image du diaporama (secondes)',
     inactivite: 'Retour au diaporama après inactivité (secondes)',
     retour5fish: 'Retour à la carte depuis le site GRN (secondes)',
