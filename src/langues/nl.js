@@ -72,6 +72,8 @@ export default {
     logoErreur: 'Deze afbeelding kon niet worden gelezen.',
     bandeauPhrase: 'Welkomstbericht ({langue})',
     bandeauPhraseAide: 'Een leeg vak toont het Engelse bericht (of het eerste ingevulde).',
+    bandeauPolice: 'Lettertype van de zin',
+    policeSysteme: 'Standaardlettertype',
     nouveauCode: 'Nieuwe toegangscode van de kerk',
     nouveauCodeAide: 'Leeg laten om de huidige code te behouden.',
     enregistrer: 'Opslaan',

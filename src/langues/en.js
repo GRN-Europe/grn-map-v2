@@ -72,6 +72,8 @@ export default {
     logoErreur: 'This image could not be read.',
     bandeauPhrase: 'Welcome message ({langue})',
     bandeauPhraseAide: 'An empty box shows the English message (or the first one filled in).',
+    bandeauPolice: 'Font of the sentence',
+    policeSysteme: 'Standard font',
     nouveauCode: 'New church access code',
     nouveauCodeAide: 'Leave empty to keep the current code.',
     enregistrer: 'Save',

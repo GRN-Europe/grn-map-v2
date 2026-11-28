@@ -102,6 +102,7 @@ export function creerEcranReglages({ donnees, quandEnregistre, quandDiaporamaCha
       formulaire.elements[`phrase-${code}`].value = reglages.bandeauPhrases[code] ?? '';
     });
     afficherEtiquettesPhrases();
+    formulaire.elements.bandeauPolice.value = reglages.bandeauPolice;
     message.textContent = '';
     afficherEtatDiaporama();
     afficherDateDonnees();
@@ -124,6 +125,7 @@ export function creerEcranReglages({ donnees, quandEnregistre, quandDiaporamaCha
     // Bandeau d'accueil
     reglages.bandeauActif = formulaire.elements.bandeauActif.checked;
     reglages.bandeauLogo = logoEnCours;
+    reglages.bandeauPolice = formulaire.elements.bandeauPolice.value;
     reglages.bandeauPhrases = {};
     languesDisponibles().forEach(({ code }) => {
       const phrase = formulaire.elements[`phrase-${code}`].value.trim();
@@ -154,6 +156,7 @@ export function creerEcranReglages({ donnees, quandEnregistre, quandDiaporamaCha
       bandeauActif: actuels.bandeauActif,
       bandeauLogo: actuels.bandeauLogo,
       bandeauPhrases: actuels.bandeauPhrases,
+      bandeauPolice: actuels.bandeauPolice,
     });
     changerLangue(REGLAGES_PAR_DEFAUT.langue);
     message.textContent = texte('defautsRemis');

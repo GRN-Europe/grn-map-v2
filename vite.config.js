@@ -96,7 +96,7 @@ export default defineConfig({
       workbox: {
         // Fichiers gardés sur l'appareil pour fonctionner hors ligne :
         // code, styles, drapeaux (svg), images du diaporama (jpg), icônes (png)
-        globPatterns: ['**/*.{js,mjs,css,html,svg,jpg,png,json}'],
+        globPatterns: ['**/*.{js,mjs,css,html,svg,jpg,png,json,woff2}'],
         // … sauf version.json, qui doit toujours venir d'internet (bouton « Mettre à jour »)
         globIgnores: ['version.json'],
         // Certains fichiers dépassent la limite par défaut (2 Mo), comme le lecteur de PDF

@@ -788,6 +788,10 @@ body.pays-ouvert .coin-bas-droite {
   overflow: hidden;
 }
 
+/* Police de la phrase choisie dans les réglages (par ex. celle des diapositives de l'église) */
+.bandeau-phrase[data-police="montserrat"] { font-family: 'Montserrat', sans-serif; font-weight: 800; }
+.bandeau-phrase[data-police="inter"] { font-family: 'Inter', sans-serif; font-weight: 600; }
+
 /* Écrans étroits : phrase plus petite */
 @media (max-width: 900px) {
   .bandeau-phrase { font-size: 18px; }

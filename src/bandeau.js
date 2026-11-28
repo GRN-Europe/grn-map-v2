@@ -31,6 +31,8 @@ export function creerBandeau({ quandHauteurChange }) {
     logo.hidden = !reglages.bandeauLogo;
     if (reglages.bandeauLogo) logo.src = reglages.bandeauLogo;
     phrase.textContent = texte;
+    // Police choisie par l'église (classes « police-… » dans styles.css)
+    phrase.dataset.police = reglages.bandeauPolice || 'systeme';
 
     // La classe "avec-bandeau" descend la carte et le diaporama sous le bandeau (voir styles.css)
     document.body.classList.toggle('avec-bandeau', visible);

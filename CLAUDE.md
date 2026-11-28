@@ -39,7 +39,10 @@
 - Recherche (loupe, comme en v1) : pays (nom dans la langue de la borne ou en anglais) et langues ;
   un pays ouvre son panneau, une langue ouvre directement son QR code.
 - Bandeau d'accueil : bande blanche de 120 px en haut (agrandie à la demande de GRN Europe) (bordure orange), logo à gauche de la phrase ;
-  la carte, le panneau d'un pays et l'écran de veille se placent dessous. « Valeurs par défaut »
+  la carte, le panneau d'un pays et l'écran de veille se placent dessous.
+  Police de la phrase (2026-11-28, pour Nouvel Impact dont les diapositives sont en Montserrat/Inter) :
+  réglage « Police de la phrase » = habituelle (défaut) / Montserrat 800 / Inter 600 ; polices libres
+  @fontsource (latin seulement), enregistrées hors ligne (woff2 dans globPatterns de vite.config.js). « Valeurs par défaut »
   ne touche ni au code de l'église ni au bandeau.
 
 - Ordre d'empilement (fin de styles.css) : carte / panneau / veille < bandeau < écran 5fish < fenêtres

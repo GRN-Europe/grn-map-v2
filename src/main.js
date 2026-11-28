@@ -2,6 +2,10 @@
 
 import 'flag-icons/css/flag-icons.min.css';
 import './styles.css';
+// Polices libres (licence OFL) proposées pour la phrase du bandeau, enregistrées avec
+// l'application pour marcher hors ligne (alphabet latin seulement : les 7 langues de la borne)
+import '@fontsource/montserrat/latin-800.css';
+import '@fontsource/inter/latin-600.css';
 // Copie des données 5fish (voir README : « Mettre à jour les données 5fish »)
 import donnees from './donnees/5fish.json';
 import { creerCarte, REGIONS } from './carte.js';

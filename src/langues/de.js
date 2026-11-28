@@ -72,6 +72,8 @@ export default {
     logoErreur: 'Dieses Bild konnte nicht gelesen werden.',
     bandeauPhrase: 'Begrüßungstext ({langue})',
     bandeauPhraseAide: 'Ein leeres Feld zeigt den englischen Text (oder den ersten ausgefüllten).',
+    bandeauPolice: 'Schriftart des Satzes',
+    policeSysteme: 'Standardschrift',
     nouveauCode: 'Neuer Zugangscode der Gemeinde',
     nouveauCodeAide: 'Leer lassen, um den aktuellen Code zu behalten.',
     enregistrer: 'Speichern',

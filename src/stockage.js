@@ -26,6 +26,7 @@ export const REGLAGES_PAR_DEFAUT = {
   bandeauActif: false,
   bandeauLogo: null,       // logo réduit en PNG (« data URL »), ou null
   bandeauPhrases: {},      // phrase d'accueil par langue : { fr: '…', en: '…' }
+  bandeauPolice: 'systeme', // police de la phrase : 'systeme', 'montserrat' ou 'inter' (voir polices.css)
 };
 
 // Lit les réglages enregistrés (ou les valeurs par défaut)

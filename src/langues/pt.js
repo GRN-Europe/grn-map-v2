@@ -72,6 +72,8 @@ export default {
     logoErreur: 'Não foi possível ler esta imagem.',
     bandeauPhrase: 'Mensagem de boas-vindas ({langue})',
     bandeauPhraseAide: 'Uma caixa vazia mostra a mensagem em inglês (ou a primeira preenchida).',
+    bandeauPolice: 'Tipo de letra da frase',
+    policeSysteme: 'Tipo de letra habitual',
     nouveauCode: 'Novo código de acesso da igreja',
     nouveauCodeAide: 'Deixe vazio para manter o código atual.',
     enregistrer: 'Guardar',

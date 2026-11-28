@@ -72,6 +72,8 @@ export default {
     logoErreur: 'Impossibile leggere questa immagine.',
     bandeauPhrase: 'Messaggio di benvenuto ({langue})',
     bandeauPhraseAide: 'Una casella vuota mostra il messaggio in inglese (o il primo compilato).',
+    bandeauPolice: 'Carattere della frase',
+    policeSysteme: 'Carattere abituale',
     nouveauCode: 'Nuovo codice di accesso della chiesa',
     nouveauCodeAide: 'Lascia vuoto per mantenere il codice attuale.',
     enregistrer: 'Salva',

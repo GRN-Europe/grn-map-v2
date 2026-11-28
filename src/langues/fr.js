@@ -72,6 +72,8 @@ export default {
     logoErreur: 'Cette image n’a pas pu être lue.',
     bandeauPhrase: 'Phrase d’accueil ({langue})',
     bandeauPhraseAide: 'Une case vide affiche la phrase en anglais (ou la première phrase remplie).',
+    bandeauPolice: 'Police de la phrase',
+    policeSysteme: 'Police habituelle',
     nouveauCode: 'Nouveau code d’accès de l’église',
     nouveauCodeAide: 'Laisser vide pour garder le code actuel.',
     enregistrer: 'Enregistrer',
