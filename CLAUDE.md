@@ -76,7 +76,8 @@
   la carte). Langues : fr, en, de, es, it, pt (portugais d'Europe), nl. Les traductions de, es,
   it, pt, nl ont été préparées par Claude et doivent être relues par des locuteurs natifs.
   Tout nouveau texte doit être ajouté dans les 7 fichiers de src/langues/. Phrase d'accueil de l'église : une case par
-  langue, anglais par défaut si vide.
+  langue, anglais par défaut si vide ; seule la case de la langue de la borne est visible, les autres
+  sont repliées dans « Autres langues (facultatif) » (dépliées d'office si l'une est remplie).
 - Réglages de la v1 (étape 5), fenêtre blanche « Réglages de la borne » / « Ces réglages sont
   enregistrés sur cet appareil. » (en v2, la liste déroulante des langues remplace FR | EN) :
   1. d'abord « Code d'accès » + boutons « Valider » (orange) et « Fermer » ;

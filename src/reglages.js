@@ -35,16 +35,28 @@ export function creerEcranReglages({ donnees, quandEnregistre, quandDiaporamaCha
   // Une ligne par fichier du dossier src/langues/
   languesDisponibles().forEach(({ code, nom }) => listeLangues.add(new Option(nom, code)));
 
-  // Bandeau : une case « Phrase d'accueil » par langue de la borne
+  // Bandeau : une case « Phrase d'accueil » par langue. Seule celle de la langue de la borne
+  // est visible ; les autres (facultatives) sont rangées dans « Autres langues ».
   const zonePhrases = document.getElementById('bandeau-phrases');
+  const zoneAutresPhrases = document.getElementById('bandeau-phrases-autres');
+  const autresLangues = document.getElementById('bandeau-autres-langues');
+  const casesPhrases = {};
   languesDisponibles().forEach(({ code, nom }) => {
     const champ = document.createElement('label');
     champ.className = 'champ';
     champ.innerHTML = `<span data-texte-phrase="${code}"></span>
       <input name="phrase-${code}" type="text" maxlength="160">`;
     champ.querySelector('span').dataset.nomLangue = nom;
-    zonePhrases.appendChild(champ);
+    casesPhrases[code] = champ;
+    zoneAutresPhrases.appendChild(champ);
   });
+
+  // Met en avant la case de la langue choisie pour la borne, range les autres
+  function placerCasesPhrases(langueDeLaBorne) {
+    Object.entries(casesPhrases).forEach(([code, champ]) => {
+      (code === langueDeLaBorne ? zonePhrases : zoneAutresPhrases).appendChild(champ);
+    });
+  }
 
   // Section « Mise à jour » (date de la version installée, bouton « Mettre à jour »)
   const miseAJour = creerMiseAJour();
@@ -102,6 +114,11 @@ export function creerEcranReglages({ donnees, quandEnregistre, quandDiaporamaCha
       formulaire.elements[`phrase-${code}`].value = reglages.bandeauPhrases[code] ?? '';
     });
     afficherEtiquettesPhrases();
+    placerCasesPhrases(reglages.langue);
+    // Une phrase déjà écrite dans une autre langue ne doit pas rester cachée
+    autresLangues.open = languesDisponibles().some(({ code }) => (
+      code !== reglages.langue && reglages.bandeauPhrases[code]
+    ));
     formulaire.elements.bandeauPolice.value = reglages.bandeauPolice;
     message.textContent = '';
     afficherEtatDiaporama();
@@ -135,7 +152,10 @@ export function creerEcranReglages({ donnees, quandEnregistre, quandDiaporamaCha
   }
 
   // Essayer une langue la montre tout de suite ; elle n'est gardée qu'avec « Enregistrer »
-  listeLangues.addEventListener('change', () => changerLangue(listeLangues.value));
+  listeLangues.addEventListener('change', () => {
+    changerLangue(listeLangues.value);
+    placerCasesPhrases(listeLangues.value);
+  });
 
   formulaire.addEventListener('submit', (evenement) => {
     evenement.preventDefault();
@@ -221,7 +241,8 @@ export function creerEcranReglages({ donnees, quandEnregistre, quandDiaporamaCha
 
   // « Phrase d'accueil (Français) », « Phrase d'accueil (English) »…
   function afficherEtiquettesPhrases() {
-    zonePhrases.querySelectorAll('[data-texte-phrase]').forEach((etiquette) => {
+    Object.values(casesPhrases).forEach((champ) => {
+      const etiquette = champ.querySelector('[data-texte-phrase]');
       etiquette.textContent = texte('bandeauPhrase', { langue: etiquette.dataset.nomLangue });
     });
   }

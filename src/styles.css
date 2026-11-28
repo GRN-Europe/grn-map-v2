@@ -840,7 +840,22 @@ body.pays-ouvert .coin-bas-droite {
 #bouton-retirer-logo[hidden] { display: none; }
 
 #bandeau-phrases { margin-top: 16px; }
-#bandeau-phrases .champ { margin-bottom: 12px; }
+#bandeau-phrases .champ,
+#bandeau-phrases-autres .champ { margin-bottom: 12px; }
+
+/* « Autres langues (facultatif) » : se déplie au toucher, grande zone pour le doigt */
+.autres-langues { margin-top: 12px; }
+.autres-langues summary {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  color: var(--texte);
+  cursor: pointer;
+}
+.autres-langues summary::before { content: '▸'; margin-right: 10px; }
+.autres-langues[open] summary::before { content: '▾'; }
+.autres-langues summary::-webkit-details-marker { display: none; }
 
 /* --- Recherche (loupe) ------------------------------------------------------------ */
 

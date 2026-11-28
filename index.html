@@ -251,9 +251,14 @@
             <button class="bouton-secondaire" id="bouton-retirer-logo" type="button" data-texte="retirerLogo"></button>
           </div>
           <input id="fichier-logo" type="file" accept="image/png,image/jpeg,image/svg+xml" hidden>
-          <!-- Une case « Phrase d'accueil » par langue de la borne (créées par reglages.js) -->
+          <!-- Une case « Phrase d'accueil » par langue (créées par reglages.js) : seule celle de la
+               langue de la borne est visible, les autres sont rangées dans « Autres langues » -->
           <div id="bandeau-phrases"></div>
           <small data-texte="bandeauPhraseAide"></small>
+          <details class="autres-langues" id="bandeau-autres-langues">
+            <summary data-texte="bandeauAutresLangues"></summary>
+            <div id="bandeau-phrases-autres"></div>
+          </details>
           <label class="champ">
             <span data-texte="bandeauPolice"></span>
             <select name="bandeauPolice">
