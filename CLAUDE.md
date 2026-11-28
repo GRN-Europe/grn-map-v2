@@ -89,7 +89,11 @@
   Le bandeau d'accueil de l'église (étape 6) s'ajoutera dans cette même fenêtre.
 - Textes : police du système et tailles de la v1 (onglets 17 px, noms de langues 17 px demi-gras #333,
   nom du pays 28 px) — section « alignées sur la v1 » à la fin de styles.css.
-- Couleurs de la v1 : mer bleu nuit #0c1a2b, pays orange brûlé #c4561a, onglet actif orange #ff6a13.
+- Couleurs de la carte (choix de GRN Europe, 2026-11-28, venu de l'essai « essais-2 ?mer=blanche ») :
+  mer blanche #ffffff, pays bleu officiel GRN #005a7e (touché #0a7fae), frontières blanches, pays choisi
+  orange clair #f4a24c ; onglet actif orange #ff6a13. Fonds de la veille et barre 5fish restent bleu nuit #0c1a2b.
+  Avant (v1) : mer #0c1a2b, pays orange brûlé #c4561a.
+  Boutons ⛶ et ⚙ de la carte : icônes bleu nuit sur rond blanc léger (le gris blanc de la v1 serait invisible).
 - Panneau d'un pays (rapidité sur tablette modeste, la Chine a 341 langues) : les 30 premières
   langues s'affichent tout de suite (nom seul), la suite par lots de 80 en rendant la main ;
   chaque petit QR code n'est calculé que lorsqu'il arrive à l'écran (IntersectionObserver),
